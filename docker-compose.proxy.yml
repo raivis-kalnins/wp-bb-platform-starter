@@ -1,0 +1,25 @@
+services:
+  app:
+    ports: []
+    expose:
+      - "80"
+    environment:
+      VIRTUAL_HOST: ${SITE_DOMAIN:-wpbb.localhost}
+      VIRTUAL_PORT: 80
+    networks:
+      - default
+      - shared_proxy
+  phpmyadmin:
+    ports: []
+    expose:
+      - "80"
+    environment:
+      VIRTUAL_HOST: ${PMA_DOMAIN:-db.wpbb.localhost}
+      VIRTUAL_PORT: 80
+    networks:
+      - default
+      - shared_proxy
+networks:
+  shared_proxy:
+    external: true
+    name: rproxy_reverse-proxy

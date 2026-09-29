@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+echo "== Composer =="
+docker compose exec -T app composer validate --no-check-publish || true
+echo "== WordPress =="
+bin/wp core version
+bin/wp plugin list --status=active
+bin/wp theme list --status=active
+echo "== Platform =="
+bin/wp bb health || true
+echo "== Acorn =="
+bin/artisan about || true
+echo "== Database =="
+bin/wp db check || true
+echo "== Cron =="
+bin/wp cron event list --fields=hook,next_run_relative --format=table | head -n 20 || true

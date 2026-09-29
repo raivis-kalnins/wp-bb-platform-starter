@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+ZIP=${1:-}
+if [ -z "$ZIP" ] || [ ! -f "$ZIP" ]; then
+  echo "Usage: bin/install-acf-pro /path/to/advanced-custom-fields-pro.zip"
+  echo "The ACF Pro commercial package is intentionally not redistributed in this starter."
+  exit 1
+fi
+TMP=$(mktemp -d)
+trap 'rm -rf "$TMP"' EXIT
+unzip -q "$ZIP" -d "$TMP"
+SRC=$(find "$TMP" -type f -name acf.php -printf '%h\n' | head -n 1)
+if [ -z "$SRC" ]; then
+  echo "Could not find acf.php in the supplied ZIP."
+  exit 1
+fi
+rm -rf web/app/plugins/advanced-custom-fields-pro
+cp -a "$SRC" web/app/plugins/advanced-custom-fields-pro
+bin/wp plugin activate advanced-custom-fields-pro
+printf "ACF Pro installed from your licensed package.\n"

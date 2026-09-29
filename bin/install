@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo "Docker is required. Install Docker Desktop with WSL2 integration, then rerun bin/install."
+  exit 1
+fi
+if ! docker compose version >/dev/null 2>&1; then
+  echo "Docker Compose v2 is required."
+  exit 1
+fi
+
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
+
+set_env() {
+  local key="$1" value="$2"
+  if grep -q "^${key}=" .env; then
+    sed -i "s|^${key}=.*|${key}='${value}'|" .env
+  else
+    printf "%s='%s'\n" "$key" "$value" >> .env
+  fi
+}
+
+random_hex() { openssl rand -hex "${1:-24}"; }
+random_b64() { openssl rand -base64 48 | tr -d '\n' | tr '/+' '_-'; }
+
+DB_PASSWORD_VALUE=${DB_PASSWORD:-$(random_hex 16)}
+DB_ROOT_PASSWORD_VALUE=${DB_ROOT_PASSWORD:-$(random_hex 20)}
+set_env DB_PASSWORD "$DB_PASSWORD_VALUE"
+if grep -q '^DB_ROOT_PASSWORD=' .env; then
+  set_env DB_ROOT_PASSWORD "$DB_ROOT_PASSWORD_VALUE"
+else
+  printf "DB_ROOT_PASSWORD='%s'\n" "$DB_ROOT_PASSWORD_VALUE" >> .env
+fi
+
+for key in AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT; do
+  if grep -q "^${key}='generateme'" .env || ! grep -q "^${key}=" .env; then
+    set_env "$key" "$(random_b64)"
+  fi
+done
+
+SITE_TITLE=${SITE_TITLE:-"WP BB Platform"}
+ADMIN_USER=${WP_ADMIN_USER:-admin}
+ADMIN_EMAIL=${WP_ADMIN_EMAIL:-admin@example.test}
+ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-$(random_b64 | cut -c1-28)}
+
+if [ -t 0 ]; then
+  read -r -p "Site title [$SITE_TITLE]: " input || true
+  SITE_TITLE=${input:-$SITE_TITLE}
+  read -r -p "Admin user [$ADMIN_USER]: " input || true
+  ADMIN_USER=${input:-$ADMIN_USER}
+  read -r -p "Admin email [$ADMIN_EMAIL]: " input || true
+  ADMIN_EMAIL=${input:-$ADMIN_EMAIL}
+fi
+
+echo "Building containers..."
+docker compose build app
+
+echo "Starting database, Redis and app..."
+docker compose up -d db redis app mailpit phpmyadmin
+
+echo "Installing Composer dependencies (WordPress, Acorn, WooCommerce, Redis and local BB packages)..."
+docker compose exec -T -e COMPOSER_ALLOW_SUPERUSER=1 app composer install --no-interaction --prefer-dist
+
+docker compose exec -T app mkdir -p /var/www/html/storage/logs /var/www/html/web/app/uploads
+docker compose exec -T app chown -R www-data:www-data /var/www/html/storage /var/www/html/web/app/uploads
+
+WP="docker compose exec -T -u www-data app wp --path=/var/www/html/web/wp"
+WP_HOME_VALUE=$(grep '^WP_HOME=' .env | head -n 1 | cut -d= -f2- | tr -d "\'\"")
+WP_HOME_VALUE=${WP_HOME_VALUE:-http://localhost:8080}
+
+if ! $WP core is-installed >/dev/null 2>&1; then
+  echo "Installing WordPress..."
+  $WP core install \
+    --url="$WP_HOME_VALUE" \
+    --title="$SITE_TITLE" \
+    --admin_user="$ADMIN_USER" \
+    --admin_password="$ADMIN_PASSWORD" \
+    --admin_email="$ADMIN_EMAIL" \
+    --skip-email
+fi
+
+$WP plugin activate woocommerce redis-cache wp-bbuilder wp-theme-woo-support || true
+$WP theme activate wp-bbtheme || true
+$WP rewrite flush || true
+$WP redis enable || true
+$WP option update permalink_structure '/%postname%/' || true
+$WP rewrite flush || true
+
+echo
+echo "Installation complete."
+echo "Site:       $WP_HOME_VALUE"
+echo "WP Admin:   ${WP_HOME_VALUE%/}/wp/wp-admin/"
+echo "Mailpit:    http://localhost:8025"
+echo "phpMyAdmin: http://localhost:8081"
+echo "Admin user: $ADMIN_USER"
+echo "Admin pass: $ADMIN_PASSWORD"
+echo
+echo "CLI:        bin/wp plugin list"
+echo "Acorn:      bin/artisan about"
+echo "Sector:     bin/install-sector medicine"

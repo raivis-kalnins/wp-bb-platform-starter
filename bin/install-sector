@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+SECTOR=${1:-}
+if [ -z "$SECTOR" ]; then
+  echo "Usage: bin/install-sector <sector>"
+  echo "Available sectors:"
+  find packages/child-themes -maxdepth 1 -name 'wp-bbtheme-child-*.zip' -printf '%f\n' | sed -E 's/^wp-bbtheme-child-//; s/-[0-9].*\.zip$//' | sort
+  exit 0
+fi
+ZIP=$(find packages/child-themes -maxdepth 1 -name "wp-bbtheme-child-${SECTOR}-*.zip" | sort | tail -n 1)
+if [ -z "$ZIP" ]; then
+  echo "No packaged child theme found for sector: $SECTOR"
+  exit 1
+fi
+SLUG="wp-bbtheme-child-${SECTOR}"
+rm -rf "web/app/themes/$SLUG"
+mkdir -p web/app/themes
+unzip -q "$ZIP" -d web/app/themes
+bin/wp theme activate "$SLUG"
+echo "Activated $SLUG from $(basename "$ZIP")"

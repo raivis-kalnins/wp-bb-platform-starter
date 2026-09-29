@@ -1,0 +1,22 @@
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - reverse-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./my_proxy.conf:/etc/nginx/conf.d/my_proxy.conf:ro
+  mailpit:
+    image: axllent/mailpit:v1.27
+    restart: unless-stopped
+    networks:
+      - reverse-proxy
+    environment:
+      VIRTUAL_HOST: mailpit.localhost
+      VIRTUAL_PORT: 8025
+networks:
+  reverse-proxy:
+    name: rproxy_reverse-proxy

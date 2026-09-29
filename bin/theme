@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ACTION=${1:-build}
+case "$ACTION" in
+  install) docker compose run --rm node npm install ;;
+  dev) docker compose run --rm node npm run dev ;;
+  build|prod) docker compose run --rm node npm run prod ;;
+  *) echo "Usage: bin/theme [install|dev|build]"; exit 2 ;;
+esac
