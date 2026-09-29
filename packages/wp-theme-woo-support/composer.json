@@ -1,0 +1,10 @@
+{
+  "name": "tfa/wp-theme-woo-support",
+  "description": "Reusable WooCommerce functionality for the WP BBTheme suite.",
+  "type": "wordpress-plugin",
+  "version": "3.4.1",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.3"
+  }
+}

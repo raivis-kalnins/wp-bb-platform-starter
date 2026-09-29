@@ -1,0 +1,8 @@
+<?php
+/**
+ * Title: Service Cards
+ * Slug: wp-theme/service-cards
+ * Categories: wp-theme-current
+ * Description: Three BBuilder-column service cards for a fast services or benefits section.
+ */ ?>
+<!-- wp:group {"className":"wp-theme-section-shell","layout":{"type":"default"}} --><div class="wp-block-group wp-theme-section-shell"><!-- wp:wpbb/row {"containerClass":"container","gutterX":"gx-4","gutterY":"gy-4"} --><!-- wp:wpbb/column {"xs":12,"md":4} --><!-- wp:group {"className":"wp-theme-sector-card","layout":{"type":"constrained"}} --><div class="wp-block-group wp-theme-sector-card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Service one</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Explain the first useful service, outcome or benefit.</p><!-- /wp:paragraph --></div><!-- /wp:group --><!-- /wp:wpbb/column --><!-- wp:wpbb/column {"xs":12,"md":4} --><!-- wp:group {"className":"wp-theme-sector-card","layout":{"type":"constrained"}} --><div class="wp-block-group wp-theme-sector-card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Service two</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Keep the description concrete and easy to scan.</p><!-- /wp:paragraph --></div><!-- /wp:group --><!-- /wp:wpbb/column --><!-- wp:wpbb/column {"xs":12,"md":4} --><!-- wp:group {"className":"wp-theme-sector-card","layout":{"type":"constrained"}} --><div class="wp-block-group wp-theme-sector-card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Service three</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Finish with a clear reason to continue or enquire.</p><!-- /wp:paragraph --></div><!-- /wp:group --><!-- /wp:wpbb/column --><!-- /wp:wpbb/row --></div><!-- /wp:group -->

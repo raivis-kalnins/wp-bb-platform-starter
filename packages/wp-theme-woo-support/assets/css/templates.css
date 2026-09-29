@@ -1,0 +1,87 @@
+.wpbb-myaccount-auth {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 28px;
+	align-items: start;
+	width: min(1120px, calc(100% - 32px));
+	margin: clamp(32px, 5vw, 64px) auto;
+}
+
+.wpbb-myaccount-auth--single {
+	grid-template-columns: minmax(0, 560px);
+	justify-content: center;
+}
+
+.wpbb-myaccount-card {
+	padding: clamp(22px, 4vw, 36px);
+	border: 1px solid #e2e8f0;
+	border-radius: 22px;
+	background: #fff;
+	box-shadow: 0 18px 45px rgba(15, 23, 42, .08);
+}
+
+.wpbb-myaccount-card__head {
+	margin-bottom: 22px;
+	text-align: left;
+}
+
+.wpbb-myaccount-card__head h2 {
+	margin: 0 0 8px;
+	color: #0f172a;
+}
+
+.wpbb-myaccount-card__head p {
+	margin: 0;
+	color: #475569;
+}
+
+.wpbb-myaccount-card .form-row {
+	margin-bottom: 16px;
+}
+
+.wpbb-myaccount-card .input-text {
+	width: 100%;
+	min-height: 48px;
+	padding: 11px 14px;
+	border: 1px solid #cbd5e1;
+	border-radius: 12px;
+	background: #fff;
+	box-sizing: border-box;
+}
+
+.wpbb-myaccount-card .button {
+	width: 100%;
+	min-height: 48px;
+	border-radius: 12px;
+	font-weight: 700;
+}
+
+.wpbb-myaccount-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.woocommerce-cart-form,
+.cart_totals,
+.woocommerce-checkout form.checkout,
+.woocommerce-checkout-review-order {
+	padding: clamp(18px, 3vw, 24px);
+	border: 1px solid #e2e8f0;
+	border-radius: 20px;
+	background: #fff;
+	box-shadow: 0 14px 35px rgba(15, 23, 42, .06);
+	box-sizing: border-box;
+}
+
+@media (max-width: 782px) {
+	.wpbb-myaccount-auth {
+		grid-template-columns: 1fr;
+	}
+
+	.wpbb-myaccount-card {
+		border-radius: 18px;
+	}
+}

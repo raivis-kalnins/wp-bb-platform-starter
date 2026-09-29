@@ -1,0 +1,385 @@
+/*
+ * Compact WordPress-native inspector adjustments for BBuilder controls.
+ * No editor-shell, interface-skeleton, modal, or viewport positioning rules
+ * belong in this file.
+ */
+.block-editor-block-inspector .components-panel__body-title,
+.block-editor-block-inspector .components-panel__body-toggle {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.block-editor-block-inspector .components-panel__body-title {
+  background: transparent !important;
+}
+
+.block-editor-block-inspector .components-panel__body .components-panel__body {
+  box-sizing: border-box;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.block-editor-block-inspector .components-panel__body.is-opened,
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title,
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title > .components-panel__body-toggle {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.block-editor-block-inspector .wpbb-responsive-group,
+.block-editor-block-inspector .wpbb-responsive-tab-panel,
+.block-editor-block-inspector .wpbb-responsive-side-field,
+.block-editor-block-inspector .wpbb-responsive-side-field__controls,
+.block-editor-block-inspector .wpbb-device-preview,
+.block-editor-block-inspector .wpbb-device-preview__buttons,
+.block-editor-block-inspector .wpbb-width-control,
+.block-editor-block-inspector .wpbb-width-presets,
+.block-editor-block-inspector .wpbb-width-presets__group,
+.block-editor-block-inspector .wpbb-responsive-summary,
+.block-editor-block-inspector .wpbb-inline-grid,
+.block-editor-block-inspector .wpbb-inline-grid--compact,
+.block-editor-block-inspector .wpbb-maxwidth-inline {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.block-editor-block-inspector .wpbb-responsive-group {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+}
+
+.block-editor-block-inspector .wpbb-responsive-group__label,
+.block-editor-block-inspector .wpbb-device-preview__label,
+.block-editor-block-inspector .wpbb-width-presets__label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 6px;
+  text-transform: none;
+}
+
+.block-editor-block-inspector .wpbb-responsive-tabs {
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0 0 10px;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.block-editor-block-inspector .wpbb-responsive-tabs > .components-button,
+.block-editor-block-inspector .wpbb-device-preview__buttons > .components-button,
+.block-editor-block-inspector .wpbb-width-presets__group > .components-button {
+  box-sizing: border-box;
+  justify-content: center;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: 100%;
+}
+
+.block-editor-block-inspector .wpbb-responsive-tabs > .components-button {
+  width: 100% !important;
+}
+
+.block-editor-block-inspector .wpbb-device-preview__buttons,
+.block-editor-block-inspector .wpbb-width-presets__group {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.block-editor-block-inspector .wpbb-device-preview__buttons > .components-button,
+.block-editor-block-inspector .wpbb-width-presets__group > .components-button {
+  flex: 1 1 auto;
+}
+
+.block-editor-block-inspector .wpbb-device-preview,
+.block-editor-block-inspector .wpbb-width-control {
+  margin: 0 0 16px;
+}
+
+.block-editor-block-inspector .wpbb-device-preview__note,
+.block-editor-block-inspector .wpbb-responsive-summary,
+.block-editor-block-inspector .components-base-control__help {
+  color: #646970;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.block-editor-block-inspector .wpbb-device-preview__note {
+  margin: -8px 0 16px;
+}
+
+.block-editor-block-inspector .wpbb-responsive-tab-panel {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.block-editor-block-inspector .wpbb-responsive-side-field {
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  margin: 0 !important;
+}
+
+.block-editor-block-inspector .wpbb-responsive-side-field--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.block-editor-block-inspector .wpbb-responsive-side-field__label {
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.block-editor-block-inspector .wpbb-responsive-side-field__controls {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 72px !important;
+  gap: 8px !important;
+  align-items: center;
+}
+
+.block-editor-block-inspector .wpbb-spacing-native-input,
+.block-editor-block-inspector .wpbb-spacing-native-select {
+  box-sizing: border-box !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.block-editor-block-inspector .wpbb-inline-grid,
+.block-editor-block-inspector .wpbb-inline-grid--compact {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 80px !important;
+  gap: 8px !important;
+  align-items: end !important;
+}
+
+.block-editor-block-inspector .wpbb-responsive-summary {
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 2px;
+  margin-top: 12px;
+  padding: 10px;
+}
+
+.block-editor-block-inspector .wpbb-responsive-summary strong,
+.block-editor-block-inspector .wpbb-responsive-summary code {
+  display: block;
+}
+
+.block-editor-block-inspector .wpbb-responsive-summary code {
+  margin-top: 4px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.block-editor-block-inspector .wpbb-mini-card {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 2px;
+  box-shadow: none;
+  box-sizing: border-box;
+  padding: 12px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.block-editor-block-inspector .wpbb-bg-custom-position__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  min-width: 0;
+}
+
+.block-editor-block-inspector .components-base-control,
+.block-editor-block-inspector .components-base-control__field,
+.block-editor-block-inspector .components-input-control__container,
+.block-editor-block-inspector .components-select-control,
+.block-editor-block-inspector .components-text-control__input,
+.block-editor-block-inspector .components-textarea-control__input {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 782px) {
+  .block-editor-block-inspector .wpbb-responsive-side-field {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .block-editor-block-inspector .wpbb-bg-custom-position__grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Keep PanelBody headings stable and full-width in both states. */
+.block-editor-block-inspector .components-panel__body > .components-panel__body-title {
+  box-sizing: border-box;
+  margin: 0 !important;
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.block-editor-block-inspector .components-panel__body > .components-panel__body-title > .components-panel__body-toggle {
+  box-sizing: border-box;
+  display: flex !important;
+  min-height: 48px;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Six breakpoint buttons remain readable within the native Inspector width. */
+.block-editor-block-inspector .wpbb-device-preview__buttons {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.block-editor-block-inspector .wpbb-device-preview__buttons > .components-button {
+  width: 100% !important;
+}
+
+
+/* 5.4.8: stable native PanelBody titles and compact icon alignment controls. */
+.block-editor-block-inspector .components-panel__body > .components-panel__body-title,
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title {
+  box-sizing: border-box !important;
+  min-height: 48px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  inset: auto !important;
+}
+
+.block-editor-block-inspector .components-panel__body > .components-panel__body-title > .components-panel__body-toggle,
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title > .components-panel__body-toggle {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  line-height: 24px !important;
+  position: static !important;
+  transform: none !important;
+}
+
+.block-editor-block-inspector .wpbb-icon-choice {
+  margin: 0 0 16px;
+}
+
+.block-editor-block-inspector .wpbb-icon-choice__label {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.block-editor-block-inspector .wpbb-icon-choice__buttons {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+}
+
+.block-editor-block-inspector .wpbb-icon-choice__button.components-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 6px;
+}
+
+.block-editor-block-inspector .wpbb-icon-choice__button .dashicons {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+
+/* 5.4.9: keep native PanelBody headings aligned and improve icon controls. */
+.block-editor-block-inspector .components-panel__body > .components-panel__body-title > .components-panel__body-toggle,
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title > .components-panel__body-toggle {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 8px !important;
+}
+.block-editor-block-inspector .components-panel__body-toggle > .components-panel__arrow,
+.block-editor-block-inspector .components-panel__body-toggle > svg:last-child {
+  margin-left: auto !important;
+  flex: 0 0 auto;
+}
+.block-editor-block-inspector .wpbb-icon-choice__buttons {
+  grid-template-columns: repeat(4, minmax(44px, 1fr));
+  gap: 6px;
+}
+.block-editor-block-inspector .wpbb-icon-choice__button.components-button {
+  min-height: 40px;
+  height: 40px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #949494;
+}
+.block-editor-block-inspector .wpbb-icon-choice__button.components-button:hover {
+  box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color, #3858e9);
+}
+.block-editor-block-inspector .wpbb-icon-choice__button.components-button.is-pressed,
+.block-editor-block-inspector .wpbb-icon-choice__button.components-button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color, #3858e9);
+}
+.block-editor-block-inspector .wpbb-alignment-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* 5.4.10: compact padding around opened panel content only. */
+.block-editor-block-inspector .components-panel__body.is-opened {
+  padding: 0 10px 10px !important;
+}
+
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title {
+  width: calc(100% + 20px) !important;
+  max-width: none !important;
+  margin: 0 -10px 10px !important;
+  padding: 0 !important;
+}
+
+.block-editor-block-inspector .components-panel__body.is-opened > .components-panel__body-title > .components-panel__body-toggle {
+  padding: 12px 16px !important;
+}

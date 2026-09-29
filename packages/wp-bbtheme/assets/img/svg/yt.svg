@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <g id="Group_8749" data-name="Group 8749" transform="translate(-0.383 -0.453)">
+    <g id="Ellipse_287" data-name="Ellipse 287" transform="translate(0.383 0.453)" fill="none" stroke="#fff" stroke-width="1.7">
+      <circle cx="11" cy="11" r="11" stroke="none"/>
+      <circle cx="11" cy="11" r="10.15" fill="none"/>
+    </g>
+    <g id="Group_8750" data-name="Group 8750" transform="translate(0.635 0.531)">
+      <path id="iconmonstr-youtube-10" d="M14.865,7.089c-1.751-.119-5.652-.118-7.4,0-1.894.129-2.116,1.274-2.131,4.284.015,3.006.236,4.155,2.132,4.284,1.749.118,5.65.119,7.4,0,1.894-.129,2.117-1.274,2.132-4.284-.016-3.005-.237-4.155-2.133-4.284ZM9.415,13.317V9.43l4.179,1.94Z" transform="translate(-0.344 -0.451)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

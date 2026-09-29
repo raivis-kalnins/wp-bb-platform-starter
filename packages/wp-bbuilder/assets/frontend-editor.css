@@ -1,0 +1,23 @@
+/* BBuilder Front-End Editor */
+html{scroll-behavior:smooth}
+.wpbb-fie-savebar,.wpbb-fie-inline-toolbar{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif}
+.wpbb-fie-savebar{position:fixed;top:150px;left:16px;z-index:99999;width:178px;padding:12px;border:1px solid rgba(114,174,230,.32);border-radius:10px;background:rgba(29,35,39,.9);color:#f0f0f1;box-shadow:0 10px 28px rgba(0,0,0,.28);backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:8px}
+.wpbb-fie-savebar[hidden],.wpbb-fie-inline-toolbar[hidden]{display:none!important}
+.wpbb-fie-toolbar-label{font-size:12px;font-weight:600;line-height:1.35;color:#c3c4c7;letter-spacing:.01em}
+.wpbb-fie-btn,.wpbb-fie-tool-btn{appearance:none;border:1px solid transparent;border-radius:4px;font-size:13px;font-weight:600;line-height:1.4;cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease}
+.wpbb-fie-btn{padding:7px 12px;text-align:center}
+.wpbb-fie-btn:disabled,.wpbb-fie-tool-btn:disabled{opacity:.55;cursor:not-allowed}
+.wpbb-fie-btn-save{background:#2271b1;border-color:#2271b1;color:#fff}.wpbb-fie-btn-save:hover:not(:disabled),.wpbb-fie-btn-save:focus:not(:disabled){background:#135e96;border-color:#135e96;color:#fff;box-shadow:0 0 0 1px #72aee6}
+.wpbb-fie-btn-cancel{background:rgba(240,246,252,.04);color:#f0f0f1;border-color:#646970}.wpbb-fie-btn-cancel:hover:not(:disabled),.wpbb-fie-btn-cancel:focus:not(:disabled){background:rgba(240,246,252,.09);border-color:#8c8f94;color:#fff}
+.wpbb-fie-message{min-height:16px;font-size:12px;color:#72aee6;word-break:break-word}
+.wpbb-fie-inline-toolbar{position:fixed;top:150px;left:212px;z-index:99999;display:flex;align-items:center;gap:4px;max-width:calc(100vw - 24px);padding:6px;border:1px solid rgba(114,174,230,.32);border-radius:8px;background:rgba(29,35,39,.88);color:#f0f0f1;box-shadow:0 10px 28px rgba(0,0,0,.24);backdrop-filter:blur(10px);opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .12s ease,transform .12s ease}
+.wpbb-fie-inline-toolbar.wpbb-fie-inline-toolbar-visible{opacity:1;transform:translateY(0);pointer-events:auto}
+.wpbb-fie-tool-btn{min-width:32px;height:32px;padding:0 9px;background:transparent;color:#f0f0f1;border-color:transparent}.wpbb-fie-tool-btn:hover,.wpbb-fie-tool-btn:focus{background:rgba(114,174,230,.16);border-color:rgba(114,174,230,.35);color:#fff}.wpbb-fie-tool-btn[aria-pressed="true"]{background:#2271b1;border-color:#72aee6;color:#fff}.wpbb-fie-tool-divider{display:block;width:1px;height:22px;margin:0 4px;background:rgba(195,196,199,.35)}
+.wpbb-fie-block{cursor:default;transition:outline .15s ease,box-shadow .15s ease;border-radius:3px}
+.wpbb-fie-block:hover{outline:2px dashed #72aee6;outline-offset:4px}.wpbb-fie-block.wpbb-fie-active{outline:2px solid #2271b1;outline-offset:4px;box-shadow:0 0 0 4px rgba(34,113,177,.14)}
+.wpbb-fie-block.wpbb-fie-active [contenteditable="true"]{min-height:1.25em;cursor:text}.wpbb-fie-block.wpbb-fie-active [contenteditable="true"]:focus{outline:none}
+.wpbb-fie-block .has-text-align-left{text-align:left}.wpbb-fie-block .has-text-align-center{text-align:center}.wpbb-fie-block .has-text-align-right{text-align:right}
+.wpbb-fie-user-fab{position:fixed;bottom:24px;right:24px;z-index:99998}.wpbb-fie-fab-toggle{width:44px;height:44px;border-radius:50%;border:1px solid rgba(114,174,230,.32);background:rgba(29,35,39,.9);color:#fff;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;transition:background .15s ease;list-style:none;backdrop-filter:blur(10px)}
+.wpbb-fie-fab-toggle:hover{background:#2c3338}.wpbb-fie-fab-toggle::-webkit-details-marker{display:none}.wpbb-fie-fab-menu{display:none;position:absolute;bottom:54px;right:0;background:rgba(29,35,39,.94);border:1px solid rgba(114,174,230,.28);border-radius:8px;padding:12px 16px;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.3);backdrop-filter:blur(10px)}
+.wpbb-fie-user-fab[open] .wpbb-fie-fab-menu{display:block}.wpbb-fie-fab-greeting{font-size:13px;color:#c3c4c7;margin-bottom:10px;display:block}.wpbb-fie-fab-logout{display:block;font-size:13px;color:#f0f0f1;text-decoration:none;padding:6px 0}.wpbb-fie-fab-logout:hover{color:#72aee6}
+@media screen and (max-width:782px){.wpbb-fie-savebar{top:150px;left:10px;width:154px;padding:10px}.wpbb-fie-inline-toolbar{left:10px;flex-wrap:wrap}.wpbb-fie-tool-btn{min-width:30px;height:30px;padding:0 8px}}

@@ -1,0 +1,219 @@
+.wpbb-admin-wrap .wpbb-admin-nav {
+  margin-bottom: 14px;
+}
+
+.wpbb-card {
+  transition: border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+
+.wpbb-card h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0;
+}
+
+.wpbb-card .wpbb-card-toggle {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 0;
+  background: transparent;
+  color: #2271b1;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.wpbb-card .wpbb-card-body {
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.wpbb-card.collapsed {
+  opacity: .95;
+}
+
+.wpbb-card.collapsed .wpbb-card-body {
+  display: none;
+}
+
+.wpbb-card .description {
+  margin: 0 0 10px;
+  color: #646970;
+  line-height: 1.45;
+}
+
+.wpbb-admin-wrap p > label,
+.wpbb-admin-wrap .wpbb-field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  color: #1d2327;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.wpbb-admin-wrap p > label > br {
+  display: none;
+}
+
+.wpbb-admin-wrap input[type=text],
+.wpbb-admin-wrap input[type=email],
+.wpbb-admin-wrap input[type=url],
+.wpbb-admin-wrap input[type=password],
+.wpbb-admin-wrap input[type=number],
+.wpbb-admin-wrap input[type=search],
+.wpbb-admin-wrap textarea,
+.wpbb-admin-wrap select,
+.wpbb-admin-wrap .wpbb-field__control {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 38px;
+  margin-top: 6px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.35;
+  box-sizing: border-box;
+}
+
+.wpbb-admin-wrap textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.wpbb-admin-wrap input[type=color] {
+  display: block;
+  width: 56px;
+  height: 38px;
+  margin-top: 6px;
+  padding: 2px;
+}
+
+.wpbb-admin-wrap .large-text {
+  font-size: 13px;
+}
+
+.wpbb-field__label {
+  display: block;
+  margin: 0;
+  color: #1d2327;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wpbb-field-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wpbb-field-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wpbb-subsettings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0 14px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.wpbb-subsettings > p {
+  min-width: 0;
+  margin: 0;
+}
+
+.wpbb-card .wpbb-setting-group,
+.wpbb-card .wpbb-settings-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.wpbb-admin-wrap .wpbb-check {
+  align-items: flex-start;
+}
+
+.wpbb-admin-wrap .wpbb-ordering-post-types label {
+  width: 100%;
+}
+
+.wpbb-smtp__toggle {
+  margin: 12px 0;
+  background: #f6f7f7;
+}
+
+.wpbb-smtp-test {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.wpbb-smtp-test__title {
+  margin-top: 0;
+}
+
+.wpbb-smtp-test__controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.wpbb-smtp-test__recipient {
+  flex: 1 1 auto;
+}
+
+.wpbb-smtp-test__button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  margin-bottom: 0;
+}
+
+.wpbb-smtp-test__status {
+  min-height: 20px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.wpbb-smtp-test__status.is-loading {
+  color: #646970;
+}
+
+.wpbb-smtp-test__status.is-success {
+  color: #008a20;
+}
+
+.wpbb-smtp-test__status.is-error {
+  color: #b32d2e;
+}
+
+@media (max-width: 782px) {
+  .wpbb-admin-wrap {
+    padding-right: 10px;
+  }
+
+  .wpbb-field-grid--two,
+  .wpbb-subsettings,
+  .wpbb-card .wpbb-setting-group,
+  .wpbb-card .wpbb-settings-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .wpbb-smtp-test__controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wpbb-smtp-test__button {
+    width: 100%;
+  }
+}
