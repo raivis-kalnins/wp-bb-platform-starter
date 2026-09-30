@@ -1,0 +1,99 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "1220px",
+      "wideSize": "1480px"
+    },
+    "color": {
+      "palette": [
+        {
+          "slug": "brand",
+          "color": "#178f55",
+          "name": "WP BB Green"
+        },
+        {
+          "slug": "brand-dark",
+          "color": "#0d432f",
+          "name": "WP BB Deep Green"
+        },
+        {
+          "slug": "navy",
+          "color": "#12354c",
+          "name": "WP BB Navy"
+        },
+        {
+          "slug": "lime",
+          "color": "#d8ff72",
+          "name": "Bright Lime"
+        },
+        {
+          "slug": "coral",
+          "color": "#ff6d5a",
+          "name": "Warm Coral"
+        },
+        {
+          "slug": "muted",
+          "color": "#607168",
+          "name": "Muted"
+        },
+        {
+          "slug": "surface",
+          "color": "#f5f8f2",
+          "name": "Surface"
+        },
+        {
+          "slug": "white",
+          "color": "#ffffff",
+          "name": "White"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          "slug": "inter",
+          "name": "Inter/System"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#ffffff",
+      "text": "#10251d"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--inter)",
+      "fontSize": "16px",
+      "lineHeight": "1.55"
+    },
+    "elements": {
+      "link": {
+        "color": {
+          "text": "#0d432f"
+        },
+        ":hover": {
+          "color": {
+            "text": "#178f55"
+          }
+        }
+      }
+    }
+  },
+  "templateParts": [
+    {
+      "name": "header",
+      "title": "Header",
+      "area": "header"
+    },
+    {
+      "name": "footer",
+      "title": "Footer",
+      "area": "footer"
+    }
+  ]
+}

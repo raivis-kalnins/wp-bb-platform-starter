@@ -1,0 +1,379 @@
+
+/* WP BB Home & Garden v4.0
+ * Bright, high-contrast enterprise storefront treatment.
+ * Keeps the existing green identity while improving large-catalogue scanning.
+ */
+:root{
+  --wpbb-v4-green:#178f55;
+  --wpbb-v4-green-dark:#0d432f;
+  --wpbb-v4-green-deep:#082f25;
+  --wpbb-v4-lime:#d8ff72;
+  --wpbb-v4-coral:#ff6d5a;
+  --wpbb-v4-navy:#12354c;
+  --wpbb-v4-ink:#10251d;
+  --wpbb-v4-muted:#607168;
+  --wpbb-v4-surface:#f5f8f2;
+  --wpbb-v4-line:#dce7df;
+  --wpbb-v4-shell:1480px;
+  --wpbb-v4-radius:18px;
+}
+
+body.wpbbshop-theme{
+  background:#fff;
+  color:var(--wpbb-v4-ink);
+}
+body.wpbbshop-theme .wpbbshop-container,
+body.wpbbshop-theme .wpbb-v400-shell{
+  width:min(var(--wpbb-v4-shell),calc(100% - 48px))!important;
+  max-width:var(--wpbb-v4-shell)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+body.wpbbshop-theme a{ text-underline-offset:3px }
+
+/* Clean functional fallback logo. Custom Logo still wins when configured. */
+.wpbbshop-brand-v400{
+  display:inline-flex!important;
+  align-items:center;
+  gap:10px;
+  width:auto!important;
+  max-width:290px!important;
+  min-width:210px;
+  color:var(--wpbb-v4-green-dark)!important;
+  text-decoration:none!important;
+  line-height:1;
+}
+.wpbbshop-brand-svg{
+  width:46px;
+  height:46px;
+  flex:0 0 46px;
+  color:var(--wpbb-v4-green);
+}
+.wpbbshop-brand-copy-v400{
+  display:grid;
+  gap:3px;
+  min-width:0;
+}
+.wpbbshop-brand-copy-v400 strong{
+  display:block;
+  font-size:21px!important;
+  line-height:.95!important;
+  letter-spacing:-.035em;
+  color:var(--wpbb-v4-green-dark)!important;
+}
+.wpbbshop-brand-copy-v400 small{
+  display:block;
+  font-size:12px!important;
+  line-height:1.05!important;
+  letter-spacing:.07em;
+  font-weight:850;
+  color:var(--wpbb-v4-navy)!important;
+  white-space:nowrap;
+}
+.llg-logo .wpbbshop-brand-v400,
+.wpbbshop-logo-wrap .wpbbshop-brand-v400{overflow:visible!important;height:auto!important}
+
+/* Header scale/readability */
+@media(min-width:821px){
+  body.wpbbshop-theme .llg-mainbar-preview{
+    grid-template-columns:minmax(220px,260px) minmax(440px,1fr) minmax(300px,360px)!important;
+    gap:24px!important;
+  }
+}
+
+/* Homepage */
+.wpbb-v400-home{
+  padding:0 0 56px;
+  background:
+    radial-gradient(circle at 88% 7%,rgba(216,255,114,.24),transparent 22%),
+    linear-gradient(#fff,#fff);
+}
+.wpbb-v400-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.04fr) minmax(430px,.96fr);
+  gap:18px;
+  padding-top:24px;
+}
+.wpbb-v400-hero-copy{
+  min-height:500px;
+  padding:58px clamp(34px,4vw,70px);
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 85% 20%,rgba(216,255,114,.18),transparent 26%),
+    linear-gradient(135deg,var(--wpbb-v4-green-deep),var(--wpbb-v4-green-dark) 58%,#125d3f);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:0 22px 55px rgba(7,55,38,.14);
+}
+.wpbb-v400-eyebrow{
+  display:inline-flex;
+  align-self:flex-start;
+  margin-bottom:20px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--wpbb-v4-lime);
+  color:#173221;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.wpbb-v400-hero h1{
+  max-width:760px;
+  margin:0 0 18px!important;
+  color:#fff!important;
+  font-size:clamp(42px,5vw,78px)!important;
+  line-height:.96!important;
+  letter-spacing:-.05em;
+  font-weight:850;
+}
+.wpbb-v400-hero-copy>p{
+  max-width:700px;
+  margin:0!important;
+  color:#dcece4!important;
+  font-size:clamp(16px,1.4vw,20px);
+  line-height:1.6;
+}
+.wpbb-v400-hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}
+.wpbb-v400-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:48px;
+  padding:0 19px;
+  border-radius:12px;
+  font-weight:850;
+  text-decoration:none!important;
+}
+.wpbb-v400-btn.is-primary{background:var(--wpbb-v4-lime);color:#112b1d!important}
+.wpbb-v400-btn.is-primary:hover{transform:translateY(-1px);filter:brightness(.97)}
+.wpbb-v400-btn.is-ghost{border:1px solid rgba(255,255,255,.4);color:#fff!important;background:rgba(255,255,255,.06)}
+.wpbb-v400-trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.wpbb-v400-trust span{
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:9px;
+  background:rgba(255,255,255,.07);
+  color:#eaf4ee;
+  font-size:12px;
+  font-weight:700;
+}
+.wpbb-v400-hero-media{
+  position:relative;
+  min-height:500px;
+  overflow:hidden;
+  border-radius:26px;
+  background:var(--wpbb-v4-surface);
+  box-shadow:0 22px 55px rgba(7,55,38,.09);
+}
+.wpbb-v400-hero-media>img{
+  width:100%;
+  height:100%;
+  min-height:500px;
+  object-fit:cover;
+  display:block;
+}
+.wpbb-v400-hero-media:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent 48%,rgba(5,36,26,.5));
+  pointer-events:none;
+}
+.wpbb-v400-hero-card{
+  position:absolute;
+  z-index:2;
+  left:22px;
+  right:22px;
+  bottom:22px;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:center;
+  padding:16px 18px;
+  border-radius:14px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(12px);
+  color:var(--wpbb-v4-ink);
+}
+.wpbb-v400-hero-card strong{font-size:15px}
+.wpbb-v400-hero-card span{font-size:12px;color:var(--wpbb-v4-muted);text-align:right}
+
+.wpbb-v400-departments{padding-top:54px}
+.wpbb-v400-section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:18px;
+}
+.wpbb-v400-section-head span{
+  color:var(--wpbb-v4-green);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.wpbb-v400-section-head h2{
+  margin:4px 0 0!important;
+  font-size:clamp(28px,3vw,44px)!important;
+  letter-spacing:-.035em;
+  color:var(--wpbb-v4-ink)!important;
+}
+.wpbb-v400-section-head>a{font-weight:850;color:var(--wpbb-v4-green-dark)!important;text-decoration:none}
+.wpbb-v400-dept-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
+}
+.wpbb-v400-dept{
+  position:relative;
+  min-height:128px;
+  padding:18px;
+  border:1px solid var(--wpbb-v4-line);
+  border-radius:16px;
+  background:#fff;
+  color:var(--wpbb-v4-ink)!important;
+  text-decoration:none!important;
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr);
+  grid-template-rows:auto auto;
+  gap:4px 12px;
+  align-items:center;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.wpbb-v400-dept:hover{
+  transform:translateY(-3px);
+  border-color:#8dcaa7;
+  box-shadow:0 14px 34px rgba(12,66,44,.09);
+}
+.wpbb-v400-dept-icon{
+  grid-row:1/3;
+  width:46px;height:46px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  background:#edf8f0;
+  color:var(--wpbb-v4-green);
+}
+.wpbb-v400-dept-icon svg{width:26px;height:26px}
+.wpbb-v400-dept strong{font-size:14px;line-height:1.2}
+.wpbb-v400-dept small{color:var(--wpbb-v4-muted);font-size:11px}
+
+.wpbb-v400-projects{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:28px;
+}
+.wpbb-v400-projects article{
+  position:relative;
+  min-height:210px;
+  overflow:hidden;
+  padding:28px;
+  border-radius:20px;
+  background:var(--wpbb-v4-navy);
+  color:#fff;
+}
+.wpbb-v400-projects article:nth-child(2){background:var(--wpbb-v4-green)}
+.wpbb-v400-projects article:nth-child(3){background:#3f372c}
+.wpbb-v400-projects article>span{
+  display:inline-flex;width:38px;height:30px;align-items:center;justify-content:center;
+  border-radius:999px;background:var(--wpbb-v4-lime);color:#17251a;font-weight:900;font-size:11px;
+}
+.wpbb-v400-projects h3{margin:34px 0 8px!important;color:#fff!important;font-size:27px!important;letter-spacing:-.03em}
+.wpbb-v400-projects p{margin:0!important;max-width:420px;color:rgba(255,255,255,.78)!important;line-height:1.55}
+
+.wpbb-v400-products{padding-top:45px;content-visibility:auto;contain-intrinsic-size:800px}
+.wpbb-v400-home .llg-section-head{margin-bottom:16px!important}
+.wpbb-v400-home .llg-section-head h2{font-size:30px!important;letter-spacing:-.03em!important}
+.wpbb-v400-home .llg-product-grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+.wpbb-v400-home .llg-product-card{
+  border:1px solid var(--wpbb-v4-line)!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  box-shadow:0 5px 18px rgba(18,53,40,.04)!important;
+  overflow:hidden!important;
+}
+.wpbb-v400-home .llg-card-media{
+  min-height:190px!important;
+  background:linear-gradient(145deg,#f7fbf6,#eef7f0)!important;
+}
+.wpbb-v400-home .llg-card-media img{
+  width:100%!important;height:190px!important;object-fit:contain!important;
+  padding:12px!important;
+}
+.wpbb-v400-home .llg-product-card:hover{box-shadow:0 16px 34px rgba(18,53,40,.09)!important;transform:translateY(-2px)}
+.wpbb-v400-home .llg-product-card h3{font-size:14px!important;line-height:1.35!important}
+.wpbb-v400-home .price,.wpbb-v400-home .llg-card-price{color:var(--wpbb-v4-green-dark)!important;font-weight:900!important}
+.wpbb-v400-home .button,.wpbb-v400-home .add_to_cart_button{
+  border-radius:9px!important;background:var(--wpbb-v4-green)!important;color:#fff!important;border-color:var(--wpbb-v4-green)!important;
+}
+
+.wpbb-v400-services{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:48px;
+}
+.wpbb-v400-services>div{
+  min-height:120px;
+  padding:22px;
+  border-radius:16px;
+  border:1px solid var(--wpbb-v4-line);
+  background:var(--wpbb-v4-surface);
+}
+.wpbb-v400-services strong{display:block;margin-bottom:7px;color:var(--wpbb-v4-green-dark);font-size:15px}
+.wpbb-v400-services span{display:block;color:var(--wpbb-v4-muted);font-size:12px;line-height:1.5}
+
+/* Footer/address readability */
+body.wpbbshop-theme .llg-footer-bottom,
+body.wpbbshop-theme .llg-site-footer{font-size:13px}
+
+/* Focus accessibility */
+.wpbb-v400-home a:focus-visible,
+.wpbbshop-brand-v400:focus-visible{
+  outline:3px solid var(--wpbb-v4-coral)!important;
+  outline-offset:3px!important;
+}
+
+/* Large catalogue progressive rendering */
+.wpbb-v400-departments,.wpbb-v400-products{content-visibility:auto}
+.wpbb-v400-departments{contain-intrinsic-size:600px}
+.wpbb-v400-products{contain-intrinsic-size:900px}
+
+@media(max-width:1280px){
+  .wpbb-v400-dept-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .wpbb-v400-home .llg-product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media(max-width:980px){
+  body.wpbbshop-theme .wpbbshop-container,body.wpbbshop-theme .wpbb-v400-shell{width:min(100% - 30px,var(--wpbb-v4-shell))!important}
+  .wpbb-v400-hero{grid-template-columns:1fr}
+  .wpbb-v400-hero-copy,.wpbb-v400-hero-media,.wpbb-v400-hero-media>img{min-height:430px}
+  .wpbb-v400-dept-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .wpbb-v400-projects{grid-template-columns:1fr}
+  .wpbb-v400-services{grid-template-columns:1fr 1fr}
+}
+@media(max-width:680px){
+  body.wpbbshop-theme .wpbbshop-container,body.wpbbshop-theme .wpbb-v400-shell{width:min(100% - 22px,var(--wpbb-v4-shell))!important}
+  .wpbb-v400-hero{padding-top:12px}
+  .wpbb-v400-hero-copy{min-height:0;padding:34px 24px;border-radius:19px}
+  .wpbb-v400-hero h1{font-size:42px!important}
+  .wpbb-v400-hero-media,.wpbb-v400-hero-media>img{min-height:310px}
+  .wpbb-v400-hero-card{left:12px;right:12px;bottom:12px;align-items:flex-start;flex-direction:column}
+  .wpbb-v400-dept-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wpbb-v400-dept{grid-template-columns:38px minmax(0,1fr);padding:14px;min-height:104px}
+  .wpbb-v400-dept-icon{width:38px;height:38px}
+  .wpbb-v400-home .llg-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .wpbb-v400-services{grid-template-columns:1fr}
+  .wpbb-v400-section-head{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:420px){
+  .wpbb-v400-dept-grid{grid-template-columns:1fr}
+  .wpbb-v400-home .llg-product-grid{grid-template-columns:1fr 1fr!important}
+  .wpbb-v400-home .llg-card-media,.wpbb-v400-home .llg-card-media img{min-height:150px!important;height:150px!important}
+}
