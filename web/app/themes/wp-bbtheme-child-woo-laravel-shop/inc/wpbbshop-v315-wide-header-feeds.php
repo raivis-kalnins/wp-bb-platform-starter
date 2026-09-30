@@ -87,7 +87,7 @@ function wpbbshop_v315_install_feed_htaccess_rules() {
 function wpbbshop_v315_feed_upgrade() {
     if (!current_user_can('edit_theme_options')) { return; }
     $version = (string) get_option('wpbbshop_v315_feed_version', '');
-    if ($version !== '4.0.0') {
+    if ($version !== '4.0.4') {
         wpbbshop_v315_prepare_feed_products();
         wpbbshop_v315_publish_static_feeds();
         delete_option('wpbbshop_v315_feed_publish_error');
@@ -95,7 +95,7 @@ function wpbbshop_v315_feed_upgrade() {
             wpbbshop_compare_feed_register_rewrites();
             flush_rewrite_rules(false);
         }
-        update_option('wpbbshop_v315_feed_version', '4.0.0', false);
+        update_option('wpbbshop_v315_feed_version', '4.0.4', false);
     }
 }
 add_action('after_switch_theme', 'wpbbshop_v315_feed_upgrade', 220);

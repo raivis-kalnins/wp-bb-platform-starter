@@ -1755,3 +1755,6 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-garden-megastore.php';
 
 /* 4.0.0 unified Home & Garden platform integration. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v400-platform.php';
+
+/* 4.0.4 stability: one shell, non-blocking cache/network maintenance, admin guard. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v404-stability.php';

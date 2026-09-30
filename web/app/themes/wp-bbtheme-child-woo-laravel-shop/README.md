@@ -155,3 +155,12 @@ No manual SQL edits are required.
 - Canonical feed URLs use the direct WordPress query endpoint (`/?wpbbshop_compare_feed=kurpirkt`, etc.), so feeds do not depend on writable root XML files or `.htaccess`.
 - Pretty `/kurpirkt.xml`, `/salidzini.xml`, `/ceno.xml` routes remain supported when the server already routes requests through WordPress.
 - The obsolete v3 XML-root/.htaccess warning is cleared on theme setup, `init`, and admin requests.
+
+## 4.0.4 stability fixes
+
+- Disables the parent WP BBTheme managed shell for this bespoke shop child theme, preventing duplicate headers and footers.
+- Removes legacy one-time full `wp_cache_flush()` hooks that can block Redis/object-cache on larger catalogues.
+- Defers Omniva locker refresh to WP-Cron instead of blocking the current page request.
+- Guards WordPress admin menu globals against early `remove_menu_page()` calls from third-party code.
+- Comparison feed links use direct WordPress query endpoints and do not require writable root XML files or `.htaccess`.
+- Adds a WordPress theme-directory `screenshot.png` generated from the current Home & Garden storefront.

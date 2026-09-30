@@ -8,7 +8,7 @@
 defined('ABSPATH') || exit;
 
 if (!defined('WPBBSHOP_V400_VERSION')) {
-    define('WPBBSHOP_V400_VERSION', '4.0.3');
+    define('WPBBSHOP_V400_VERSION', '4.0.4');
 }
 
 function wpbbshop_v400_primary_language() {

@@ -14,9 +14,7 @@ function wpbbshop_compare_feed_enabled($feed) {
 
 function wpbbshop_compare_feed_url($feed) {
     $feed = in_array($feed, array('kurpirkt','salidzini','ceno'), true) ? $feed : 'kurpirkt';
-    // Canonical URL deliberately uses a normal WordPress query endpoint so the
-    // feed works even when the document root and .htaccess are read-only.
-    // Pretty /kurpirkt.xml style routes remain supported when rewrites are available.
+    // Canonical endpoint deliberately bypasses web-server rewrite requirements.
     return add_query_arg('wpbbshop_compare_feed', $feed, home_url('/'));
 }
 
