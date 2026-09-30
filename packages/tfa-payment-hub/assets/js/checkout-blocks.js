@@ -64,9 +64,9 @@
                     type: responseTypes.SUCCESS,
                     meta: {
                         paymentMethodData: {
-                            tfa_payment_group: group,
-                            tfa_payment_provider: provider,
-                            tfa_direct_debit_consent: consent ? 'yes' : 'no'
+                            wp_payment_group: group,
+                            wp_payment_provider: provider,
+                            wp_direct_debit_consent: consent ? 'yes' : 'no'
                         }
                     }
                 };

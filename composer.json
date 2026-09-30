@@ -1,5 +1,5 @@
 {
-  "name": "tfa/wp-bb-platform-starter",
+  "name": "wp/wp-bb-platform-starter",
   "type": "project",
   "license": "proprietary",
   "description": "Bedrock + Acorn WordPress platform for WP BBTheme, BBuilder, WooCommerce and large custom systems.",
@@ -55,12 +55,12 @@
     "wp-plugin/updraftplus": "1.26.8",
     "wp-plugin/woocommerce": "11.1.2",
     "wp-plugin/redis-cache": "^3.0",
-    "tfa/wp-payment-hub": "*",
-    "tfa/wp-bb-platform": "*",
-    "tfa/wp-bbtheme": "*",
-    "tfa/wp-bbtheme-child-woo-laravel-shop": "*",
-    "tfa/wp-bbuilder": "*",
-    "tfa/wp-theme-woo-support": "*"
+    "wp/wp-payment-hub": "*",
+    "wp/wp-bb-platform": "*",
+    "wp/wp-bbtheme": "*",
+    "wp/wp-bbtheme-child-woo-laravel-shop": "*",
+    "wp/wp-bbuilder": "*",
+    "wp/wp-theme-woo-support": "*"
   },
   "config": {
     "optimize-autoloader": true,

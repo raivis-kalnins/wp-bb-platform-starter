@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Output WebSite schema with SearchAction.
  * Uses validator-safe query-input string format.
  */
-add_action( 'wp_head', 'tfa_output_website_search_schema', 20 );
-function tfa_output_website_search_schema() {
+add_action( 'wp_head', 'wp_output_website_search_schema', 20 );
+function wp_output_website_search_schema() {
 	if ( is_admin() ) {
 		return;
 	}
@@ -44,8 +44,8 @@ function tfa_output_website_search_schema() {
 /**
  * Output Product schema for all products visible on WooCommerce pages.
  */
-add_action( 'wp_footer', 'tfa_output_woocommerce_product_schema_graph', 99 );
-function tfa_output_woocommerce_product_schema_graph() {
+add_action( 'wp_footer', 'wp_output_woocommerce_product_schema_graph', 99 );
+function wp_output_woocommerce_product_schema_graph() {
 	if ( is_admin() || ! function_exists( 'is_woocommerce' ) || ! function_exists( 'wc_get_product' ) ) {
 		return;
 	}
@@ -55,7 +55,7 @@ function tfa_output_woocommerce_product_schema_graph() {
 		return;
 	}
 
-	$product_ids = tfa_collect_visible_product_ids();
+	$product_ids = wp_collect_visible_product_ids();
 
 	if ( empty( $product_ids ) ) {
 		return;
@@ -70,7 +70,7 @@ function tfa_output_woocommerce_product_schema_graph() {
 			continue;
 		}
 
-		$item = tfa_build_product_schema_item( $product );
+		$item = wp_build_product_schema_item( $product );
 
 		if ( ! empty( $item ) ) {
 			$graph[] = $item;
@@ -94,7 +94,7 @@ function tfa_output_woocommerce_product_schema_graph() {
 /**
  * Collect product IDs from current view.
  */
-function tfa_collect_visible_product_ids() {
+function wp_collect_visible_product_ids() {
 	$product_ids = array();
 
 	global $wp_query;
@@ -134,7 +134,7 @@ function tfa_collect_visible_product_ids() {
 /**
  * Build one Product schema node.
  */
-function tfa_build_product_schema_item( WC_Product $product ) {
+function wp_build_product_schema_item( WC_Product $product ) {
 	$product_id = $product->get_id();
 	$url        = get_permalink( $product_id );
 

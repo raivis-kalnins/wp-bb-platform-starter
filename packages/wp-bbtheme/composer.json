@@ -1,5 +1,5 @@
 {
-  "name": "tfa/wp-bbtheme",
+  "name": "wp/wp-bbtheme",
   "description": "WP BBTheme parent theme with optional Acorn/Blade view support.",
   "type": "wordpress-theme",
   "version": "3.8.10.24",

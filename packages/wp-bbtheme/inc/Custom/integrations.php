@@ -1044,8 +1044,8 @@ function wp_theme_ajax_search_markup( $args = array() ) {
     $args = wp_parse_args( $args, $defaults );
     $registry = class_exists( 'WP_Block_Type_Registry' ) ? WP_Block_Type_Registry::get_instance() : null;
     $block_name = '';
-    if ( $registry && $registry->is_registered( 'tfa/ajax-search' ) ) {
-        $block_name = 'tfa/ajax-search';
+    if ( $registry && $registry->is_registered( 'wp/ajax-search' ) ) {
+        $block_name = 'wp/ajax-search';
     } elseif ( $registry && $registry->is_registered( 'wpbb/ajax-search' ) ) {
         $block_name = 'wpbb/ajax-search';
     }
@@ -1063,7 +1063,7 @@ function wp_theme_ajax_search_markup( $args = array() ) {
             'showExcerpt' => true,
             'className' => 'wp-theme-global-ajax-search',
         );
-        if ( 'tfa/ajax-search' === $block_name ) {
+        if ( 'wp/ajax-search' === $block_name ) {
             $attrs['searchButton'] = false;
             $attrs['searchScopeControl'] = 'none';
         } else {

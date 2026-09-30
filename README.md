@@ -371,7 +371,7 @@ cd ~/projects/wp-bb-platform
 
 The installer validates Docker/Compose, creates `.env` when needed, generates database passwords and WordPress salts, builds the PHP container, starts MariaDB/Redis/Mailpit/phpMyAdmin, runs Composer as the host user, creates the writable WordPress/Acorn directories, installs WordPress through WP-CLI, activates the managed plugins and the Home & Garden child theme, and configures permalinks and Redis.
 
-Project-owned theme/plugin source belongs under `packages/`, not the ignored `web/app/` install tree. Composer currently installs the parent theme, Home & Garden child theme, BBuilder, Woo Support and TFA Payment Hub from those tracked source packages. WooCommerce, Redis Object Cache, Polylang, ACF Options for Polylang and UpdraftPlus are reproducible public Composer dependencies.
+Project-owned theme/plugin source belongs under `packages/`, not the ignored `web/app/` install tree. Composer currently installs the parent theme, Home & Garden child theme, BBuilder, Woo Support and WP Payment Hub from those tracked source packages. WooCommerce, Redis Object Cache, Polylang, ACF Options for Polylang and UpdraftPlus are reproducible public Composer dependencies.
 
 ---
 

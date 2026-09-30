@@ -1,5 +1,5 @@
 {
-  "name": "tfa/wp-bb-platform",
+  "name": "wp/wp-bb-platform",
   "description": "Operations, health, Acorn bootstrap and WP-CLI integration for WP BB Platform.",
   "type": "wordpress-muplugin",
   "version": "0.1.0",

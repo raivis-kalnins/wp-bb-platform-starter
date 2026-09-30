@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function tfa_ajax_search_allowed_post_types(): array {
+function wp_ajax_search_allowed_post_types(): array {
     $post_types = [
         'post' => __('Blogs', 'wp-theme'),
         'page' => __('Pages', 'wp-theme'),
@@ -20,7 +20,7 @@ function tfa_ajax_search_allowed_post_types(): array {
     return $post_types;
 }
 
-function tfa_ajax_search_product_categories(): array {
+function wp_ajax_search_product_categories(): array {
     if (!taxonomy_exists('product_cat')) {
         return [];
     }
@@ -45,7 +45,7 @@ function tfa_ajax_search_product_categories(): array {
     return $options;
 }
 
-function tfa_ajax_search_block_attributes(): array {
+function wp_ajax_search_block_attributes(): array {
     return [
         'placeholder' => [
             'type'    => 'string',
@@ -65,7 +65,7 @@ function tfa_ajax_search_block_attributes(): array {
         ],
         'postTypes' => [
             'type'    => 'array',
-            'default' => array_keys(tfa_ajax_search_allowed_post_types()),
+            'default' => array_keys(wp_ajax_search_allowed_post_types()),
             'items'   => [
                 'type' => 'string',
             ],
@@ -112,15 +112,15 @@ function tfa_ajax_search_block_attributes(): array {
     ];
 }
 
-function tfa_ajax_search_register_block(): void {
+function wp_ajax_search_register_block(): void {
     if (!function_exists('register_block_type')) {
         return;
     }
 
-    register_block_type('tfa/ajax-search', [
+    register_block_type('wp/ajax-search', [
         'api_version'     => 2,
-        'render_callback' => 'tfa_ajax_search_render_block',
-        'attributes'      => tfa_ajax_search_block_attributes(),
+        'render_callback' => 'wp_ajax_search_render_block',
+        'attributes'      => wp_ajax_search_block_attributes(),
         'supports'        => [
             'html'      => false,
             'className' => true,
@@ -128,9 +128,9 @@ function tfa_ajax_search_register_block(): void {
         ],
     ]);
 }
-add_action('init', 'tfa_ajax_search_register_block');
+add_action('init', 'wp_ajax_search_register_block');
 
-function tfa_ajax_search_enqueue_editor_assets(): void {
+function wp_ajax_search_enqueue_editor_assets(): void {
     if (!is_admin()) {
         return;
     }
@@ -145,9 +145,9 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
     $handle = 'wp-ajax-search-editor';
     wp_register_script($handle, '', ['wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-server-side-render', 'wp-i18n'], '1.1.0', true);
 
-    wp_localize_script($handle, 'tfaAjaxSearchEditor', [
-        'postTypes'         => tfa_ajax_search_allowed_post_types(),
-        'productCategories' => tfa_ajax_search_product_categories(),
+    wp_localize_script($handle, 'wpAjaxSearchEditor', [
+        'postTypes'         => wp_ajax_search_allowed_post_types(),
+        'productCategories' => wp_ajax_search_product_categories(),
     ]);
 
     $script = <<<'JS'
@@ -188,8 +188,8 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
         });
     };
 
-    registerBlockType('tfa/ajax-search', {
-        title: __('TFA AJAX Search', 'wp-theme'),
+    registerBlockType('wp/ajax-search', {
+        title: __('WP AJAX Search', 'wp-theme'),
         icon: 'search',
         category: 'widgets',
         description: __('AJAX search for products, posts and pages.', 'wp-theme'),
@@ -325,7 +325,7 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
                     'div',
                     blockProps,
                     el(ServerSideRender, {
-                        block: 'tfa/ajax-search',
+                        block: 'wp/ajax-search',
                         attributes: attrs
                     })
                 )
@@ -335,15 +335,15 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
             return null;
         }
     });
-})(window.wp, window.tfaAjaxSearchEditor || {});
+})(window.wp, window.wpAjaxSearchEditor || {});
 JS;
 
     wp_add_inline_script($handle, $script);
     wp_enqueue_script($handle);
 }
-add_action('enqueue_block_editor_assets', 'tfa_ajax_search_enqueue_editor_assets');
+add_action('enqueue_block_editor_assets', 'wp_ajax_search_enqueue_editor_assets');
 
-function tfa_ajax_search_frontend_config(): void {
+function wp_ajax_search_frontend_config(): void {
     if (is_admin()) {
         return;
     }
@@ -363,9 +363,9 @@ function tfa_ajax_search_frontend_config(): void {
         wp_enqueue_script($handle);
     }
 
-    wp_localize_script($handle, 'tfaAjaxSearch', [
+    wp_localize_script($handle, 'wpAjaxSearch', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce'   => wp_create_nonce('tfa_ajax_search_nonce'),
+        'nonce'   => wp_create_nonce('wp_ajax_search_nonce'),
         'labels'  => [
             'loading'    => __('Searching…', 'wp-theme'),
             'viewAll'    => __('View all results', 'wp-theme'),
@@ -374,12 +374,12 @@ function tfa_ajax_search_frontend_config(): void {
         ],
     ]);
 }
-add_action('wp_enqueue_scripts', 'tfa_ajax_search_frontend_config', 20);
+add_action('wp_enqueue_scripts', 'wp_ajax_search_frontend_config', 20);
 
-function tfa_ajax_search_render_block(array $attributes = []): string {
+function wp_ajax_search_render_block(array $attributes = []): string {
     $post_types = !empty($attributes['postTypes']) && is_array($attributes['postTypes'])
-        ? array_values(array_intersect($attributes['postTypes'], array_keys(tfa_ajax_search_allowed_post_types())))
-        : array_keys(tfa_ajax_search_allowed_post_types());
+        ? array_values(array_intersect($attributes['postTypes'], array_keys(wp_ajax_search_allowed_post_types())))
+        : array_keys(wp_ajax_search_allowed_post_types());
 
     if (empty($post_types)) {
         $post_types = ['post'];
@@ -442,7 +442,7 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
     }
 
     if ($scope_control !== 'none') {
-        $post_types = array_values(array_intersect(['product', 'post', 'page'], array_keys(tfa_ajax_search_allowed_post_types())));
+        $post_types = array_values(array_intersect(['product', 'post', 'page'], array_keys(wp_ajax_search_allowed_post_types())));
         if (!in_array('product', $post_types, true) && post_type_exists('product')) {
             array_unshift($post_types, 'product');
         }
@@ -515,12 +515,12 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
     return (string) ob_get_clean();
 }
 
-function tfa_ajax_search_result_type_label(string $post_type): string {
+function wp_ajax_search_result_type_label(string $post_type): string {
     $obj = get_post_type_object($post_type);
     return $obj && !empty($obj->labels->name) ? $obj->labels->name : ucfirst($post_type);
 }
 
-function tfa_ajax_search_build_query_args(string $post_type, string $term, int $remaining, string $product_category = ''): array {
+function wp_ajax_search_build_query_args(string $post_type, string $term, int $remaining, string $product_category = ''): array {
     $args = [
         'post_type'              => $post_type,
         'post_status'            => 'publish',
@@ -545,7 +545,7 @@ function tfa_ajax_search_build_query_args(string $post_type, string $term, int $
     return $args;
 }
 
-function tfa_ajax_search_find_sku_product_ids(string $term, int $limit, string $product_category = ''): array {
+function wp_ajax_search_find_sku_product_ids(string $term, int $limit, string $product_category = ''): array {
     global $wpdb;
 
     $like = '%' . $wpdb->esc_like($term) . '%';
@@ -576,7 +576,7 @@ function tfa_ajax_search_find_sku_product_ids(string $term, int $limit, string $
     return array_slice($ids, 0, max(1, $limit));
 }
 
-function tfa_ajax_search_highlight(string $text, string $term, bool $enabled): string {
+function wp_ajax_search_highlight(string $text, string $term, bool $enabled): string {
     $safe_text = esc_html($text);
     if (!$enabled || $term === '') {
         return $safe_text;
@@ -586,7 +586,7 @@ function tfa_ajax_search_highlight(string $text, string $term, bool $enabled): s
     return (string) preg_replace($pattern, '<mark>$0</mark>', $safe_text);
 }
 
-function tfa_ajax_search_render_results_html(array $grouped, string $term, bool $show_image, bool $show_excerpt, bool $show_price, bool $show_type_label, bool $highlight_terms, array $post_types, string $product_category): string {
+function wp_ajax_search_render_results_html(array $grouped, string $term, bool $show_image, bool $show_excerpt, bool $show_price, bool $show_type_label, bool $highlight_terms, array $post_types, string $product_category): string {
     ob_start();
 
     if (!empty($grouped)) {
@@ -594,7 +594,7 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
         foreach ($grouped as $post_type => $posts) {
             echo '<div class="wp-ajax-search__group">';
             if ($show_type_label) {
-                echo '<div class="wp-ajax-search__group-title">' . esc_html(tfa_ajax_search_result_type_label($post_type)) . '</div>';
+                echo '<div class="wp-ajax-search__group-title">' . esc_html(wp_ajax_search_result_type_label($post_type)) . '</div>';
             }
             echo '<ul class="wp-ajax-search__list">';
             foreach ($posts as $post) {
@@ -609,7 +609,7 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
                     echo '<span class="wp-ajax-search__media"><img src="' . esc_url($thumb) . '" alt="" loading="lazy" /></span>';
                 }
                 echo '<span class="wp-ajax-search__content">';
-                echo '<span class="wp-ajax-search__title">' . wp_kses(tfa_ajax_search_highlight($title, $term, $highlight_terms), ['mark' => []]) . '</span>';
+                echo '<span class="wp-ajax-search__title">' . wp_kses(wp_ajax_search_highlight($title, $term, $highlight_terms), ['mark' => []]) . '</span>';
                 if ($show_price && $post_type === 'product' && function_exists('wc_get_product')) {
                     $product = wc_get_product($post->ID);
                     if ($product) {
@@ -623,7 +623,7 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
                     }
                 }
                 if ($excerpt) {
-                    echo '<span class="wp-ajax-search__excerpt">' . wp_kses(tfa_ajax_search_highlight($excerpt, $term, $highlight_terms), ['mark' => []]) . '</span>';
+                    echo '<span class="wp-ajax-search__excerpt">' . wp_kses(wp_ajax_search_highlight($excerpt, $term, $highlight_terms), ['mark' => []]) . '</span>';
                 }
                 echo '</span>';
                 echo '</a>';
@@ -656,13 +656,13 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
     return (string) ob_get_clean();
 }
 
-function tfa_ajax_search_ajax_handler(): void {
-    check_ajax_referer('tfa_ajax_search_nonce', 'nonce');
+function wp_ajax_search_ajax_handler(): void {
+    check_ajax_referer('wp_ajax_search_nonce', 'nonce');
 
     $raw_term = isset($_POST['term']) ? wp_unslash($_POST['term']) : '';
     $term = trim(sanitize_text_field($raw_term));
 
-    $allowed = array_keys(tfa_ajax_search_allowed_post_types());
+    $allowed = array_keys(wp_ajax_search_allowed_post_types());
     $post_types = isset($_POST['postTypes']) ? (array) $_POST['postTypes'] : $allowed;
     $post_types = array_values(array_intersect(array_map('sanitize_key', $post_types), $allowed));
     if (empty($post_types)) {
@@ -694,11 +694,11 @@ function tfa_ajax_search_ajax_handler(): void {
             break;
         }
 
-        $query = new WP_Query(tfa_ajax_search_build_query_args($post_type, $term, $remaining, $product_category));
+        $query = new WP_Query(wp_ajax_search_build_query_args($post_type, $term, $remaining, $product_category));
         $posts = $query->posts;
 
         if ($post_type === 'product' && $search_in_sku) {
-            $sku_ids = tfa_ajax_search_find_sku_product_ids($term, $remaining, $product_category);
+            $sku_ids = wp_ajax_search_find_sku_product_ids($term, $remaining, $product_category);
             $existing_ids = wp_list_pluck($posts, 'ID');
             $sku_ids = array_values(array_diff($sku_ids, $used_ids));
             if (!empty($sku_ids)) {
@@ -735,11 +735,11 @@ function tfa_ajax_search_ajax_handler(): void {
     }
 
     wp_send_json_success([
-        'html' => tfa_ajax_search_render_results_html($grouped, $term, $show_image, $show_excerpt, $show_price, $show_type_label, $highlight_terms, $post_types, $product_category),
+        'html' => wp_ajax_search_render_results_html($grouped, $term, $show_image, $show_excerpt, $show_price, $show_type_label, $highlight_terms, $post_types, $product_category),
     ]);
 }
-add_action('wp_ajax_tfa_ajax_search', 'tfa_ajax_search_ajax_handler');
-add_action('wp_ajax_nopriv_tfa_ajax_search', 'tfa_ajax_search_ajax_handler');
+add_action('wp_ajax_wp_ajax_search', 'wp_ajax_search_ajax_handler');
+add_action('wp_ajax_nopriv_wp_ajax_search', 'wp_ajax_search_ajax_handler');
 
 /**
  * Keep submitted product searches aligned with the AJAX search UX.
@@ -747,7 +747,7 @@ add_action('wp_ajax_nopriv_tfa_ajax_search', 'tfa_ajax_search_ajax_handler');
  * - ?iws_search_scope=posts searches posts only.
  * - ?iws_search_scope=all searches products, posts and pages.
  */
-function tfa_ajax_search_request_scope(): string {
+function wp_ajax_search_request_scope(): string {
     $scope = isset($_GET['iws_search_scope']) ? sanitize_key(wp_unslash($_GET['iws_search_scope'])) : '';
     if (in_array($scope, ['products', 'posts', 'all'], true)) {
         return $scope;
@@ -764,23 +764,23 @@ function tfa_ajax_search_request_scope(): string {
     return '';
 }
 
-function tfa_ajax_search_apply_scope_to_main_query(WP_Query $query): void {
+function wp_ajax_search_apply_scope_to_main_query(WP_Query $query): void {
     if (is_admin() || !$query->is_main_query() || !$query->is_search()) {
         return;
     }
 
-    $scope = tfa_ajax_search_request_scope();
+    $scope = wp_ajax_search_request_scope();
     if ($scope === 'products') {
         $query->set('post_type', ['product']);
     } elseif ($scope === 'posts') {
         $query->set('post_type', ['post']);
     } elseif ($scope === 'all') {
-        $query->set('post_type', array_values(array_intersect(['product', 'post', 'page'], array_keys(tfa_ajax_search_allowed_post_types()))));
+        $query->set('post_type', array_values(array_intersect(['product', 'post', 'page'], array_keys(wp_ajax_search_allowed_post_types()))));
     }
 }
-add_action('pre_get_posts', 'tfa_ajax_search_apply_scope_to_main_query', 20);
+add_action('pre_get_posts', 'wp_ajax_search_apply_scope_to_main_query', 20);
 
-function tfa_ajax_search_query_includes_product_sku(string $search, WP_Query $query): string {
+function wp_ajax_search_query_includes_product_sku(string $search, WP_Query $query): string {
     if (is_admin() || $search === '') {
         return $search;
     }
@@ -791,13 +791,13 @@ function tfa_ajax_search_query_includes_product_sku(string $search, WP_Query $qu
     }
 
     $post_type = (array) $query->get('post_type');
-    $scope = tfa_ajax_search_request_scope();
+    $scope = wp_ajax_search_request_scope();
     $is_product_search = in_array('product', $post_type, true) || $scope === 'products' || $scope === 'all';
     if (!$is_product_search || !post_type_exists('product')) {
         return $search;
     }
 
-    $sku_ids = tfa_ajax_search_find_sku_product_ids($term, 500);
+    $sku_ids = wp_ajax_search_find_sku_product_ids($term, 500);
     if (empty($sku_ids)) {
         return $search;
     }
@@ -811,13 +811,13 @@ function tfa_ajax_search_query_includes_product_sku(string $search, WP_Query $qu
 
     return " AND (({$search_without_and}) OR {$wpdb->posts}.ID IN ({$id_list})) ";
 }
-add_filter('posts_search', 'tfa_ajax_search_query_includes_product_sku', 20, 2);
+add_filter('posts_search', 'wp_ajax_search_query_includes_product_sku', 20, 2);
 
 /**
  * Add product SKU to normal WordPress search results.
  * This covers submitted searches, not only the AJAX dropdown.
  */
-function tfa_ajax_search_append_sku_to_search_result_title(string $block_content, array $block): string {
+function wp_ajax_search_append_sku_to_search_result_title(string $block_content, array $block): string {
     if (is_admin() || !is_search() || ($block['blockName'] ?? '') !== 'core/post-title' || get_post_type() !== 'product' || !function_exists('wc_get_product')) {
         return $block_content;
     }
@@ -829,7 +829,7 @@ function tfa_ajax_search_append_sku_to_search_result_title(string $block_content
 
     return $block_content . '<div class="iws-search-result-sku">' . esc_html__('SKU:', 'wp-theme') . ' <span>' . esc_html($product->get_sku()) . '</span></div>';
 }
-add_filter('render_block', 'tfa_ajax_search_append_sku_to_search_result_title', 20, 2);
+add_filter('render_block', 'wp_ajax_search_append_sku_to_search_result_title', 20, 2);
 
 
 

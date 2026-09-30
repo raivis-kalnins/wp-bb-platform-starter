@@ -158,7 +158,7 @@ add_action( 'after_setup_theme', function() {
 		wp_theme_woo_support_require( 'includes/optional/custom-login.php' );
 	}
 
-	if ( wp_theme_woo_support_feature_enabled( 'ajax_search' ) && ! function_exists( 'tfa_ajax_search_allowed_post_types' ) ) {
+	if ( wp_theme_woo_support_feature_enabled( 'ajax_search' ) && ! function_exists( 'wp_ajax_search_allowed_post_types' ) ) {
 		wp_theme_woo_support_require( 'includes/optional/ajax-search-block.php' );
 	}
 

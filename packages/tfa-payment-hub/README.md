@@ -1,11 +1,11 @@
-# TFA Payment Hub for WooCommerce
+# WP Payment Hub for WooCommerce
 
 **Version:** 2.3.0  
 **Plugin folder:** `wp-payment-hub`  
 **Main file:** `universal-payment-gateway-for-woocommerce.php`  
 **WooCommerce gateway ID:** `universal_payments_gateway`
 
-TFA Payment Hub adds one payment method to WooCommerce. Inside that payment method, customers can choose an enabled bank, Direct Debit method, wallet, or hosted payment provider. The same provider selector is available in the classic checkout and the WooCommerce Checkout Block.
+WP Payment Hub adds one payment method to WooCommerce. Inside that payment method, customers can choose an enabled bank, Direct Debit method, wallet, or hosted payment provider. The same provider selector is available in the classic checkout and the WooCommerce Checkout Block.
 
 ## What changed in 2.3.0
 
@@ -45,8 +45,8 @@ TFA Payment Hub adds one payment method to WooCommerce. Inside that payment meth
 1. Back up the WordPress files and database.
 2. Deactivate the previous private payment gateway plugin.
 3. Upload the new ZIP in **Plugins > Add New > Upload Plugin**.
-4. Activate **TFA Payment Hub for WooCommerce**.
-5. Open **WooCommerce > Settings > Payments > TFA Payment Hub**.
+4. Activate **WP Payment Hub for WooCommerce**.
+5. Open **WooCommerce > Settings > Payments > WP Payment Hub**.
 6. Review every enabled provider and complete a test order before using Live mode.
 7. Remove the old plugin folder only after confirming the new version works correctly.
 
@@ -91,7 +91,7 @@ The Apple Pay and Google Pay option creates a Stripe-hosted Checkout Session. St
 6. In Stripe, create a webhook endpoint using:
 
 ```text
-https://example.com/?wc-api=wc_gateway_tfa_payment_hub_stripe_webhook
+https://example.com/?wc-api=wc_gateway_wp_payment_hub_stripe_webhook
 ```
 
 7. Subscribe the webhook to:
@@ -151,15 +151,15 @@ Use consent wording and customer communications approved by the sponsor bank or 
 Generic hosted providers use:
 
 ```text
-https://example.com/?wc-api=wc_gateway_tfa_payment_hub_response
-https://example.com/?wc-api=wc_gateway_tfa_payment_hub_notify
+https://example.com/?wc-api=wc_gateway_wp_payment_hub_response
+https://example.com/?wc-api=wc_gateway_wp_payment_hub_notify
 ```
 
 Stripe wallets use:
 
 ```text
-https://example.com/?wc-api=wc_gateway_tfa_payment_hub_stripe_return
-https://example.com/?wc-api=wc_gateway_tfa_payment_hub_stripe_webhook
+https://example.com/?wc-api=wc_gateway_wp_payment_hub_stripe_return
+https://example.com/?wc-api=wc_gateway_wp_payment_hub_stripe_webhook
 ```
 
 Backward-compatible callback routes from previous private versions remain registered.
@@ -226,6 +226,6 @@ Every bank, Direct Debit method, custom Direct Debit profile and wallet has two 
 - **Bank / provider logo** — a wider brand logo shown beside the method name.
 - **Card / payment icon** — a compact card, mandate or wallet icon shown at the right side of the method.
 
-Open **WooCommerce > Settings > Payments > TFA Payment Hub**, choose the payment category and provider, then use **Choose image**. Images are selected from the WordPress Media Library and appear in both Classic Checkout and the WooCommerce Checkout Block. Transparent PNG or WebP files are recommended. SVG uploads depend on the site's permitted file types.
+Open **WooCommerce > Settings > Payments > WP Payment Hub**, choose the payment category and provider, then use **Choose image**. Images are selected from the WordPress Media Library and appear in both Classic Checkout and the WooCommerce Checkout Block. Transparent PNG or WebP files are recommended. SVG uploads depend on the site's permitted file types.
 
 Version 2.3.0 also fixes hidden setup fields for Direct Debit profiles whose IDs begin with a bank provider ID, including Worldpay Direct Debit, NatWest Direct Debit, Barclays Direct Debit, Lloyds Direct Debit, HSBC Direct Debit, Swedbank Direct Debit, SEB Direct Debit, Luminor Direct Debit and Revolut Direct Debit.
