@@ -82,14 +82,14 @@ add_action( 'wp_enqueue_scripts', function() {
 			margin-right:auto!important;
 			padding:10px 15px!important;
 			border:0!important;
-			border-color:var(--tfa-brand-color)!important;
+			border-color:var(--wp-brand-color)!important;
 			border-radius:0 15px 0 0!important;
-			background-color:var(--tfa-brand-color)!important;
+			background-color:var(--wp-brand-color)!important;
 			background-image:url("' . $arrow . '")!important;
 			background-repeat:no-repeat!important;
 			background-position:calc(100% + 32px) center!important;
 			background-size:16px auto!important;
-			color:var(--tfa-white-color,#fff)!important;
+			color:var(--wp-white-color,#fff)!important;
 			font-weight:500!important;
 			line-height:1!important;
 			text-align:center!important;
@@ -119,10 +119,10 @@ add_action( 'wp_enqueue_scripts', function() {
 		.loadMore.btn:hover,
 		.loadMore.btn:focus{
 			padding-right:50px!important;
-			background-color:var(--tfa-brand-color)!important;
+			background-color:var(--wp-brand-color)!important;
 			background-position:calc(100% - 18px) center!important;
-			border-color:var(--tfa-brand-color)!important;
-			color:var(--tfa-white-color,#fff)!important;
+			border-color:var(--wp-brand-color)!important;
+			color:var(--wp-white-color,#fff)!important;
 		}
 		.iws-load-more-wrap .btn.btn-primary *,
 		.iws-load-more-wrap .iws-load-more *,
@@ -130,7 +130,7 @@ add_action( 'wp_enqueue_scripts', function() {
 		.iws-archive-load-more .wp-block-query-pagination-next *,
 		.iws-archive-load-more .wp-block-query-pagination-previous *,
 		.iws-archive-load-more .iws-ajax-load-more-button *{
-			color:var(--tfa-white-color,#fff)!important;
+			color:var(--wp-white-color,#fff)!important;
 		}
 		.iws-load-more.is-loading,
 		.iws-load-more[disabled],

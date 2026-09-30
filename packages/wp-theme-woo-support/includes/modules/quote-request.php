@@ -168,7 +168,7 @@ add_action( 'wp_ajax_nopriv_wp_theme_woo_quote_add', 'wp_theme_woo_quote_ajax_ad
 function wp_theme_woo_quote_product_button() {
     global $product;
     if ( ! $product instanceof WC_Product ) return;
-    echo '<button type="button" class="button alt tfa-quote-button wp-theme-add-to-quote" data-quote-single data-product-id="' . esc_attr( $product->get_id() ) . '">' . esc_html__( 'Add to Quote', 'wp-theme-woo-support' ) . '</button><span class="wp-theme-quote-status" data-quote-status aria-live="polite"></span>';
+    echo '<button type="button" class="button alt wp-quote-button wp-theme-add-to-quote" data-quote-single data-product-id="' . esc_attr( $product->get_id() ) . '">' . esc_html__( 'Add to Quote', 'wp-theme-woo-support' ) . '</button><span class="wp-theme-quote-status" data-quote-status aria-live="polite"></span>';
 }
 add_action( 'woocommerce_after_add_to_cart_button', 'wp_theme_woo_quote_product_button', 30 );
 

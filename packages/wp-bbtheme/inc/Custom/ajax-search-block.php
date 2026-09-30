@@ -142,7 +142,7 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
     wp_enqueue_script('wp-server-side-render');
     wp_enqueue_script('wp-i18n');
 
-    $handle = 'tfa-ajax-search-editor';
+    $handle = 'wp-ajax-search-editor';
     wp_register_script($handle, '', ['wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-server-side-render', 'wp-i18n'], '1.1.0', true);
 
     wp_localize_script($handle, 'tfaAjaxSearchEditor', [
@@ -211,7 +211,7 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
         },
         edit: function(props) {
             const attrs = props.attributes;
-            const blockProps = useBlockProps({ className: 'tfa-ajax-search-editor-preview' });
+            const blockProps = useBlockProps({ className: 'wp-ajax-search-editor-preview' });
             const selectedPostTypes = attrs.postTypes || [];
             const productsEnabled = selectedPostTypes.includes('product');
             const categoryOptions = [{ label: __('All product categories', 'wp-theme'), value: '' }]
@@ -385,7 +385,7 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
         $post_types = ['post'];
     }
 
-    $wrapper_classes = ['wp-block-tfa-ajax-search', 'tfa-ajax-search'];
+    $wrapper_classes = ['wp-block-wp-ajax-search', 'wp-ajax-search'];
     if (!empty($attributes['className'])) {
         foreach (preg_split('/\s+/', (string) $attributes['className']) as $class_name) {
             $class_name = sanitize_html_class($class_name);
@@ -453,7 +453,7 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
     // WooCommerce redirecting product searches to the shop/product archive.
     $search_url = home_url('/');
 
-    $input_id = wp_unique_id('tfa-search-');
+    $input_id = wp_unique_id('wp-search-');
 
     ob_start();
     ?>
@@ -472,12 +472,12 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
         data-current-scope="<?php echo esc_attr($current_scope); ?>"
         data-site-search-url="<?php echo esc_url(home_url('/')); ?>"
         data-product-search-url="<?php echo esc_url(home_url('/')); ?>">
-        <form class="tfa-ajax-search__form" role="search" method="get" action="<?php echo esc_url($search_url); ?>">
+        <form class="wp-ajax-search__form" role="search" method="get" action="<?php echo esc_url($search_url); ?>">
             <label class="screen-reader-text" for="<?php echo esc_attr($input_id); ?>"><?php esc_html_e('Search', 'wp-theme'); ?></label>
-            <div class="tfa-ajax-search__field-wrap">
+            <div class="wp-ajax-search__field-wrap">
                 <?php if ($scope_control === 'select') : ?>
                     <label class="screen-reader-text" for="<?php echo esc_attr($input_id . '-scope'); ?>"><?php esc_html_e('Search in', 'wp-theme'); ?></label>
-                    <select id="<?php echo esc_attr($input_id . '-scope'); ?>" class="tfa-ajax-search__scope-select" name="iws_search_scope" aria-label="<?php esc_attr_e('Search in', 'wp-theme'); ?>" data-no-select2="1">
+                    <select id="<?php echo esc_attr($input_id . '-scope'); ?>" class="wp-ajax-search__scope-select" name="iws_search_scope" aria-label="<?php esc_attr_e('Search in', 'wp-theme'); ?>" data-no-select2="1">
                         <option value="products" <?php selected($current_scope, 'products'); ?>><?php esc_html_e('Products', 'wp-theme'); ?></option>
                         <option value="posts" <?php selected($current_scope, 'posts'); ?>><?php esc_html_e('Blogs', 'wp-theme'); ?></option>
                         <option value="all" <?php selected($current_scope, 'all'); ?>><?php esc_html_e('All', 'wp-theme'); ?></option>
@@ -485,7 +485,7 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
                 <?php endif; ?>
                 <input
                     id="<?php echo esc_attr($input_id); ?>"
-                    class="tfa-ajax-search__input"
+                    class="wp-ajax-search__input"
                     type="search"
                     name="s"
                     value="<?php echo isset($_GET['s']) ? esc_attr(sanitize_text_field(wp_unslash($_GET['s']))) : ''; ?>"
@@ -494,22 +494,22 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
                     aria-label="<?php esc_attr_e('Search site', 'wp-theme'); ?>"
                 />
                 <?php if ($search_button) : ?>
-                    <button class="tfa-ajax-search__button" type="submit" aria-label="<?php esc_attr_e('Search', 'wp-theme'); ?>"><?php echo $button_text !== '' ? esc_html($button_text) : '<span aria-hidden="true">⌕</span>'; ?></button>
+                    <button class="wp-ajax-search__button" type="submit" aria-label="<?php esc_attr_e('Search', 'wp-theme'); ?>"><?php echo $button_text !== '' ? esc_html($button_text) : '<span aria-hidden="true">⌕</span>'; ?></button>
                 <?php endif; ?>
             </div>
             <?php if ($scope_control === 'radio') : ?>
-                <fieldset class="tfa-ajax-search__scope tfa-ajax-search__scope--radio" aria-label="<?php esc_attr_e('Search in', 'wp-theme'); ?>">
+                <fieldset class="wp-ajax-search__scope wp-ajax-search__scope--radio" aria-label="<?php esc_attr_e('Search in', 'wp-theme'); ?>">
                     <label><input type="radio" name="iws_search_scope" value="products" <?php checked($current_scope, 'products'); ?> /> <span><?php esc_html_e('Products', 'wp-theme'); ?></span></label>
                     <label><input type="radio" name="iws_search_scope" value="posts" <?php checked($current_scope, 'posts'); ?> /> <span><?php esc_html_e('Blogs', 'wp-theme'); ?></span></label>
                     <label><input type="radio" name="iws_search_scope" value="all" <?php checked($current_scope, 'all'); ?> /> <span><?php esc_html_e('All', 'wp-theme'); ?></span></label>
                 </fieldset>
             <?php endif; ?>
-            <input class="tfa-ajax-search__post-type" type="hidden" name="post_type" value="" disabled />
+            <input class="wp-ajax-search__post-type" type="hidden" name="post_type" value="" disabled />
             <?php if ($product_category) : ?>
                 <input type="hidden" name="product_cat" value="<?php echo esc_attr($product_category); ?>" />
             <?php endif; ?>
         </form>
-        <div class="tfa-ajax-search__results" aria-live="polite" hidden></div>
+        <div class="wp-ajax-search__results" aria-live="polite" hidden></div>
     </div>
     <?php
     return (string) ob_get_clean();
@@ -590,40 +590,40 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
     ob_start();
 
     if (!empty($grouped)) {
-        echo '<div class="tfa-ajax-search__panel">';
+        echo '<div class="wp-ajax-search__panel">';
         foreach ($grouped as $post_type => $posts) {
-            echo '<div class="tfa-ajax-search__group">';
+            echo '<div class="wp-ajax-search__group">';
             if ($show_type_label) {
-                echo '<div class="tfa-ajax-search__group-title">' . esc_html(tfa_ajax_search_result_type_label($post_type)) . '</div>';
+                echo '<div class="wp-ajax-search__group-title">' . esc_html(tfa_ajax_search_result_type_label($post_type)) . '</div>';
             }
-            echo '<ul class="tfa-ajax-search__list">';
+            echo '<ul class="wp-ajax-search__list">';
             foreach ($posts as $post) {
                 $permalink = get_permalink($post);
                 $title = get_the_title($post) ?: __('Untitled', 'wp-theme');
                 $excerpt = $show_excerpt ? wp_trim_words(wp_strip_all_tags(get_the_excerpt($post) ?: $post->post_content), 16) : '';
                 $thumb = $show_image ? get_the_post_thumbnail_url($post, 'thumbnail') : '';
 
-                echo '<li class="tfa-ajax-search__item">';
-                echo '<a class="tfa-ajax-search__result" href="' . esc_url($permalink) . '">';
+                echo '<li class="wp-ajax-search__item">';
+                echo '<a class="wp-ajax-search__result" href="' . esc_url($permalink) . '">';
                 if ($thumb) {
-                    echo '<span class="tfa-ajax-search__media"><img src="' . esc_url($thumb) . '" alt="" loading="lazy" /></span>';
+                    echo '<span class="wp-ajax-search__media"><img src="' . esc_url($thumb) . '" alt="" loading="lazy" /></span>';
                 }
-                echo '<span class="tfa-ajax-search__content">';
-                echo '<span class="tfa-ajax-search__title">' . wp_kses(tfa_ajax_search_highlight($title, $term, $highlight_terms), ['mark' => []]) . '</span>';
+                echo '<span class="wp-ajax-search__content">';
+                echo '<span class="wp-ajax-search__title">' . wp_kses(tfa_ajax_search_highlight($title, $term, $highlight_terms), ['mark' => []]) . '</span>';
                 if ($show_price && $post_type === 'product' && function_exists('wc_get_product')) {
                     $product = wc_get_product($post->ID);
                     if ($product) {
-                        echo '<span class="tfa-ajax-search__meta tfa-ajax-search__price">' . wp_kses_post($product->get_price_html()) . '</span>';
+                        echo '<span class="wp-ajax-search__meta wp-ajax-search__price">' . wp_kses_post($product->get_price_html()) . '</span>';
                     }
                 }
                 if ($post_type === 'product' && function_exists('wc_get_product')) {
                     $product = isset($product) && $product ? $product : wc_get_product($post->ID);
                     if ($product && $product->get_sku()) {
-                        echo '<span class="tfa-ajax-search__meta tfa-ajax-search__sku">' . esc_html__('SKU:', 'wp-theme') . ' ' . esc_html($product->get_sku()) . '</span>';
+                        echo '<span class="wp-ajax-search__meta wp-ajax-search__sku">' . esc_html__('SKU:', 'wp-theme') . ' ' . esc_html($product->get_sku()) . '</span>';
                     }
                 }
                 if ($excerpt) {
-                    echo '<span class="tfa-ajax-search__excerpt">' . wp_kses(tfa_ajax_search_highlight($excerpt, $term, $highlight_terms), ['mark' => []]) . '</span>';
+                    echo '<span class="wp-ajax-search__excerpt">' . wp_kses(tfa_ajax_search_highlight($excerpt, $term, $highlight_terms), ['mark' => []]) . '</span>';
                 }
                 echo '</span>';
                 echo '</a>';
@@ -647,10 +647,10 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
             $view_all_url = add_query_arg(['s' => $term, 'post_type' => 'post', 'iws_search_scope' => 'posts'], home_url('/'));
         }
 
-        echo '<div class="tfa-ajax-search__footer"><a class="tfa-ajax-search__view-all" href="' . esc_url($view_all_url) . '">' . esc_html__('View all results', 'wp-theme') . '</a></div>';
+        echo '<div class="wp-ajax-search__footer"><a class="wp-ajax-search__view-all" href="' . esc_url($view_all_url) . '">' . esc_html__('View all results', 'wp-theme') . '</a></div>';
         echo '</div>';
     } else {
-        echo '<div class="tfa-ajax-search__empty">' . esc_html__('No results found.', 'wp-theme') . '</div>';
+        echo '<div class="wp-ajax-search__empty">' . esc_html__('No results found.', 'wp-theme') . '</div>';
     }
 
     return (string) ob_get_clean();
@@ -681,7 +681,7 @@ function tfa_ajax_search_ajax_handler(): void {
 
     if (mb_strlen($term) < 1) {
         wp_send_json_success([
-            'html' => '<div class="tfa-ajax-search__empty">' . esc_html__('Type to search…', 'wp-theme') . '</div>',
+            'html' => '<div class="wp-ajax-search__empty">' . esc_html__('Type to search…', 'wp-theme') . '</div>',
         ]);
     }
 

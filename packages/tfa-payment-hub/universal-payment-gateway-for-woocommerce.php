@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: TFA Payment Hub for WooCommerce
- * Plugin URI:  https://tfa-workspace.co.uk/plugins/tfa-payment-hub/
+ * Plugin URI:  https://wp-workspace.co.uk/plugins/wp-payment-hub/
  * Description: One clear WooCommerce payment method with organised bank, Direct Debit and wallet options, including Stripe-hosted Apple Pay and Google Pay.
  * Version:     2.3.0
  * Author:      TFA Workspace
- * Author URI:  https://tfa-workspace.co.uk/
- * Text Domain: tfa-payment-hub
- * Update URI:  https://tfa-workspace.co.uk/plugins/tfa-payment-hub/
+ * Author URI:  https://wp-workspace.co.uk/
+ * Text Domain: wp-payment-hub
+ * Update URI:  https://wp-workspace.co.uk/plugins/wp-payment-hub/
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
@@ -52,8 +52,8 @@ function tfa_payment_hub_init() {
 
         public function __construct() {
             $this->id                 = 'universal_payments_gateway';
-            $this->method_title       = __( 'TFA Payment Hub', 'tfa-payment-hub' );
-            $this->method_description = __( 'One WooCommerce payment method containing bank, wallet and Direct Debit choices, with provider-level controls and hosted-payment configuration.', 'tfa-payment-hub' );
+            $this->method_title       = __( 'TFA Payment Hub', 'wp-payment-hub' );
+            $this->method_description = __( 'One WooCommerce payment method containing bank, wallet and Direct Debit choices, with provider-level controls and hosted-payment configuration.', 'wp-payment-hub' );
             $this->has_fields         = true;
             $this->supports           = array( 'products' );
             $this->providers          = $this->get_providers();
@@ -61,8 +61,8 @@ function tfa_payment_hub_init() {
             $this->init_form_fields();
             $this->init_settings();
 
-            $this->title       = $this->get_option( 'title', __( 'Secure payment', 'tfa-payment-hub' ) );
-            $this->description = $this->get_option( 'description', __( 'Choose how you would like to pay.', 'tfa-payment-hub' ) );
+            $this->title       = $this->get_option( 'title', __( 'Secure payment', 'wp-payment-hub' ) );
+            $this->description = $this->get_option( 'description', __( 'Choose how you would like to pay.', 'wp-payment-hub' ) );
             $this->enabled     = $this->get_option( 'enabled', 'no' );
 
             add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -295,108 +295,108 @@ function tfa_payment_hub_init() {
         public function init_form_fields() {
             $fields = array(
                 'enabled' => array(
-                    'title'   => __( 'Enable / Disable', 'tfa-payment-hub' ),
+                    'title'   => __( 'Enable / Disable', 'wp-payment-hub' ),
                     'type'    => 'checkbox',
-                    'label'   => __( 'Enable TFA Payment Hub at checkout', 'tfa-payment-hub' ),
+                    'label'   => __( 'Enable TFA Payment Hub at checkout', 'wp-payment-hub' ),
                     'default' => 'no',
                 ),
                 'title' => array(
-                    'title'       => __( 'Checkout title', 'tfa-payment-hub' ),
+                    'title'       => __( 'Checkout title', 'wp-payment-hub' ),
                     'type'        => 'text',
-                    'description' => __( 'The single payment method title customers see in WooCommerce.', 'tfa-payment-hub' ),
-                    'default'     => __( 'Secure payment', 'tfa-payment-hub' ),
+                    'description' => __( 'The single payment method title customers see in WooCommerce.', 'wp-payment-hub' ),
+                    'default'     => __( 'Secure payment', 'wp-payment-hub' ),
                     'desc_tip'    => true,
                 ),
                 'description' => array(
-                    'title'       => __( 'Checkout description', 'tfa-payment-hub' ),
+                    'title'       => __( 'Checkout description', 'wp-payment-hub' ),
                     'type'        => 'textarea',
-                    'description' => __( 'Introductory text displayed above the bank, wallet and Direct Debit choices.', 'tfa-payment-hub' ),
-                    'default'     => __( 'Choose how you would like to pay.', 'tfa-payment-hub' ),
+                    'description' => __( 'Introductory text displayed above the bank, wallet and Direct Debit choices.', 'wp-payment-hub' ),
+                    'default'     => __( 'Choose how you would like to pay.', 'wp-payment-hub' ),
                     'desc_tip'    => true,
                 ),
                 'enable_bank' => array(
-                    'title'   => __( 'Banks and cards', 'tfa-payment-hub' ),
+                    'title'   => __( 'Banks and cards', 'wp-payment-hub' ),
                     'type'    => 'checkbox',
-                    'label'   => __( 'Show enabled bank and hosted card providers', 'tfa-payment-hub' ),
+                    'label'   => __( 'Show enabled bank and hosted card providers', 'wp-payment-hub' ),
                     'default' => 'yes',
                 ),
                 'enable_direct_debit' => array(
-                    'title'   => __( 'Direct Debit', 'tfa-payment-hub' ),
+                    'title'   => __( 'Direct Debit', 'wp-payment-hub' ),
                     'type'    => 'checkbox',
-                    'label'   => __( 'Show enabled Direct Debit options inside this payment method', 'tfa-payment-hub' ),
+                    'label'   => __( 'Show enabled Direct Debit options inside this payment method', 'wp-payment-hub' ),
                     'default' => 'no',
                 ),
                 'enable_wallet' => array(
-                    'title'   => __( 'Wallets and other providers', 'tfa-payment-hub' ),
+                    'title'   => __( 'Wallets and other providers', 'wp-payment-hub' ),
                     'type'    => 'checkbox',
-                    'label'   => __( 'Show enabled wallet and alternative hosted providers', 'tfa-payment-hub' ),
+                    'label'   => __( 'Show enabled wallet and alternative hosted providers', 'wp-payment-hub' ),
                     'default' => 'no',
                 ),
                 'default_group' => array(
-                    'title'       => __( 'Default payment section', 'tfa-payment-hub' ),
+                    'title'       => __( 'Default payment section', 'wp-payment-hub' ),
                     'type'        => 'select',
                     'default'     => 'bank',
                     'options'     => array(
-                        'bank'         => __( 'Banks and cards', 'tfa-payment-hub' ),
-                        'direct_debit' => __( 'Direct Debit', 'tfa-payment-hub' ),
-                        'wallet'       => __( 'Wallets and other', 'tfa-payment-hub' ),
+                        'bank'         => __( 'Banks and cards', 'wp-payment-hub' ),
+                        'direct_debit' => __( 'Direct Debit', 'wp-payment-hub' ),
+                        'wallet'       => __( 'Wallets and other', 'wp-payment-hub' ),
                     ),
                 ),
                 'default_provider' => array(
-                    'title'       => __( 'Default provider', 'tfa-payment-hub' ),
+                    'title'       => __( 'Default provider', 'wp-payment-hub' ),
                     'type'        => 'select',
-                    'description' => __( 'Provider pre-selected when it is enabled in the selected section.', 'tfa-payment-hub' ),
+                    'description' => __( 'Provider pre-selected when it is enabled in the selected section.', 'wp-payment-hub' ),
                     'default'     => 'natwest',
                     'options'     => $this->provider_options(),
                 ),
                 'direct_debit_consent_text' => array(
-                    'title'       => __( 'Direct Debit consent', 'tfa-payment-hub' ),
+                    'title'       => __( 'Direct Debit consent', 'wp-payment-hub' ),
                     'type'        => 'textarea',
-                    'default'     => __( 'I understand that a Direct Debit mandate must be completed and approved before collection.', 'tfa-payment-hub' ),
-                    'description' => __( 'Displayed as a required confirmation when a Direct Debit provider is selected. Use wording approved by your sponsor bank or provider.', 'tfa-payment-hub' ),
+                    'default'     => __( 'I understand that a Direct Debit mandate must be completed and approved before collection.', 'wp-payment-hub' ),
+                    'description' => __( 'Displayed as a required confirmation when a Direct Debit provider is selected. Use wording approved by your sponsor bank or provider.', 'wp-payment-hub' ),
                 ),
                 'manual_dd_order_status' => array(
-                    'title'   => __( 'Manual Direct Debit order status', 'tfa-payment-hub' ),
+                    'title'   => __( 'Manual Direct Debit order status', 'wp-payment-hub' ),
                     'type'    => 'select',
                     'default' => 'on-hold',
                     'options' => array(
-                        'on-hold' => __( 'On hold', 'tfa-payment-hub' ),
-                        'pending' => __( 'Pending payment', 'tfa-payment-hub' ),
+                        'on-hold' => __( 'On hold', 'wp-payment-hub' ),
+                        'pending' => __( 'Pending payment', 'wp-payment-hub' ),
                     ),
                 ),
                 'manual_dd_instructions' => array(
-                    'title'       => __( 'Default manual Direct Debit instructions', 'tfa-payment-hub' ),
+                    'title'       => __( 'Default manual Direct Debit instructions', 'wp-payment-hub' ),
                     'type'        => 'textarea',
-                    'default'     => __( 'We will contact you with the approved Direct Debit mandate instructions. Your order will remain on hold until the mandate is confirmed.', 'tfa-payment-hub' ),
-                    'description' => __( 'Shown on the order confirmation page and customer email for manual Direct Debit orders.', 'tfa-payment-hub' ),
+                    'default'     => __( 'We will contact you with the approved Direct Debit mandate instructions. Your order will remain on hold until the mandate is confirmed.', 'wp-payment-hub' ),
+                    'description' => __( 'Shown on the order confirmation page and customer email for manual Direct Debit orders.', 'wp-payment-hub' ),
                 ),
                 'transaction_type' => array(
-                    'title'       => __( 'Hosted transaction type', 'tfa-payment-hub' ),
+                    'title'       => __( 'Hosted transaction type', 'wp-payment-hub' ),
                     'type'        => 'select',
                     'default'     => 'sale',
                     'options'     => array(
-                        'sale'    => __( 'Sale', 'tfa-payment-hub' ),
-                        'preauth' => __( 'Pre-authorisation', 'tfa-payment-hub' ),
+                        'sale'    => __( 'Sale', 'wp-payment-hub' ),
+                        'preauth' => __( 'Pre-authorisation', 'wp-payment-hub' ),
                     ),
                 ),
                 'debug' => array(
-                    'title'   => __( 'Debug log', 'tfa-payment-hub' ),
+                    'title'   => __( 'Debug log', 'wp-payment-hub' ),
                     'type'    => 'checkbox',
-                    'label'   => __( 'Enable logging in WooCommerce > Status > Logs', 'tfa-payment-hub' ),
+                    'label'   => __( 'Enable logging in WooCommerce > Status > Logs', 'wp-payment-hub' ),
                     'default' => 'no',
                 ),
                 'send_3ds_challenge_indicator' => array(
-                    'title'       => __( '3-D Secure challenge indicator', 'tfa-payment-hub' ),
+                    'title'       => __( '3-D Secure challenge indicator', 'wp-payment-hub' ),
                     'type'        => 'checkbox',
-                    'label'       => __( 'Send threeDSRequestorChallengeIndicator=01 with IPG Connect requests', 'tfa-payment-hub' ),
+                    'label'       => __( 'Send threeDSRequestorChallengeIndicator=01 with IPG Connect requests', 'wp-payment-hub' ),
                     'default'     => 'no',
-                    'description' => __( 'Leave disabled unless the processor specifically requires it.', 'tfa-payment-hub' ),
+                    'description' => __( 'Leave disabled unless the processor specifically requires it.', 'wp-payment-hub' ),
                 ),
             );
 
             foreach ( $this->providers as $provider_id => $provider ) {
                 $prefix = $provider_id . '_';
-                $base_class = 'tfa-provider-field tfa-provider-field-' . esc_attr( $provider_id ) . ' tfa-provider-group-' . esc_attr( $provider['group'] );
+                $base_class = 'wp-provider-field wp-provider-field-' . esc_attr( $provider_id ) . ' wp-provider-group-' . esc_attr( $provider['group'] );
 
                 $fields[ $prefix . 'section' ] = array(
                     'title'       => $provider['name'],
@@ -407,39 +407,39 @@ function tfa_payment_hub_init() {
                     'provider_flow' => $provider['flow'],
                 );
                 $fields[ $prefix . 'enabled' ] = array(
-                    'title'   => __( 'Provider status', 'tfa-payment-hub' ),
+                    'title'   => __( 'Provider status', 'wp-payment-hub' ),
                     'type'    => 'checkbox',
-                    'label'   => sprintf( __( 'Enable %s inside TFA Payment Hub', 'tfa-payment-hub' ), $provider['name'] ),
+                    'label'   => sprintf( __( 'Enable %s inside TFA Payment Hub', 'wp-payment-hub' ), $provider['name'] ),
                     'default' => ( 'natwest' === $provider_id ) ? 'yes' : 'no',
                     'class'   => $base_class,
                 );
                 $fields[ $prefix . 'title' ] = array(
-                    'title'       => __( 'Customer label', 'tfa-payment-hub' ),
+                    'title'       => __( 'Customer label', 'wp-payment-hub' ),
                     'type'        => 'text',
                     'default'     => $provider['default_title'],
-                    'description' => __( 'Name shown inside the single checkout payment method.', 'tfa-payment-hub' ),
+                    'description' => __( 'Name shown inside the single checkout payment method.', 'wp-payment-hub' ),
                     'class'       => $base_class,
                 );
                 $fields[ $prefix . 'description' ] = array(
-                    'title'       => __( 'Customer description', 'tfa-payment-hub' ),
+                    'title'       => __( 'Customer description', 'wp-payment-hub' ),
                     'type'        => 'textarea',
                     'default'     => $provider['default_description'],
-                    'description' => __( 'Short explanation shown beneath this provider choice.', 'tfa-payment-hub' ),
+                    'description' => __( 'Short explanation shown beneath this provider choice.', 'wp-payment-hub' ),
                     'class'       => $base_class,
                 );
                 $fields[ $prefix . 'logo_id' ] = array(
-                    'title'         => __( 'Bank / provider logo', 'tfa-payment-hub' ),
+                    'title'         => __( 'Bank / provider logo', 'wp-payment-hub' ),
                     'type'          => 'media_image',
-                    'description'   => __( 'Optional logo displayed beside this payment choice at checkout. A transparent PNG, WebP or SVG with a wide layout works best.', 'tfa-payment-hub' ),
+                    'description'   => __( 'Optional logo displayed beside this payment choice at checkout. A transparent PNG, WebP or SVG with a wide layout works best.', 'wp-payment-hub' ),
                     'provider_id'   => $provider_id,
                     'provider_name' => $provider['name'],
                     'image_role'    => 'logo',
                     'class'         => $base_class,
                 );
                 $fields[ $prefix . 'icon_id' ] = array(
-                    'title'         => __( 'Card / payment icon', 'tfa-payment-hub' ),
+                    'title'         => __( 'Card / payment icon', 'wp-payment-hub' ),
                     'type'          => 'media_image',
-                    'description'   => __( 'Optional compact card, mandate or wallet icon displayed on the right of this payment choice.', 'tfa-payment-hub' ),
+                    'description'   => __( 'Optional compact card, mandate or wallet icon displayed on the right of this payment choice.', 'wp-payment-hub' ),
                     'provider_id'   => $provider_id,
                     'provider_name' => $provider['name'],
                     'image_role'    => 'icon',
@@ -448,10 +448,10 @@ function tfa_payment_hub_init() {
 
                 if ( 'manual' === $provider['flow'] ) {
                     $fields[ $prefix . 'manual_instructions' ] = array(
-                        'title'       => __( 'Provider-specific instructions', 'tfa-payment-hub' ),
+                        'title'       => __( 'Provider-specific instructions', 'wp-payment-hub' ),
                         'type'        => 'textarea',
                         'default'     => '',
-                        'description' => __( 'Optional. Leave blank to use the default manual Direct Debit instructions from General settings.', 'tfa-payment-hub' ),
+                        'description' => __( 'Optional. Leave blank to use the default manual Direct Debit instructions from General settings.', 'wp-payment-hub' ),
                         'class'       => $base_class,
                     );
                     continue;
@@ -459,46 +459,46 @@ function tfa_payment_hub_init() {
 
                 if ( 'stripe_checkout' === $provider['flow'] ) {
                     $fields[ $prefix . 'setup_info' ] = array(
-                        'title'       => __( 'How it works', 'tfa-payment-hub' ),
+                        'title'       => __( 'How it works', 'wp-payment-hub' ),
                         'type'        => 'wallet_setup_info',
                         'class'       => $base_class,
                     );
                     $fields[ $prefix . 'payment_mode' ] = array(
-                        'title'   => __( 'Mode', 'tfa-payment-hub' ),
+                        'title'   => __( 'Mode', 'wp-payment-hub' ),
                         'type'    => 'select',
                         'default' => 'test',
                         'options' => array(
-                            'test' => __( 'Test / sandbox', 'tfa-payment-hub' ),
-                            'live' => __( 'Live', 'tfa-payment-hub' ),
+                            'test' => __( 'Test / sandbox', 'wp-payment-hub' ),
+                            'live' => __( 'Live', 'wp-payment-hub' ),
                         ),
                         'class'   => $base_class,
                     );
                     $fields[ $prefix . 'test_secret_key' ] = array(
-                        'title'       => __( 'Test secret key', 'tfa-payment-hub' ),
+                        'title'       => __( 'Test secret key', 'wp-payment-hub' ),
                         'type'        => 'password',
-                        'description' => __( 'Stripe test secret key beginning with sk_test_.', 'tfa-payment-hub' ),
+                        'description' => __( 'Stripe test secret key beginning with sk_test_.', 'wp-payment-hub' ),
                         'class'       => $base_class,
                     );
                     $fields[ $prefix . 'test_webhook_secret' ] = array(
-                        'title'       => __( 'Test webhook secret', 'tfa-payment-hub' ),
+                        'title'       => __( 'Test webhook secret', 'wp-payment-hub' ),
                         'type'        => 'password',
-                        'description' => __( 'Recommended. Stripe signing secret beginning with whsec_.', 'tfa-payment-hub' ),
+                        'description' => __( 'Recommended. Stripe signing secret beginning with whsec_.', 'wp-payment-hub' ),
                         'class'       => $base_class,
                     );
                     $fields[ $prefix . 'live_secret_key' ] = array(
-                        'title'       => __( 'Live secret key', 'tfa-payment-hub' ),
+                        'title'       => __( 'Live secret key', 'wp-payment-hub' ),
                         'type'        => 'password',
-                        'description' => __( 'Stripe live secret key beginning with sk_live_.', 'tfa-payment-hub' ),
+                        'description' => __( 'Stripe live secret key beginning with sk_live_.', 'wp-payment-hub' ),
                         'class'       => $base_class,
                     );
                     $fields[ $prefix . 'live_webhook_secret' ] = array(
-                        'title'       => __( 'Live webhook secret', 'tfa-payment-hub' ),
+                        'title'       => __( 'Live webhook secret', 'wp-payment-hub' ),
                         'type'        => 'password',
-                        'description' => __( 'Recommended. Live Stripe signing secret beginning with whsec_.', 'tfa-payment-hub' ),
+                        'description' => __( 'Recommended. Live Stripe signing secret beginning with whsec_.', 'wp-payment-hub' ),
                         'class'       => $base_class,
                     );
                     $fields[ $prefix . 'test_button' ] = array(
-                        'title'         => __( 'Connection check', 'tfa-payment-hub' ),
+                        'title'         => __( 'Connection check', 'wp-payment-hub' ),
                         'type'          => 'provider_test_button',
                         'provider_id'   => $provider_id,
                         'provider_name' => $provider['name'],
@@ -508,62 +508,62 @@ function tfa_payment_hub_init() {
                 }
 
                 $fields[ $prefix . 'payment_mode' ] = array(
-                    'title'   => __( 'Mode', 'tfa-payment-hub' ),
+                    'title'   => __( 'Mode', 'wp-payment-hub' ),
                     'type'    => 'select',
                     'default' => 'test',
                     'options' => array(
-                        'test' => __( 'Test / sandbox', 'tfa-payment-hub' ),
-                        'live' => __( 'Live', 'tfa-payment-hub' ),
+                        'test' => __( 'Test / sandbox', 'wp-payment-hub' ),
+                        'live' => __( 'Live', 'wp-payment-hub' ),
                     ),
                     'class'   => $base_class,
                 );
                 $fields[ $prefix . 'hash_encoding' ] = array(
-                    'title'       => __( 'Hash encoding', 'tfa-payment-hub' ),
+                    'title'       => __( 'Hash encoding', 'wp-payment-hub' ),
                     'type'        => 'select',
                     'default'     => 'hex',
                     'options'     => array(
-                        'hex' => __( 'SHA256 over hex-encoded string (IPG Connect)', 'tfa-payment-hub' ),
-                        'raw' => __( 'SHA256 over raw string', 'tfa-payment-hub' ),
+                        'hex' => __( 'SHA256 over hex-encoded string (IPG Connect)', 'wp-payment-hub' ),
+                        'raw' => __( 'SHA256 over raw string', 'wp-payment-hub' ),
                     ),
-                    'description' => __( 'Use the format required by the hosted payment provider.', 'tfa-payment-hub' ),
+                    'description' => __( 'Use the format required by the hosted payment provider.', 'wp-payment-hub' ),
                     'class'       => $base_class,
                 );
                 $fields[ $prefix . 'test_gateway_url' ] = array(
-                    'title'       => __( 'Test gateway or mandate URL', 'tfa-payment-hub' ),
+                    'title'       => __( 'Test gateway or mandate URL', 'wp-payment-hub' ),
                     'type'        => 'text',
                     'default'     => $provider['default_test_url'],
-                    'description' => __( 'Provider-hosted test endpoint. Bank details must remain on the provider page.', 'tfa-payment-hub' ),
+                    'description' => __( 'Provider-hosted test endpoint. Bank details must remain on the provider page.', 'wp-payment-hub' ),
                     'class'       => $base_class,
                 );
                 $fields[ $prefix . 'test_store_id' ] = array(
-                    'title' => __( 'Test merchant / store ID', 'tfa-payment-hub' ),
+                    'title' => __( 'Test merchant / store ID', 'wp-payment-hub' ),
                     'type'  => 'text',
                     'class' => $base_class,
                 );
                 $fields[ $prefix . 'test_shared_secret' ] = array(
-                    'title' => __( 'Test shared secret', 'tfa-payment-hub' ),
+                    'title' => __( 'Test shared secret', 'wp-payment-hub' ),
                     'type'  => 'password',
                     'class' => $base_class,
                 );
                 $fields[ $prefix . 'live_gateway_url' ] = array(
-                    'title'       => __( 'Live gateway or mandate URL', 'tfa-payment-hub' ),
+                    'title'       => __( 'Live gateway or mandate URL', 'wp-payment-hub' ),
                     'type'        => 'text',
                     'default'     => $provider['default_live_url'],
-                    'description' => __( 'Provider-hosted production endpoint.', 'tfa-payment-hub' ),
+                    'description' => __( 'Provider-hosted production endpoint.', 'wp-payment-hub' ),
                     'class'       => $base_class,
                 );
                 $fields[ $prefix . 'live_store_id' ] = array(
-                    'title' => __( 'Live merchant / store ID', 'tfa-payment-hub' ),
+                    'title' => __( 'Live merchant / store ID', 'wp-payment-hub' ),
                     'type'  => 'text',
                     'class' => $base_class,
                 );
                 $fields[ $prefix . 'live_shared_secret' ] = array(
-                    'title' => __( 'Live shared secret', 'tfa-payment-hub' ),
+                    'title' => __( 'Live shared secret', 'wp-payment-hub' ),
                     'type'  => 'password',
                     'class' => $base_class,
                 );
                 $fields[ $prefix . 'test_button' ] = array(
-                    'title'         => __( 'Configuration check', 'tfa-payment-hub' ),
+                    'title'         => __( 'Configuration check', 'wp-payment-hub' ),
                     'type'          => 'provider_test_button',
                     'provider_id'   => $provider_id,
                     'provider_name' => $provider['name'],
@@ -620,37 +620,37 @@ function tfa_payment_hub_init() {
                 }
             }
 
-            echo '<div class="tfa-payment-hub-admin">';
-            echo '<div class="tfa-payment-hub-hero">';
-            echo '<div><h2>' . esc_html( $this->get_method_title() ) . '</h2><p>' . esc_html__( 'Manage the customer-facing gateway, then open a category and choose one payment method to edit.', 'tfa-payment-hub' ) . '</p></div>';
-            echo '<div class="tfa-hub-status ' . ( 'yes' === $this->enabled ? 'is-enabled' : 'is-disabled' ) . '"><span></span>' . esc_html( 'yes' === $this->enabled ? __( 'Gateway enabled', 'tfa-payment-hub' ) : __( 'Gateway disabled', 'tfa-payment-hub' ) ) . '</div>';
+            echo '<div class="wp-payment-hub-admin">';
+            echo '<div class="wp-payment-hub-hero">';
+            echo '<div><h2>' . esc_html( $this->get_method_title() ) . '</h2><p>' . esc_html__( 'Manage the customer-facing gateway, then open a category and choose one payment method to edit.', 'wp-payment-hub' ) . '</p></div>';
+            echo '<div class="wp-hub-status ' . ( 'yes' === $this->enabled ? 'is-enabled' : 'is-disabled' ) . '"><span></span>' . esc_html( 'yes' === $this->enabled ? __( 'Gateway enabled', 'wp-payment-hub' ) : __( 'Gateway disabled', 'wp-payment-hub' ) ) . '</div>';
             echo '</div>';
 
-            echo '<div class="tfa-hub-summary">';
-            echo '<div><strong>' . esc_html( $enabled_counts['bank'] ) . '</strong><span>' . esc_html__( 'banks enabled', 'tfa-payment-hub' ) . '</span></div>';
-            echo '<div><strong>' . esc_html( $enabled_counts['direct_debit'] ) . '</strong><span>' . esc_html__( 'Direct Debit enabled', 'tfa-payment-hub' ) . '</span></div>';
-            echo '<div><strong>' . esc_html( $enabled_counts['wallet'] ) . '</strong><span>' . esc_html__( 'wallets enabled', 'tfa-payment-hub' ) . '</span></div>';
+            echo '<div class="wp-hub-summary">';
+            echo '<div><strong>' . esc_html( $enabled_counts['bank'] ) . '</strong><span>' . esc_html__( 'banks enabled', 'wp-payment-hub' ) . '</span></div>';
+            echo '<div><strong>' . esc_html( $enabled_counts['direct_debit'] ) . '</strong><span>' . esc_html__( 'Direct Debit enabled', 'wp-payment-hub' ) . '</span></div>';
+            echo '<div><strong>' . esc_html( $enabled_counts['wallet'] ) . '</strong><span>' . esc_html__( 'wallets enabled', 'wp-payment-hub' ) . '</span></div>';
             echo '</div>';
 
-            echo '<nav class="nav-tab-wrapper tfa-primary-tabs" aria-label="' . esc_attr__( 'Payment settings sections', 'tfa-payment-hub' ) . '">';
-            echo '<a href="#" class="nav-tab nav-tab-active" data-group="general">' . esc_html__( 'General', 'tfa-payment-hub' ) . '</a>';
-            echo '<a href="#" class="nav-tab" data-group="bank">' . esc_html__( 'Banks & Cards', 'tfa-payment-hub' ) . '</a>';
-            echo '<a href="#" class="nav-tab" data-group="direct_debit">' . esc_html__( 'Direct Debit', 'tfa-payment-hub' ) . '</a>';
-            echo '<a href="#" class="nav-tab" data-group="wallet">' . esc_html__( 'Wallets', 'tfa-payment-hub' ) . '</a>';
+            echo '<nav class="nav-tab-wrapper wp-primary-tabs" aria-label="' . esc_attr__( 'Payment settings sections', 'wp-payment-hub' ) . '">';
+            echo '<a href="#" class="nav-tab nav-tab-active" data-group="general">' . esc_html__( 'General', 'wp-payment-hub' ) . '</a>';
+            echo '<a href="#" class="nav-tab" data-group="bank">' . esc_html__( 'Banks & Cards', 'wp-payment-hub' ) . '</a>';
+            echo '<a href="#" class="nav-tab" data-group="direct_debit">' . esc_html__( 'Direct Debit', 'wp-payment-hub' ) . '</a>';
+            echo '<a href="#" class="nav-tab" data-group="wallet">' . esc_html__( 'Wallets', 'wp-payment-hub' ) . '</a>';
             echo '</nav>';
 
-            echo '<div class="tfa-secondary-tabs-wrap">';
-            echo '<nav class="nav-tab-wrapper tfa-secondary-tabs is-visible" data-parent="general" aria-hidden="false" aria-label="' . esc_attr__( 'General settings', 'tfa-payment-hub' ) . '">';
-            echo '<a href="#" class="nav-tab nav-tab-active" data-subtab="checkout">' . esc_html__( 'Checkout', 'tfa-payment-hub' ) . '</a>';
-            echo '<a href="#" class="nav-tab" data-subtab="choices">' . esc_html__( 'Payment choices', 'tfa-payment-hub' ) . '</a>';
-            echo '<a href="#" class="nav-tab" data-subtab="processing">' . esc_html__( 'Processing', 'tfa-payment-hub' ) . '</a>';
-            echo '<a href="#" class="nav-tab" data-subtab="logs">' . esc_html__( 'Logs & security', 'tfa-payment-hub' ) . '</a>';
+            echo '<div class="wp-secondary-tabs-wrap">';
+            echo '<nav class="nav-tab-wrapper wp-secondary-tabs is-visible" data-parent="general" aria-hidden="false" aria-label="' . esc_attr__( 'General settings', 'wp-payment-hub' ) . '">';
+            echo '<a href="#" class="nav-tab nav-tab-active" data-subtab="checkout">' . esc_html__( 'Checkout', 'wp-payment-hub' ) . '</a>';
+            echo '<a href="#" class="nav-tab" data-subtab="choices">' . esc_html__( 'Payment choices', 'wp-payment-hub' ) . '</a>';
+            echo '<a href="#" class="nav-tab" data-subtab="processing">' . esc_html__( 'Processing', 'wp-payment-hub' ) . '</a>';
+            echo '<a href="#" class="nav-tab" data-subtab="logs">' . esc_html__( 'Logs & security', 'wp-payment-hub' ) . '</a>';
             echo '</nav>';
 
             foreach ( array( 'bank', 'direct_debit', 'wallet' ) as $group ) {
-                echo '<nav class="nav-tab-wrapper tfa-secondary-tabs" data-parent="' . esc_attr( $group ) . '" aria-hidden="true" hidden aria-label="' . esc_attr__( 'Payment methods', 'tfa-payment-hub' ) . '">';
+                echo '<nav class="nav-tab-wrapper wp-secondary-tabs" data-parent="' . esc_attr( $group ) . '" aria-hidden="true" hidden aria-label="' . esc_attr__( 'Payment methods', 'wp-payment-hub' ) . '">';
                 if ( 'direct_debit' === $group ) {
-                    echo '<a href="#" class="nav-tab nav-tab-active" data-subtab="direct_debit_settings"><span class="tfa-method-dot is-global"></span>' . esc_html__( 'Direct Debit settings', 'tfa-payment-hub' ) . '</a>';
+                    echo '<a href="#" class="nav-tab nav-tab-active" data-subtab="direct_debit_settings"><span class="wp-method-dot is-global"></span>' . esc_html__( 'Direct Debit settings', 'wp-payment-hub' ) . '</a>';
                 }
                 $first = true;
                 foreach ( $this->providers as $provider_id => $provider ) {
@@ -659,15 +659,15 @@ function tfa_payment_hub_init() {
                     }
                     $active_class = ( $first && 'direct_debit' !== $group ) ? ' nav-tab-active' : '';
                     $enabled_class = 'yes' === $this->get_option( $provider_id . '_enabled', 'no' ) ? ' is-enabled' : '';
-                    echo '<a href="#" class="nav-tab' . esc_attr( $active_class ) . '" data-subtab="' . esc_attr( $provider_id ) . '"><span class="tfa-method-dot' . esc_attr( $enabled_class ) . '"></span>' . esc_html( $provider['name'] ) . '</a>';
+                    echo '<a href="#" class="nav-tab' . esc_attr( $active_class ) . '" data-subtab="' . esc_attr( $provider_id ) . '"><span class="wp-method-dot' . esc_attr( $enabled_class ) . '"></span>' . esc_html( $provider['name'] ) . '</a>';
                     $first = false;
                 }
                 echo '</nav>';
             }
             echo '</div>';
 
-            echo '<div class="tfa-current-panel"><strong class="tfa-current-title"></strong><span class="tfa-current-description"></span></div>';
-            echo '<table class="form-table tfa-payments-settings-table">';
+            echo '<div class="wp-current-panel"><strong class="wp-current-title"></strong><span class="wp-current-description"></span></div>';
+            echo '<table class="form-table wp-payments-settings-table">';
             $this->generate_settings_html();
             echo '</table>';
             echo '</div>';
@@ -680,22 +680,22 @@ function tfa_payment_hub_init() {
             $group = isset( $data['provider_group'] ) ? $data['provider_group'] : 'bank';
             $flow = isset( $data['provider_flow'] ) ? $data['provider_flow'] : 'hosted';
             $group_labels = array(
-                'bank' => __( 'Bank / card', 'tfa-payment-hub' ),
-                'direct_debit' => __( 'Direct Debit', 'tfa-payment-hub' ),
-                'wallet' => __( 'Wallet / other', 'tfa-payment-hub' ),
+                'bank' => __( 'Bank / card', 'wp-payment-hub' ),
+                'direct_debit' => __( 'Direct Debit', 'wp-payment-hub' ),
+                'wallet' => __( 'Wallet / other', 'wp-payment-hub' ),
             );
             ob_start();
             ?>
-            <tr valign="top" class="tfa-provider-section tfa-provider-section-<?php echo esc_attr( $provider_id ); ?> tfa-provider-group-<?php echo esc_attr( $group ); ?>">
+            <tr valign="top" class="wp-provider-section wp-provider-section-<?php echo esc_attr( $provider_id ); ?> wp-provider-group-<?php echo esc_attr( $group ); ?>">
                 <th colspan="2">
-                    <div class="tfa-provider-card-title">
+                    <div class="wp-provider-card-title">
                         <div>
-                            <span class="tfa-provider-type"><?php echo esc_html( $group_labels[ $group ] ); ?></span>
+                            <span class="wp-provider-type"><?php echo esc_html( $group_labels[ $group ] ); ?></span>
                             <h3><?php echo esc_html( $data['title'] ); ?></h3>
                         </div>
-                        <span class="tfa-provider-flow"><?php echo esc_html( 'manual' === $flow ? __( 'Manual Direct Debit', 'tfa-payment-hub' ) : ( 'stripe_checkout' === $flow ? __( 'Express wallets', 'tfa-payment-hub' ) : __( 'Secure provider page', 'tfa-payment-hub' ) ) ); ?></span>
+                        <span class="wp-provider-flow"><?php echo esc_html( 'manual' === $flow ? __( 'Manual Direct Debit', 'wp-payment-hub' ) : ( 'stripe_checkout' === $flow ? __( 'Express wallets', 'wp-payment-hub' ) : __( 'Secure provider page', 'wp-payment-hub' ) ) ); ?></span>
                     </div>
-                    <div class="tfa-provider-help"><strong><?php esc_html_e( 'Setup notes:', 'tfa-payment-hub' ); ?></strong> <?php echo esc_html( $data['description'] ); ?></div>
+                    <div class="wp-provider-help"><strong><?php esc_html_e( 'Setup notes:', 'wp-payment-hub' ); ?></strong> <?php echo esc_html( $data['description'] ); ?></div>
                 </th>
             </tr>
             <?php
@@ -710,25 +710,25 @@ function tfa_payment_hub_init() {
             $image_role    = isset( $data['image_role'] ) ? sanitize_key( $data['image_role'] ) : 'logo';
             $image_url     = $attachment_id ? wp_get_attachment_image_url( $attachment_id, 'medium' ) : '';
             $preview_alt   = 'icon' === $image_role
-                ? sprintf( __( '%s payment icon preview', 'tfa-payment-hub' ), $provider_name )
-                : sprintf( __( '%s logo preview', 'tfa-payment-hub' ), $provider_name );
+                ? sprintf( __( '%s payment icon preview', 'wp-payment-hub' ), $provider_name )
+                : sprintf( __( '%s logo preview', 'wp-payment-hub' ), $provider_name );
             ob_start();
             ?>
             <tr valign="top" class="universal-provider-field universal-provider-field-<?php echo esc_attr( $provider_id ); ?>" data-provider="<?php echo esc_attr( $provider_id ); ?>">
                 <th scope="row" class="titledesc"><label for="<?php echo esc_attr( $field_key ); ?>"><?php echo esc_html( $data['title'] ); ?></label></th>
                 <td class="forminp">
-                    <div class="tfa-media-image-field" data-role="<?php echo esc_attr( $image_role ); ?>">
+                    <div class="wp-media-image-field" data-role="<?php echo esc_attr( $image_role ); ?>">
                         <input type="hidden" id="<?php echo esc_attr( $field_key ); ?>" name="<?php echo esc_attr( $field_key ); ?>" value="<?php echo esc_attr( $attachment_id ); ?>">
-                        <div class="tfa-media-image-preview<?php echo $image_url ? ' has-image' : ''; ?>">
+                        <div class="wp-media-image-preview<?php echo $image_url ? ' has-image' : ''; ?>">
                             <?php if ( $image_url ) : ?>
                                 <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $preview_alt ); ?>">
                             <?php else : ?>
-                                <span><?php esc_html_e( 'No image selected', 'tfa-payment-hub' ); ?></span>
+                                <span><?php esc_html_e( 'No image selected', 'wp-payment-hub' ); ?></span>
                             <?php endif; ?>
                         </div>
-                        <div class="tfa-media-image-actions">
-                            <button type="button" class="button tfa-select-provider-image" data-title="<?php echo esc_attr( 'icon' === $image_role ? __( 'Choose payment icon', 'tfa-payment-hub' ) : __( 'Choose bank or provider logo', 'tfa-payment-hub' ) ); ?>"><?php esc_html_e( 'Choose image', 'tfa-payment-hub' ); ?></button>
-                            <button type="button" class="button-link-delete tfa-remove-provider-image"<?php echo $image_url ? '' : ' hidden'; ?>><?php esc_html_e( 'Remove image', 'tfa-payment-hub' ); ?></button>
+                        <div class="wp-media-image-actions">
+                            <button type="button" class="button wp-select-provider-image" data-title="<?php echo esc_attr( 'icon' === $image_role ? __( 'Choose payment icon', 'wp-payment-hub' ) : __( 'Choose bank or provider logo', 'wp-payment-hub' ) ); ?>"><?php esc_html_e( 'Choose image', 'wp-payment-hub' ); ?></button>
+                            <button type="button" class="button-link-delete wp-remove-provider-image"<?php echo $image_url ? '' : ' hidden'; ?>><?php esc_html_e( 'Remove image', 'wp-payment-hub' ); ?></button>
                         </div>
                         <?php if ( ! empty( $data['description'] ) ) : ?>
                             <p class="description"><?php echo esc_html( $data['description'] ); ?></p>
@@ -749,12 +749,12 @@ function tfa_payment_hub_init() {
             ob_start();
             ?>
             <tr valign="top" class="universal-provider-field universal-provider-field-apple_google_pay" data-provider="apple_google_pay">
-                <th scope="row" class="titledesc"><?php esc_html_e( 'Stripe Checkout', 'tfa-payment-hub' ); ?></th>
+                <th scope="row" class="titledesc"><?php esc_html_e( 'Stripe Checkout', 'wp-payment-hub' ); ?></th>
                 <td class="forminp">
-                    <div class="tfa-wallet-steps">
-                        <div><span>1</span><p><strong><?php esc_html_e( 'Add Stripe keys', 'tfa-payment-hub' ); ?></strong><br><?php esc_html_e( 'Use test keys first, then switch to live keys after a successful test order.', 'tfa-payment-hub' ); ?></p></div>
-                        <div><span>2</span><p><strong><?php esc_html_e( 'Add the webhook', 'tfa-payment-hub' ); ?></strong><br><code><?php echo esc_html( $webhook_url ); ?></code></p></div>
-                        <div><span>3</span><p><strong><?php esc_html_e( 'Enable wallets in Stripe', 'tfa-payment-hub' ); ?></strong><br><?php esc_html_e( 'Stripe Checkout shows Apple Pay or Google Pay only when the customer device and account support it.', 'tfa-payment-hub' ); ?></p></div>
+                    <div class="wp-wallet-steps">
+                        <div><span>1</span><p><strong><?php esc_html_e( 'Add Stripe keys', 'wp-payment-hub' ); ?></strong><br><?php esc_html_e( 'Use test keys first, then switch to live keys after a successful test order.', 'wp-payment-hub' ); ?></p></div>
+                        <div><span>2</span><p><strong><?php esc_html_e( 'Add the webhook', 'wp-payment-hub' ); ?></strong><br><code><?php echo esc_html( $webhook_url ); ?></code></p></div>
+                        <div><span>3</span><p><strong><?php esc_html_e( 'Enable wallets in Stripe', 'wp-payment-hub' ); ?></strong><br><?php esc_html_e( 'Stripe Checkout shows Apple Pay or Google Pay only when the customer device and account support it.', 'wp-payment-hub' ); ?></p></div>
                     </div>
                 </td>
             </tr>
@@ -772,9 +772,9 @@ function tfa_payment_hub_init() {
             <tr valign="top" class="universal-provider-field universal-provider-field-<?php echo esc_attr( $provider_id ); ?>">
                 <th scope="row" class="titledesc"><label for="<?php echo esc_attr( $field_key ); ?>"><?php echo esc_html( $data['title'] ); ?></label></th>
                 <td class="forminp">
-                    <button type="button" class="button button-secondary tfa-test-provider" data-provider="<?php echo esc_attr( $provider_id ); ?>"><?php echo esc_html( sprintf( __( 'Check %s configuration', 'tfa-payment-hub' ), $provider_name ) ); ?></button>
-                    <span class="tfa-test-result" id="tfa-test-result-<?php echo esc_attr( $provider_id ); ?>"></span>
-                    <p class="description"><?php echo esc_html( 'stripe_checkout' === $provider_flow ? __( 'Checks the selected Stripe key and confirms that the account can be reached. It does not create a charge.', 'tfa-payment-hub' ) : __( 'Checks the required credentials and tests whether the configured endpoint can be reached. It does not perform a real transaction.', 'tfa-payment-hub' ) ); ?></p>
+                    <button type="button" class="button button-secondary wp-test-provider" data-provider="<?php echo esc_attr( $provider_id ); ?>"><?php echo esc_html( sprintf( __( 'Check %s configuration', 'wp-payment-hub' ), $provider_name ) ); ?></button>
+                    <span class="wp-test-result" id="wp-test-result-<?php echo esc_attr( $provider_id ); ?>"></span>
+                    <p class="description"><?php echo esc_html( 'stripe_checkout' === $provider_flow ? __( 'Checks the selected Stripe key and confirms that the account can be reached. It does not create a charge.', 'wp-payment-hub' ) : __( 'Checks the required credentials and tests whether the configured endpoint can be reached. It does not perform a real transaction.', 'wp-payment-hub' ) ); ?></p>
                 </td>
             </tr>
             <?php
@@ -793,7 +793,7 @@ function tfa_payment_hub_init() {
             $nonce = wp_create_nonce( 'tfa_payment_hub_test_provider' );
             ?>
             <style>
-                .tfa-payment-hub-admin{max-width:1180px}.tfa-payment-hub-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:22px 24px;margin:14px 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.03)}.tfa-payment-hub-hero h2{font-size:25px;margin:0 0 6px}.tfa-payment-hub-hero p{margin:0;color:#50575e;max-width:720px}.tfa-hub-status{display:flex;align-items:center;gap:8px;white-space:nowrap;border-radius:999px;padding:7px 12px;font-weight:600;background:#f6f7f7}.tfa-hub-status span{width:9px;height:9px;border-radius:50%;background:#8c8f94}.tfa-hub-status.is-enabled{background:#edfaef;color:#006b2d}.tfa-hub-status.is-enabled span{background:#00a32a}.tfa-hub-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px}.tfa-hub-summary>div{display:flex;align-items:baseline;gap:8px;background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:13px 15px}.tfa-hub-summary strong{font-size:20px}.tfa-hub-summary span{color:#646970}.tfa-primary-tabs{margin-top:0}.tfa-secondary-tabs-wrap{padding-top:12px}.tfa-secondary-tabs{display:none!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.tfa-secondary-tabs[hidden]{display:none!important}.tfa-secondary-tabs.is-visible:not([hidden]){display:flex!important}.tfa-secondary-tabs .nav-tab{display:flex;align-items:center;gap:7px;flex:0 0 auto;white-space:nowrap}.tfa-method-dot{width:8px;height:8px;border-radius:50%;background:#a7aaad}.tfa-method-dot.is-enabled{background:#00a32a}.tfa-method-dot.is-global{background:#2271b1}.tfa-current-panel{display:flex;align-items:baseline;gap:10px;background:#f0f6fc;border:1px solid #c5d9ed;border-radius:8px;padding:10px 13px;margin:12px 0}.tfa-current-title{font-size:14px;white-space:nowrap}.tfa-current-description{color:#50575e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tfa-payments-settings-table{background:#fff;border:1px solid #dcdcde;border-radius:10px;border-collapse:separate;padding:2px 20px;margin-top:0}.tfa-payments-settings-table th{width:245px}.tfa-provider-section th{padding-top:22px!important;border-top:0!important}.tfa-provider-card-title{display:flex;justify-content:space-between;align-items:center}.tfa-provider-card-title h3{font-size:20px;margin:3px 0 0}.tfa-provider-type,.tfa-provider-flow{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600}.tfa-provider-type{background:#f0f0f1;color:#2c3338}.tfa-provider-flow{background:#edfaef;color:#006b2d}.tfa-provider-help{background:#f6f7f7;border-left:4px solid #2271b1;padding:12px;margin:12px 0 0;font-weight:400}.tfa-test-result{display:inline-block;margin-left:10px;font-weight:600}.tfa-test-result.success{color:#008a20}.tfa-test-result.error{color:#b32d2e}.tfa-wallet-steps{display:grid;gap:8px}.tfa-wallet-steps>div{display:flex;align-items:flex-start;gap:10px;background:#f6f7f7;border-radius:8px;padding:10px}.tfa-wallet-steps>div>span{display:flex;align-items:center;justify-content:center;flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:#2271b1;color:#fff;font-weight:700}.tfa-wallet-steps p{margin:0}.tfa-wallet-steps code{word-break:break-all}.tfa-media-image-field{display:grid;gap:10px}.tfa-media-image-preview{display:flex;align-items:center;justify-content:center;width:190px;min-height:76px;border:1px dashed #c3c4c7;border-radius:8px;background:#f6f7f7;color:#646970;padding:10px;box-sizing:border-box}.tfa-media-image-preview.has-image{background:#fff;border-style:solid}.tfa-media-image-preview img{display:block;max-width:168px;max-height:64px;width:auto;height:auto}.tfa-media-image-field[data-role=icon] .tfa-media-image-preview{width:112px}.tfa-media-image-field[data-role=icon] .tfa-media-image-preview img{max-width:88px;max-height:48px}.tfa-media-image-actions{display:flex;align-items:center;gap:12px}.tfa-payment-hub-admin input.regular-input,.tfa-payment-hub-admin input[type=text],.tfa-payment-hub-admin input[type=password],.tfa-payment-hub-admin textarea,.tfa-payment-hub-admin select{max-width:560px}.tfa-payment-hub-admin textarea{min-height:92px}.tfa-payments-settings-table tr.is-tfa-hidden{display:none!important}@media(max-width:782px){.tfa-payment-hub-hero{display:block}.tfa-hub-status{display:inline-flex;margin-top:12px}.tfa-hub-summary{grid-template-columns:1fr}.tfa-primary-tabs{display:flex;overflow-x:auto}.tfa-primary-tabs .nav-tab{white-space:nowrap}.tfa-current-panel{display:block}.tfa-current-description{display:block;white-space:normal;margin-top:4px}.tfa-provider-card-title{display:block}.tfa-provider-flow{margin-top:10px}.tfa-payments-settings-table{padding:2px 10px}.tfa-payments-settings-table th{width:auto}.tfa-secondary-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}}
+                .wp-payment-hub-admin{max-width:1180px}.wp-payment-hub-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:22px 24px;margin:14px 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.03)}.wp-payment-hub-hero h2{font-size:25px;margin:0 0 6px}.wp-payment-hub-hero p{margin:0;color:#50575e;max-width:720px}.wp-hub-status{display:flex;align-items:center;gap:8px;white-space:nowrap;border-radius:999px;padding:7px 12px;font-weight:600;background:#f6f7f7}.wp-hub-status span{width:9px;height:9px;border-radius:50%;background:#8c8f94}.wp-hub-status.is-enabled{background:#edfaef;color:#006b2d}.wp-hub-status.is-enabled span{background:#00a32a}.wp-hub-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px}.wp-hub-summary>div{display:flex;align-items:baseline;gap:8px;background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:13px 15px}.wp-hub-summary strong{font-size:20px}.wp-hub-summary span{color:#646970}.wp-primary-tabs{margin-top:0}.wp-secondary-tabs-wrap{padding-top:12px}.wp-secondary-tabs{display:none!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.wp-secondary-tabs[hidden]{display:none!important}.wp-secondary-tabs.is-visible:not([hidden]){display:flex!important}.wp-secondary-tabs .nav-tab{display:flex;align-items:center;gap:7px;flex:0 0 auto;white-space:nowrap}.wp-method-dot{width:8px;height:8px;border-radius:50%;background:#a7aaad}.wp-method-dot.is-enabled{background:#00a32a}.wp-method-dot.is-global{background:#2271b1}.wp-current-panel{display:flex;align-items:baseline;gap:10px;background:#f0f6fc;border:1px solid #c5d9ed;border-radius:8px;padding:10px 13px;margin:12px 0}.wp-current-title{font-size:14px;white-space:nowrap}.wp-current-description{color:#50575e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wp-payments-settings-table{background:#fff;border:1px solid #dcdcde;border-radius:10px;border-collapse:separate;padding:2px 20px;margin-top:0}.wp-payments-settings-table th{width:245px}.wp-provider-section th{padding-top:22px!important;border-top:0!important}.wp-provider-card-title{display:flex;justify-content:space-between;align-items:center}.wp-provider-card-title h3{font-size:20px;margin:3px 0 0}.wp-provider-type,.wp-provider-flow{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600}.wp-provider-type{background:#f0f0f1;color:#2c3338}.wp-provider-flow{background:#edfaef;color:#006b2d}.wp-provider-help{background:#f6f7f7;border-left:4px solid #2271b1;padding:12px;margin:12px 0 0;font-weight:400}.wp-test-result{display:inline-block;margin-left:10px;font-weight:600}.wp-test-result.success{color:#008a20}.wp-test-result.error{color:#b32d2e}.wp-wallet-steps{display:grid;gap:8px}.wp-wallet-steps>div{display:flex;align-items:flex-start;gap:10px;background:#f6f7f7;border-radius:8px;padding:10px}.wp-wallet-steps>div>span{display:flex;align-items:center;justify-content:center;flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:#2271b1;color:#fff;font-weight:700}.wp-wallet-steps p{margin:0}.wp-wallet-steps code{word-break:break-all}.wp-media-image-field{display:grid;gap:10px}.wp-media-image-preview{display:flex;align-items:center;justify-content:center;width:190px;min-height:76px;border:1px dashed #c3c4c7;border-radius:8px;background:#f6f7f7;color:#646970;padding:10px;box-sizing:border-box}.wp-media-image-preview.has-image{background:#fff;border-style:solid}.wp-media-image-preview img{display:block;max-width:168px;max-height:64px;width:auto;height:auto}.wp-media-image-field[data-role=icon] .wp-media-image-preview{width:112px}.wp-media-image-field[data-role=icon] .wp-media-image-preview img{max-width:88px;max-height:48px}.wp-media-image-actions{display:flex;align-items:center;gap:12px}.wp-payment-hub-admin input.regular-input,.wp-payment-hub-admin input[type=text],.wp-payment-hub-admin input[type=password],.wp-payment-hub-admin textarea,.wp-payment-hub-admin select{max-width:560px}.wp-payment-hub-admin textarea{min-height:92px}.wp-payments-settings-table tr.is-wp-hidden{display:none!important}@media(max-width:782px){.wp-payment-hub-hero{display:block}.wp-hub-status{display:inline-flex;margin-top:12px}.wp-hub-summary{grid-template-columns:1fr}.wp-primary-tabs{display:flex;overflow-x:auto}.wp-primary-tabs .nav-tab{white-space:nowrap}.wp-current-panel{display:block}.wp-current-description{display:block;white-space:normal;margin-top:4px}.wp-provider-card-title{display:block}.wp-provider-flow{margin-top:10px}.wp-payments-settings-table{padding:2px 10px}.wp-payments-settings-table th{width:auto}.wp-secondary-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}}
             </style>
             <script>
                 jQuery(function($){
@@ -819,11 +819,11 @@ function tfa_payment_hub_init() {
                         manual_dd_instructions: true
                     };
                     var panelCopy = {
-                        checkout: ['<?php echo esc_js( __( 'Checkout', 'tfa-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Turn the gateway on and set the title and description customers see.', 'tfa-payment-hub' ) ); ?>'],
-                        choices: ['<?php echo esc_js( __( 'Payment choices', 'tfa-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Choose which payment categories appear and which option is selected first.', 'tfa-payment-hub' ) ); ?>'],
-                        processing: ['<?php echo esc_js( __( 'Processing', 'tfa-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Control hosted transaction behaviour and 3-D Secure options.', 'tfa-payment-hub' ) ); ?>'],
-                        logs: ['<?php echo esc_js( __( 'Logs & security', 'tfa-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Enable diagnostic logging only while testing or troubleshooting.', 'tfa-payment-hub' ) ); ?>'],
-                        direct_debit_settings: ['<?php echo esc_js( __( 'Direct Debit settings', 'tfa-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Set the consent wording, order status and customer instructions used by Direct Debit methods.', 'tfa-payment-hub' ) ); ?>']
+                        checkout: ['<?php echo esc_js( __( 'Checkout', 'wp-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Turn the gateway on and set the title and description customers see.', 'wp-payment-hub' ) ); ?>'],
+                        choices: ['<?php echo esc_js( __( 'Payment choices', 'wp-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Choose which payment categories appear and which option is selected first.', 'wp-payment-hub' ) ); ?>'],
+                        processing: ['<?php echo esc_js( __( 'Processing', 'wp-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Control hosted transaction behaviour and 3-D Secure options.', 'wp-payment-hub' ) ); ?>'],
+                        logs: ['<?php echo esc_js( __( 'Logs & security', 'wp-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Enable diagnostic logging only while testing or troubleshooting.', 'wp-payment-hub' ) ); ?>'],
+                        direct_debit_settings: ['<?php echo esc_js( __( 'Direct Debit settings', 'wp-payment-hub' ) ); ?>', '<?php echo esc_js( __( 'Set the consent wording, order status and customer instructions used by Direct Debit methods.', 'wp-payment-hub' ) ); ?>']
                     };
 
                     var providerIds = Object.keys(providerGroups).sort(function(a, b){ return b.length - a.length; });
@@ -846,7 +846,7 @@ function tfa_payment_hub_init() {
                         }
                         for (var i = 0; i < providerIds.length; i++) {
                             var classProvider = providerIds[i];
-                            if ($row.hasClass('tfa-provider-section-' + classProvider) || $row.hasClass('universal-provider-field-' + classProvider)) {
+                            if ($row.hasClass('wp-provider-section-' + classProvider) || $row.hasClass('universal-provider-field-' + classProvider)) {
                                 return classProvider;
                             }
                         }
@@ -863,7 +863,7 @@ function tfa_payment_hub_init() {
                     function defaultSubtab(group) {
                         if (group === 'general') return 'checkout';
                         if (group === 'direct_debit') return 'direct_debit_settings';
-                        var $first = $('.tfa-secondary-tabs[data-parent="' + group + '"] a').first();
+                        var $first = $('.wp-secondary-tabs[data-parent="' + group + '"] a').first();
                         return $first.data('subtab') || '';
                     }
 
@@ -877,8 +877,8 @@ function tfa_payment_hub_init() {
                             title = panelCopy[subtab][0];
                             description = panelCopy[subtab][1];
                         }
-                        $('.tfa-current-title').text(title);
-                        $('.tfa-current-description').text(description);
+                        $('.wp-current-title').text(title);
+                        $('.wp-current-description').text(description);
                     }
 
                     function rowBelongs($row, group, subtab) {
@@ -891,18 +891,18 @@ function tfa_payment_hub_init() {
                     }
 
                     function showPanel(group, subtab) {
-                        if (!$('.tfa-secondary-tabs[data-parent="' + group + '"] a[data-subtab="' + subtab + '"]').length) {
+                        if (!$('.wp-secondary-tabs[data-parent="' + group + '"] a[data-subtab="' + subtab + '"]').length) {
                             subtab = defaultSubtab(group);
                         }
-                        $('.tfa-primary-tabs .nav-tab').removeClass('nav-tab-active');
-                        $('.tfa-primary-tabs .nav-tab[data-group="' + group + '"]').addClass('nav-tab-active');
-                        var $secondaryTabs = $('.tfa-secondary-tabs');
+                        $('.wp-primary-tabs .nav-tab').removeClass('nav-tab-active');
+                        $('.wp-primary-tabs .nav-tab[data-group="' + group + '"]').addClass('nav-tab-active');
+                        var $secondaryTabs = $('.wp-secondary-tabs');
                         $secondaryTabs.removeClass('is-visible').attr('hidden', true).attr('aria-hidden', 'true');
                         $secondaryTabs.filter('[data-parent="' + group + '"]').first().removeAttr('hidden').attr('aria-hidden', 'false').addClass('is-visible');
-                        $('.tfa-secondary-tabs a').removeClass('nav-tab-active');
-                        $('.tfa-secondary-tabs[data-parent="' + group + '"] a[data-subtab="' + subtab + '"]').addClass('nav-tab-active');
-                        $('.tfa-payments-settings-table tr').each(function(){
-                            $(this).toggleClass('is-tfa-hidden', !rowBelongs($(this), group, subtab));
+                        $('.wp-secondary-tabs a').removeClass('nav-tab-active');
+                        $('.wp-secondary-tabs[data-parent="' + group + '"] a[data-subtab="' + subtab + '"]').addClass('nav-tab-active');
+                        $('.wp-payments-settings-table tr').each(function(){
+                            $(this).toggleClass('is-wp-hidden', !rowBelongs($(this), group, subtab));
                         });
                         setPanelCopy(group, subtab);
                         try {
@@ -911,25 +911,25 @@ function tfa_payment_hub_init() {
                         } catch(e) {}
                     }
 
-                    $('.tfa-primary-tabs').on('click', '.nav-tab', function(e){
+                    $('.wp-primary-tabs').on('click', '.nav-tab', function(e){
                         e.preventDefault();
                         var group = $(this).data('group');
                         var subtab = '';
                         try { subtab = window.localStorage.getItem('tfaPaymentHubAdminSubtab_' + group) || ''; } catch(e) {}
                         showPanel(group, subtab || defaultSubtab(group));
                     });
-                    $('.tfa-secondary-tabs').on('click', 'a', function(e){
+                    $('.wp-secondary-tabs').on('click', 'a', function(e){
                         e.preventDefault();
-                        showPanel($(this).closest('.tfa-secondary-tabs').data('parent'), $(this).data('subtab'));
+                        showPanel($(this).closest('.wp-secondary-tabs').data('parent'), $(this).data('subtab'));
                     });
 
-                    $('.tfa-payment-hub-admin').on('click', '.tfa-select-provider-image', function(e){
+                    $('.wp-payment-hub-admin').on('click', '.wp-select-provider-image', function(e){
                         e.preventDefault();
                         var $button = $(this);
-                        var $field = $button.closest('.tfa-media-image-field');
+                        var $field = $button.closest('.wp-media-image-field');
                         var frame = wp.media({
-                            title: $button.data('title') || '<?php echo esc_js( __( 'Choose image', 'tfa-payment-hub' ) ); ?>',
-                            button: { text: '<?php echo esc_js( __( 'Use this image', 'tfa-payment-hub' ) ); ?>' },
+                            title: $button.data('title') || '<?php echo esc_js( __( 'Choose image', 'wp-payment-hub' ) ); ?>',
+                            button: { text: '<?php echo esc_js( __( 'Use this image', 'wp-payment-hub' ) ); ?>' },
                             library: { type: 'image' },
                             multiple: false
                         });
@@ -937,25 +937,25 @@ function tfa_payment_hub_init() {
                             var attachment = frame.state().get('selection').first().toJSON();
                             var previewUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
                             $field.find('input[type="hidden"]').val(attachment.id).trigger('change');
-                            $field.find('.tfa-media-image-preview').addClass('has-image').html($('<img>', { src: previewUrl, alt: attachment.alt || attachment.title || '' }));
-                            $field.find('.tfa-remove-provider-image').prop('hidden', false).removeAttr('hidden');
+                            $field.find('.wp-media-image-preview').addClass('has-image').html($('<img>', { src: previewUrl, alt: attachment.alt || attachment.title || '' }));
+                            $field.find('.wp-remove-provider-image').prop('hidden', false).removeAttr('hidden');
                         });
                         frame.open();
                     });
 
-                    $('.tfa-payment-hub-admin').on('click', '.tfa-remove-provider-image', function(e){
+                    $('.wp-payment-hub-admin').on('click', '.wp-remove-provider-image', function(e){
                         e.preventDefault();
-                        var $field = $(this).closest('.tfa-media-image-field');
+                        var $field = $(this).closest('.wp-media-image-field');
                         $field.find('input[type="hidden"]').val('').trigger('change');
-                        $field.find('.tfa-media-image-preview').removeClass('has-image').html($('<span>').text('<?php echo esc_js( __( 'No image selected', 'tfa-payment-hub' ) ); ?>'));
+                        $field.find('.wp-media-image-preview').removeClass('has-image').html($('<span>').text('<?php echo esc_js( __( 'No image selected', 'wp-payment-hub' ) ); ?>'));
                         $(this).prop('hidden', true).attr('hidden', 'hidden');
                     });
 
-                    $('.tfa-test-provider').on('click', function(e){
+                    $('.wp-test-provider').on('click', function(e){
                         e.preventDefault();
                         var provider = $(this).data('provider');
-                        var $result = $('#tfa-test-result-' + provider);
-                        $result.removeClass('success error').text('<?php echo esc_js( __( 'Checking...', 'tfa-payment-hub' ) ); ?>');
+                        var $result = $('#wp-test-result-' + provider);
+                        $result.removeClass('success error').text('<?php echo esc_js( __( 'Checking...', 'wp-payment-hub' ) ); ?>');
                         $.post(ajaxurl, {
                             action: 'tfa_payment_hub_test_provider',
                             nonce: '<?php echo esc_js( $nonce ); ?>',
@@ -964,16 +964,16 @@ function tfa_payment_hub_init() {
                             if (response && response.success) {
                                 $result.addClass('success').text(response.data.message);
                             } else {
-                                $result.addClass('error').text(response && response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Configuration check failed.', 'tfa-payment-hub' ) ); ?>');
+                                $result.addClass('error').text(response && response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Configuration check failed.', 'wp-payment-hub' ) ); ?>');
                             }
                         }).fail(function(){
-                            $result.addClass('error').text('<?php echo esc_js( __( 'Configuration check failed.', 'tfa-payment-hub' ) ); ?>');
+                            $result.addClass('error').text('<?php echo esc_js( __( 'Configuration check failed.', 'wp-payment-hub' ) ); ?>');
                         });
                     });
 
                     var initialGroup = 'general';
                     try { initialGroup = window.localStorage.getItem('tfaPaymentHubAdminGroup') || 'general'; } catch(e) {}
-                    if (!$('.tfa-primary-tabs .nav-tab[data-group="' + initialGroup + '"]').length) initialGroup = 'general';
+                    if (!$('.wp-primary-tabs .nav-tab[data-group="' + initialGroup + '"]').length) initialGroup = 'general';
                     var initialSubtab = '';
                     try { initialSubtab = window.localStorage.getItem('tfaPaymentHubAdminSubtab_' + initialGroup) || ''; } catch(e) {}
                     showPanel(initialGroup, initialSubtab || defaultSubtab(initialGroup));
@@ -985,45 +985,45 @@ function tfa_payment_hub_init() {
 
         public function ajax_test_provider() {
             if ( ! current_user_can( 'manage_woocommerce' ) ) {
-                wp_send_json_error( array( 'message' => __( 'Permission denied.', 'tfa-payment-hub' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Permission denied.', 'wp-payment-hub' ) ) );
             }
             check_ajax_referer( 'tfa_payment_hub_test_provider', 'nonce' );
 
             $provider_id = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
             if ( empty( $this->providers[ $provider_id ] ) ) {
-                wp_send_json_error( array( 'message' => __( 'Unknown provider.', 'tfa-payment-hub' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Unknown provider.', 'wp-payment-hub' ) ) );
             }
 
             $config = $this->get_provider_config( $provider_id );
             if ( 'yes' !== $config['enabled'] ) {
-                wp_send_json_error( array( 'message' => __( 'Provider is disabled. Enable it before testing.', 'tfa-payment-hub' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Provider is disabled. Enable it before testing.', 'wp-payment-hub' ) ) );
             }
             if ( 'manual' === $config['flow'] ) {
-                wp_send_json_success( array( 'message' => __( 'Manual mandate option is enabled. No gateway credentials are required.', 'tfa-payment-hub' ) ) );
+                wp_send_json_success( array( 'message' => __( 'Manual mandate option is enabled. No gateway credentials are required.', 'wp-payment-hub' ) ) );
             }
             if ( 'stripe_checkout' === $config['flow'] ) {
                 if ( empty( $config['secret_key'] ) ) {
-                    wp_send_json_error( array( 'message' => __( 'Add the Stripe secret key for the selected mode.', 'tfa-payment-hub' ) ) );
+                    wp_send_json_error( array( 'message' => __( 'Add the Stripe secret key for the selected mode.', 'wp-payment-hub' ) ) );
                 }
                 $response = $this->stripe_api_request( 'GET', '/v1/account', $config['secret_key'] );
                 if ( is_wp_error( $response ) ) {
                     wp_send_json_error( array( 'message' => $response->get_error_message() ) );
                 }
                 $message = ! empty( $config['webhook_secret'] )
-                    ? __( 'Stripe connected. The webhook secret is also configured.', 'tfa-payment-hub' )
-                    : __( 'Stripe connected. Add the webhook secret before going live.', 'tfa-payment-hub' );
+                    ? __( 'Stripe connected. The webhook secret is also configured.', 'wp-payment-hub' )
+                    : __( 'Stripe connected. Add the webhook secret before going live.', 'wp-payment-hub' );
                 wp_send_json_success( array( 'message' => $message ) );
             }
             if ( empty( $config['gateway_url'] ) || empty( $config['store_id'] ) || empty( $config['shared_secret'] ) ) {
-                wp_send_json_error( array( 'message' => __( 'Missing Gateway URL, Merchant/Store ID or Shared Secret for the selected mode.', 'tfa-payment-hub' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Missing Gateway URL, Merchant/Store ID or Shared Secret for the selected mode.', 'wp-payment-hub' ) ) );
             }
 
             $response = wp_remote_head( $config['gateway_url'], array( 'timeout' => 10, 'redirection' => 2 ) );
             if ( is_wp_error( $response ) ) {
-                wp_send_json_success( array( 'message' => sprintf( __( 'Required fields are present. URL check warning: %s', 'tfa-payment-hub' ), $response->get_error_message() ) ) );
+                wp_send_json_success( array( 'message' => sprintf( __( 'Required fields are present. URL check warning: %s', 'wp-payment-hub' ), $response->get_error_message() ) ) );
             }
             $code = wp_remote_retrieve_response_code( $response );
-            wp_send_json_success( array( 'message' => sprintf( __( 'Required fields are present. Gateway URL returned HTTP %s.', 'tfa-payment-hub' ), $code ? $code : __( 'no status', 'tfa-payment-hub' ) ) ) );
+            wp_send_json_success( array( 'message' => sprintf( __( 'Required fields are present. Gateway URL returned HTTP %s.', 'wp-payment-hub' ), $code ? $code : __( 'no status', 'wp-payment-hub' ) ) ) );
         }
 
         public function payment_fields() {
@@ -1033,7 +1033,7 @@ function tfa_payment_hub_init() {
 
             $enabled_providers = $this->get_checkout_providers();
             if ( empty( $enabled_providers ) ) {
-                echo '<p>' . esc_html__( 'No configured provider is currently available inside TFA Payment Hub. Please choose another payment method or contact the store.', 'tfa-payment-hub' ) . '</p>';
+                echo '<p>' . esc_html__( 'No configured provider is currently available inside TFA Payment Hub. Please choose another payment method or contact the store.', 'wp-payment-hub' ) . '</p>';
                 return;
             }
 
@@ -1043,9 +1043,9 @@ function tfa_payment_hub_init() {
             }
 
             $group_labels = array(
-                'bank' => __( 'Bank or card', 'tfa-payment-hub' ),
-                'direct_debit' => __( 'Direct Debit', 'tfa-payment-hub' ),
-                'wallet' => __( 'Wallets', 'tfa-payment-hub' ),
+                'bank' => __( 'Bank or card', 'wp-payment-hub' ),
+                'direct_debit' => __( 'Direct Debit', 'wp-payment-hub' ),
+                'wallet' => __( 'Wallets', 'wp-payment-hub' ),
             );
             $default_group = $this->get_option( 'default_group', 'bank' );
             if ( empty( $groups[ $default_group ] ) ) {
@@ -1056,11 +1056,11 @@ function tfa_payment_hub_init() {
                 $default_provider = key( $groups[ $default_group ] );
             }
 
-            echo '<div class="tfa-payment-hub-checkout">';
+            echo '<div class="wp-payment-hub-checkout">';
             if ( count( $groups ) > 1 ) {
-                echo '<div class="tfa-payment-group-switcher" role="radiogroup" aria-label="' . esc_attr__( 'Payment type', 'tfa-payment-hub' ) . '">';
+                echo '<div class="wp-payment-group-switcher" role="radiogroup" aria-label="' . esc_attr__( 'Payment type', 'wp-payment-hub' ) . '">';
                 foreach ( $groups as $group_id => $providers ) {
-                    echo '<label class="tfa-payment-group-choice"><input type="radio" name="tfa_payment_group" value="' . esc_attr( $group_id ) . '" ' . checked( $group_id, $default_group, false ) . '> <span>' . esc_html( $group_labels[ $group_id ] ) . '</span></label>';
+                    echo '<label class="wp-payment-group-choice"><input type="radio" name="tfa_payment_group" value="' . esc_attr( $group_id ) . '" ' . checked( $group_id, $default_group, false ) . '> <span>' . esc_html( $group_labels[ $group_id ] ) . '</span></label>';
                 }
                 echo '</div>';
             } else {
@@ -1069,47 +1069,47 @@ function tfa_payment_hub_init() {
 
             foreach ( $groups as $group_id => $providers ) {
                 $style = $group_id === $default_group ? '' : ' style="display:none"';
-                echo '<div class="tfa-provider-options" data-group="' . esc_attr( $group_id ) . '"' . $style . '>';
+                echo '<div class="wp-provider-options" data-group="' . esc_attr( $group_id ) . '"' . $style . '>';
                 foreach ( $providers as $provider_id => $provider ) {
                     $config = $this->get_provider_config( $provider_id );
                     $checked = $provider_id === $default_provider;
-                    echo '<label class="tfa-provider-option">';
+                    echo '<label class="wp-provider-option">';
                     echo '<input type="radio" name="tfa_payment_provider" value="' . esc_attr( $provider_id ) . '" data-group="' . esc_attr( $group_id ) . '" ' . checked( $checked, true, false ) . '> ';
                     if ( ! empty( $config['logo_id'] ) ) {
-                        echo '<span class="tfa-provider-logo-wrap">' . wp_get_attachment_image( $config['logo_id'], 'medium', false, array( 'class' => 'tfa-provider-logo', 'alt' => $config['title'] ) ) . '</span>';
+                        echo '<span class="wp-provider-logo-wrap">' . wp_get_attachment_image( $config['logo_id'], 'medium', false, array( 'class' => 'wp-provider-logo', 'alt' => $config['title'] ) ) . '</span>';
                     }
-                    echo '<span class="tfa-provider-option-content"><strong>' . esc_html( $config['title'] ) . '</strong>';
+                    echo '<span class="wp-provider-option-content"><strong>' . esc_html( $config['title'] ) . '</strong>';
                     if ( ! empty( $config['description'] ) ) {
                         echo '<small>' . esc_html( $config['description'] ) . '</small>';
                     }
                     if ( 'manual' === $provider['flow'] ) {
-                        echo '<em>' . esc_html__( 'Order placed on hold while the mandate is arranged.', 'tfa-payment-hub' ) . '</em>';
+                        echo '<em>' . esc_html__( 'Order placed on hold while the mandate is arranged.', 'wp-payment-hub' ) . '</em>';
                     } elseif ( 'stripe_checkout' === $provider['flow'] ) {
-                        echo '<em>' . esc_html__( 'Apple Pay or Google Pay appears on Stripe Checkout when supported by the customer device.', 'tfa-payment-hub' ) . '</em>';
+                        echo '<em>' . esc_html__( 'Apple Pay or Google Pay appears on Stripe Checkout when supported by the customer device.', 'wp-payment-hub' ) . '</em>';
                     }
                     echo '</span>';
                     if ( ! empty( $config['icon_id'] ) ) {
-                        echo '<span class="tfa-provider-icon-wrap">' . wp_get_attachment_image( $config['icon_id'], 'thumbnail', false, array( 'class' => 'tfa-provider-icon', 'alt' => sprintf( __( '%s payment icon', 'tfa-payment-hub' ), $config['title'] ) ) ) . '</span>';
+                        echo '<span class="wp-provider-icon-wrap">' . wp_get_attachment_image( $config['icon_id'], 'thumbnail', false, array( 'class' => 'wp-provider-icon', 'alt' => sprintf( __( '%s payment icon', 'wp-payment-hub' ), $config['title'] ) ) ) . '</span>';
                     }
                     echo '</label>';
                 }
                 if ( 'direct_debit' === $group_id ) {
-                    echo '<label class="tfa-dd-consent"><input type="checkbox" name="tfa_direct_debit_consent" value="yes"> <span>' . esc_html( $this->get_option( 'direct_debit_consent_text', __( 'I understand that a Direct Debit mandate must be completed and approved before collection.', 'tfa-payment-hub' ) ) ) . '</span></label>';
+                    echo '<label class="wp-dd-consent"><input type="checkbox" name="tfa_direct_debit_consent" value="yes"> <span>' . esc_html( $this->get_option( 'direct_debit_consent_text', __( 'I understand that a Direct Debit mandate must be completed and approved before collection.', 'wp-payment-hub' ) ) ) . '</span></label>';
                 }
                 echo '</div>';
             }
             echo '</div>';
             ?>
             <style>
-                .tfa-payment-group-switcher{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}.tfa-payment-group-choice input{position:absolute;opacity:0}.tfa-payment-group-choice span{display:block;border:1px solid #c3c4c7;border-radius:8px;padding:8px 12px;background:#fff;cursor:pointer}.tfa-payment-group-choice input:checked+span{border-color:#2271b1;box-shadow:0 0 0 1px #2271b1;background:#f0f6fc}.tfa-provider-options{display:grid;gap:9px}.tfa-provider-option{display:flex!important;align-items:flex-start;gap:9px;border:1px solid #dcdcde;border-radius:8px;padding:11px 12px;background:#fff;cursor:pointer}.tfa-provider-option:has(input:checked){border-color:#2271b1;box-shadow:0 0 0 1px #2271b1}.tfa-provider-option input{margin-top:4px}.tfa-provider-logo-wrap{display:flex;align-items:center;justify-content:center;flex:0 0 88px;min-height:42px}.tfa-provider-logo{display:block;max-width:82px!important;max-height:42px!important;width:auto!important;height:auto!important;object-fit:contain}.tfa-provider-option-content{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:2px}.tfa-provider-icon-wrap{display:flex;align-items:center;justify-content:flex-end;flex:0 0 58px;min-height:40px;margin-left:auto}.tfa-provider-icon{display:block;max-width:54px!important;max-height:36px!important;width:auto!important;height:auto!important;object-fit:contain}.tfa-provider-option-content small{font-size:12px;line-height:1.4}.tfa-provider-option-content em{font-size:11px;color:#646970}.tfa-dd-consent{display:flex!important;gap:8px;align-items:flex-start;background:#f6f7f7;border-radius:8px;padding:11px;margin-top:3px}.tfa-dd-consent input{margin-top:4px}@media(max-width:520px){.tfa-provider-option{flex-wrap:wrap}.tfa-provider-logo-wrap{flex-basis:64px}.tfa-provider-logo{max-width:60px!important}.tfa-provider-option-content{flex-basis:calc(100% - 96px)}.tfa-provider-icon-wrap{flex-basis:44px}.tfa-provider-icon{max-width:42px!important}}
+                .wp-payment-group-switcher{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}.wp-payment-group-choice input{position:absolute;opacity:0}.wp-payment-group-choice span{display:block;border:1px solid #c3c4c7;border-radius:8px;padding:8px 12px;background:#fff;cursor:pointer}.wp-payment-group-choice input:checked+span{border-color:#2271b1;box-shadow:0 0 0 1px #2271b1;background:#f0f6fc}.wp-provider-options{display:grid;gap:9px}.wp-provider-option{display:flex!important;align-items:flex-start;gap:9px;border:1px solid #dcdcde;border-radius:8px;padding:11px 12px;background:#fff;cursor:pointer}.wp-provider-option:has(input:checked){border-color:#2271b1;box-shadow:0 0 0 1px #2271b1}.wp-provider-option input{margin-top:4px}.wp-provider-logo-wrap{display:flex;align-items:center;justify-content:center;flex:0 0 88px;min-height:42px}.wp-provider-logo{display:block;max-width:82px!important;max-height:42px!important;width:auto!important;height:auto!important;object-fit:contain}.wp-provider-option-content{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:2px}.wp-provider-icon-wrap{display:flex;align-items:center;justify-content:flex-end;flex:0 0 58px;min-height:40px;margin-left:auto}.wp-provider-icon{display:block;max-width:54px!important;max-height:36px!important;width:auto!important;height:auto!important;object-fit:contain}.wp-provider-option-content small{font-size:12px;line-height:1.4}.wp-provider-option-content em{font-size:11px;color:#646970}.wp-dd-consent{display:flex!important;gap:8px;align-items:flex-start;background:#f6f7f7;border-radius:8px;padding:11px;margin-top:3px}.wp-dd-consent input{margin-top:4px}@media(max-width:520px){.wp-provider-option{flex-wrap:wrap}.wp-provider-logo-wrap{flex-basis:64px}.wp-provider-logo{max-width:60px!important}.wp-provider-option-content{flex-basis:calc(100% - 96px)}.wp-provider-icon-wrap{flex-basis:44px}.wp-provider-icon{max-width:42px!important}}
             </style>
             <script>
                 (function($){
-                    var $hub = $('.tfa-payment-hub-checkout').last();
+                    var $hub = $('.wp-payment-hub-checkout').last();
                     if (!$hub.length) return;
                     function showGroup(group){
-                        $hub.find('.tfa-provider-options').hide().filter('[data-group="' + group + '"]').show();
-                        var $visible = $hub.find('.tfa-provider-options[data-group="' + group + '"] input[name="tfa_payment_provider"]');
+                        $hub.find('.wp-provider-options').hide().filter('[data-group="' + group + '"]').show();
+                        var $visible = $hub.find('.wp-provider-options[data-group="' + group + '"] input[name="tfa_payment_provider"]');
                         if (!$visible.filter(':checked').length && $visible.length) { $visible.first().prop('checked', true); }
                     }
                     $hub.on('change', 'input[name="tfa_payment_group"]', function(){ showGroup(this.value); });
@@ -1125,7 +1125,7 @@ function tfa_payment_hub_init() {
             $enabled_providers = $this->get_enabled_providers();
 
             if ( empty( $provider_id ) || empty( $enabled_providers[ $provider_id ] ) ) {
-                wc_add_notice( __( 'Please choose an available payment option.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'Please choose an available payment option.', 'wp-payment-hub' ), 'error' );
                 return false;
             }
 
@@ -1133,7 +1133,7 @@ function tfa_payment_hub_init() {
             if ( 'direct_debit' === $provider['group'] ) {
                 $consent = isset( $_POST['tfa_direct_debit_consent'] ) ? sanitize_text_field( wp_unslash( $_POST['tfa_direct_debit_consent'] ) ) : '';
                 if ( 'yes' !== $consent ) {
-                    wc_add_notice( __( 'Please confirm the Direct Debit mandate statement.', 'tfa-payment-hub' ), 'error' );
+                    wc_add_notice( __( 'Please confirm the Direct Debit mandate statement.', 'wp-payment-hub' ), 'error' );
                     return false;
                 }
             }
@@ -1145,13 +1145,13 @@ function tfa_payment_hub_init() {
             $config = $this->get_provider_config( $provider_id );
             if ( 'stripe_checkout' === $provider['flow'] ) {
                 if ( empty( $config['secret_key'] ) ) {
-                    wc_add_notice( __( 'Apple Pay and Google Pay are temporarily unavailable. Please use another payment option.', 'tfa-payment-hub' ), 'error' );
+                    wc_add_notice( __( 'Apple Pay and Google Pay are temporarily unavailable. Please use another payment option.', 'wp-payment-hub' ), 'error' );
                     return false;
                 }
                 return true;
             }
             if ( empty( $config['gateway_url'] ) || empty( $config['store_id'] ) || empty( $config['shared_secret'] ) ) {
-                wc_add_notice( sprintf( __( '%s is not fully configured. Please use another payment option or contact the store.', 'tfa-payment-hub' ), $provider['name'] ), 'error' );
+                wc_add_notice( sprintf( __( '%s is not fully configured. Please use another payment option or contact the store.', 'wp-payment-hub' ), $provider['name'] ), 'error' );
                 return false;
             }
 
@@ -1161,14 +1161,14 @@ function tfa_payment_hub_init() {
         public function process_payment( $order_id ) {
             $order = wc_get_order( $order_id );
             if ( ! $order ) {
-                wc_add_notice( __( 'Invalid order.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'Invalid order.', 'wp-payment-hub' ), 'error' );
                 return array( 'result' => 'failure' );
             }
 
             $provider_id = isset( $_POST['tfa_payment_provider'] ) ? sanitize_key( wp_unslash( $_POST['tfa_payment_provider'] ) ) : ( isset( $_POST['universal_payment_provider'] ) ? sanitize_key( wp_unslash( $_POST['universal_payment_provider'] ) ) : $this->get_option( 'default_provider', 'natwest' ) );
             $enabled_providers = $this->get_enabled_providers();
             if ( empty( $enabled_providers[ $provider_id ] ) ) {
-                wc_add_notice( __( 'Selected payment option is not available.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'Selected payment option is not available.', 'wp-payment-hub' ), 'error' );
                 return array( 'result' => 'failure' );
             }
 
@@ -1183,7 +1183,7 @@ function tfa_payment_hub_init() {
             if ( 'manual' === $provider['flow'] ) {
                 $status = $this->get_option( 'manual_dd_order_status', 'on-hold' );
                 $instructions = $this->get_manual_instructions( $provider_id );
-                $order->update_status( $status, sprintf( __( 'Awaiting %s mandate confirmation. %s', 'tfa-payment-hub' ), $provider['name'], $instructions ) );
+                $order->update_status( $status, sprintf( __( 'Awaiting %s mandate confirmation. %s', 'wp-payment-hub' ), $provider['name'], $instructions ) );
                 wc_reduce_stock_levels( $order_id );
                 if ( WC()->cart ) {
                     WC()->cart->empty_cart();
@@ -1197,16 +1197,16 @@ function tfa_payment_hub_init() {
             $config = $this->get_provider_config( $provider_id );
             if ( 'stripe_checkout' === $provider['flow'] ) {
                 if ( empty( $config['secret_key'] ) ) {
-                    wc_add_notice( __( 'Apple Pay and Google Pay are not fully configured.', 'tfa-payment-hub' ), 'error' );
+                    wc_add_notice( __( 'Apple Pay and Google Pay are not fully configured.', 'wp-payment-hub' ), 'error' );
                     return array( 'result' => 'failure' );
                 }
                 $session = $this->create_stripe_checkout_session( $order, $config );
                 if ( is_wp_error( $session ) ) {
                     $this->log( 'Stripe Checkout session error: ' . $session->get_error_message() );
-                    wc_add_notice( __( 'The express wallet checkout could not be started. Please try again or use another payment option.', 'tfa-payment-hub' ), 'error' );
+                    wc_add_notice( __( 'The express wallet checkout could not be started. Please try again or use another payment option.', 'wp-payment-hub' ), 'error' );
                     return array( 'result' => 'failure' );
                 }
-                $order->update_status( 'pending', __( 'Awaiting Apple Pay or Google Pay payment through Stripe Checkout.', 'tfa-payment-hub' ) );
+                $order->update_status( 'pending', __( 'Awaiting Apple Pay or Google Pay payment through Stripe Checkout.', 'wp-payment-hub' ) );
                 $order->update_meta_data( '_tfa_stripe_session_id', sanitize_text_field( $session['id'] ) );
                 $order->update_meta_data( '_tfa_stripe_mode', $config['mode'] );
                 $order->save();
@@ -1217,11 +1217,11 @@ function tfa_payment_hub_init() {
             }
 
             if ( empty( $config['store_id'] ) || empty( $config['shared_secret'] ) || empty( $config['gateway_url'] ) ) {
-                wc_add_notice( sprintf( __( '%s is not fully configured.', 'tfa-payment-hub' ), $provider['name'] ), 'error' );
+                wc_add_notice( sprintf( __( '%s is not fully configured.', 'wp-payment-hub' ), $provider['name'] ), 'error' );
                 return array( 'result' => 'failure' );
             }
 
-            $order->update_status( 'pending', sprintf( __( 'Awaiting %s payment.', 'tfa-payment-hub' ), $provider['name'] ) );
+            $order->update_status( 'pending', sprintf( __( 'Awaiting %s payment.', 'wp-payment-hub' ), $provider['name'] ) );
 
             return array(
                 'result'   => 'success',
@@ -1242,7 +1242,7 @@ function tfa_payment_hub_init() {
             $order    = wc_get_order( $order_id );
 
             if ( ! $order || ! hash_equals( $order->get_order_key(), $key ) ) {
-                wc_add_notice( __( 'Invalid payment request.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'Invalid payment request.', 'wp-payment-hub' ), 'error' );
                 wp_safe_redirect( wc_get_cart_url() );
                 exit;
             }
@@ -1250,14 +1250,14 @@ function tfa_payment_hub_init() {
             $provider_id = $this->get_order_provider_id( $order );
             $config = $this->get_provider_config( $provider_id );
             if ( empty( $config['store_id'] ) || empty( $config['shared_secret'] ) || empty( $config['gateway_url'] ) ) {
-                wc_add_notice( sprintf( __( '%s payment gateway is not fully configured.', 'tfa-payment-hub' ), $this->providers[ $provider_id ]['name'] ), 'error' );
+                wc_add_notice( sprintf( __( '%s payment gateway is not fully configured.', 'wp-payment-hub' ), $this->providers[ $provider_id ]['name'] ), 'error' );
                 wp_safe_redirect( wc_get_cart_url() );
                 exit;
             }
 
             $currency_numeric = $this->get_currency_number( $order->get_currency() );
             if ( empty( $currency_numeric ) ) {
-                wc_add_notice( __( 'This currency is not configured for universal payments.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'This currency is not configured for universal payments.', 'wp-payment-hub' ), 'error' );
                 wp_safe_redirect( wc_get_cart_url() );
                 exit;
             }
@@ -1351,7 +1351,7 @@ function tfa_payment_hub_init() {
             $missing = $this->missing_required_gateway_fields( $fields, $required_fields );
             if ( ! empty( $missing ) ) {
                 $this->log( 'Payment redirect blocked. Missing required fields: ' . implode( ', ', $missing ) );
-                wc_add_notice( sprintf( __( '%s payment request is missing required fields. Please check gateway settings.', 'tfa-payment-hub' ), $this->providers[ $provider_id ]['name'] ), 'error' );
+                wc_add_notice( sprintf( __( '%s payment request is missing required fields. Please check gateway settings.', 'wp-payment-hub' ), $this->providers[ $provider_id ]['name'] ), 'error' );
                 wp_safe_redirect( wc_get_checkout_url() );
                 exit;
             }
@@ -1359,14 +1359,14 @@ function tfa_payment_hub_init() {
             $this->log( 'Redirect form provider ' . $provider_id . ': ' . wc_print_r( array_diff_key( $fields, array( 'hash' => true, 'shared_secret' => true ) ), true ) );
 
             nocache_headers();
-            echo '<!doctype html><html><head><meta charset="utf-8"><title>' . esc_html__( 'Redirecting to payment...', 'tfa-payment-hub' ) . '</title></head><body>';
-            echo '<p>' . esc_html__( 'Redirecting to the secure payment page. Please wait...', 'tfa-payment-hub' ) . '</p>';
-            echo '<form id="tfa-payment-hub-form" method="post" action="' . esc_url( $config['gateway_url'] ) . '">';
+            echo '<!doctype html><html><head><meta charset="utf-8"><title>' . esc_html__( 'Redirecting to payment...', 'wp-payment-hub' ) . '</title></head><body>';
+            echo '<p>' . esc_html__( 'Redirecting to the secure payment page. Please wait...', 'wp-payment-hub' ) . '</p>';
+            echo '<form id="wp-payment-hub-form" method="post" action="' . esc_url( $config['gateway_url'] ) . '">';
             foreach ( $fields as $name => $value ) {
                 echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '">';
             }
-            echo '<noscript><button type="submit">' . esc_html__( 'Continue to payment', 'tfa-payment-hub' ) . '</button></noscript>';
-            echo '</form><script>document.getElementById("tfa-payment-hub-form").submit();</script></body></html>';
+            echo '<noscript><button type="submit">' . esc_html__( 'Continue to payment', 'wp-payment-hub' ) . '</button></noscript>';
+            echo '</form><script>document.getElementById("wp-payment-hub-form").submit();</script></body></html>';
             exit;
         }
 
@@ -1376,7 +1376,7 @@ function tfa_payment_hub_init() {
             $order    = wc_get_order( $order_id );
 
             if ( ! $order || ( $key && ! hash_equals( $order->get_order_key(), $key ) ) ) {
-                wc_add_notice( __( 'Invalid payment response.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'Invalid payment response.', 'wp-payment-hub' ), 'error' );
                 wp_safe_redirect( wc_get_cart_url() );
                 exit;
             }
@@ -1390,16 +1390,16 @@ function tfa_payment_hub_init() {
             if ( $valid && 'APPROVED' === strtoupper( $status ) && 0 === strpos( strtoupper( $approval_code ), 'Y:' ) ) {
                 if ( ! $order->is_paid() ) {
                     $order->payment_complete( $merchant_txn_id );
-                    $order->add_order_note( sprintf( __( '%1$s payment approved. Approval code: %2$s', 'tfa-payment-hub' ), $this->providers[ $provider_id ]['name'], $approval_code ) );
+                    $order->add_order_note( sprintf( __( '%1$s payment approved. Approval code: %2$s', 'wp-payment-hub' ), $this->providers[ $provider_id ]['name'], $approval_code ) );
                     WC()->cart->empty_cart();
                 }
                 wp_safe_redirect( $this->get_return_url( $order ) );
                 exit;
             }
 
-            $message = $approval_code ? $approval_code : __( 'Payment was not approved.', 'tfa-payment-hub' );
-            $order->update_status( 'failed', sprintf( __( '%1$s payment failed or could not be verified. Message: %2$s', 'tfa-payment-hub' ), $this->providers[ $provider_id ]['name'], $message ) );
-            wc_add_notice( __( 'There was an issue with the payment. Please try again or use another payment method.', 'tfa-payment-hub' ), 'error' );
+            $message = $approval_code ? $approval_code : __( 'Payment was not approved.', 'wp-payment-hub' );
+            $order->update_status( 'failed', sprintf( __( '%1$s payment failed or could not be verified. Message: %2$s', 'wp-payment-hub' ), $this->providers[ $provider_id ]['name'], $message ) );
+            wc_add_notice( __( 'There was an issue with the payment. Please try again or use another payment method.', 'wp-payment-hub' ), 'error' );
             wp_safe_redirect( wc_get_checkout_url() );
             exit;
         }
@@ -1422,10 +1422,10 @@ function tfa_payment_hub_init() {
             if ( $valid && 'APPROVED' === strtoupper( $status ) && ( 0 === strpos( strtoupper( $approval_code ), 'Y:' ) || false !== stripos( $approval_code, 'waiting 3dsecure' ) ) ) {
                 if ( ! $order->is_paid() ) {
                     $order->payment_complete( $merchant_txn_id );
-                    $order->add_order_note( sprintf( __( '%1$s payment notification approved. Approval code: %2$s', 'tfa-payment-hub' ), $this->providers[ $provider_id ]['name'], $approval_code ) );
+                    $order->add_order_note( sprintf( __( '%1$s payment notification approved. Approval code: %2$s', 'wp-payment-hub' ), $this->providers[ $provider_id ]['name'], $approval_code ) );
                 }
             } elseif ( $valid && ! $order->is_paid() ) {
-                $order->update_status( 'failed', sprintf( __( '%1$s payment notification received but not approved. Message: %2$s', 'tfa-payment-hub' ), $this->providers[ $provider_id ]['name'], $approval_code ) );
+                $order->update_status( 'failed', sprintf( __( '%1$s payment notification received but not approved. Message: %2$s', 'wp-payment-hub' ), $this->providers[ $provider_id ]['name'], $approval_code ) );
             }
 
             status_header( 200 );
@@ -1449,7 +1449,7 @@ function tfa_payment_hub_init() {
                     'logo_url'    => $config['logo_id'] ? wp_get_attachment_image_url( $config['logo_id'], 'medium' ) : '',
                     'logo_alt'    => $config['title'],
                     'icon_url'    => $config['icon_id'] ? wp_get_attachment_image_url( $config['icon_id'], 'thumbnail' ) : '',
-                    'icon_alt'    => sprintf( __( '%s payment icon', 'tfa-payment-hub' ), $config['title'] ),
+                    'icon_alt'    => sprintf( __( '%s payment icon', 'wp-payment-hub' ), $config['title'] ),
                     'group'       => $provider['group'],
                     'flow'        => $provider['flow'],
                 );
@@ -1469,13 +1469,13 @@ function tfa_payment_hub_init() {
                 'description'        => $this->description,
                 'groups'             => $groups,
                 'group_labels'       => array(
-                    'bank'         => __( 'Bank or card', 'tfa-payment-hub' ),
-                    'direct_debit' => __( 'Direct Debit', 'tfa-payment-hub' ),
-                    'wallet'       => __( 'Wallets', 'tfa-payment-hub' ),
+                    'bank'         => __( 'Bank or card', 'wp-payment-hub' ),
+                    'direct_debit' => __( 'Direct Debit', 'wp-payment-hub' ),
+                    'wallet'       => __( 'Wallets', 'wp-payment-hub' ),
                 ),
                 'default_group'      => $default_group,
                 'default_provider'   => $default_provider,
-                'direct_debit_text'  => $this->get_option( 'direct_debit_consent_text', __( 'I understand that a Direct Debit mandate must be completed and approved before collection.', 'tfa-payment-hub' ) ),
+                'direct_debit_text'  => $this->get_option( 'direct_debit_consent_text', __( 'I understand that a Direct Debit mandate must be completed and approved before collection.', 'wp-payment-hub' ) ),
                 'supports'           => array_values( array_filter( $this->supports, array( $this, 'supports' ) ) ),
                 'available'          => ! empty( $providers ),
             );
@@ -1502,7 +1502,7 @@ function tfa_payment_hub_init() {
             $code = wp_remote_retrieve_response_code( $response );
             $data = json_decode( wp_remote_retrieve_body( $response ), true );
             if ( $code < 200 || $code >= 300 || ! is_array( $data ) ) {
-                $message = isset( $data['error']['message'] ) ? sanitize_text_field( $data['error']['message'] ) : __( 'Stripe returned an unexpected response.', 'tfa-payment-hub' );
+                $message = isset( $data['error']['message'] ) ? sanitize_text_field( $data['error']['message'] ) : __( 'Stripe returned an unexpected response.', 'wp-payment-hub' );
                 return new WP_Error( 'tfa_stripe_error', $message );
             }
             return $data;
@@ -1528,13 +1528,13 @@ function tfa_payment_hub_init() {
                 'customer_email'                                   => $order->get_billing_email(),
                 'payment_method_types[0]'                          => 'card',
                 'line_items[0][price_data][currency]'              => strtolower( $order->get_currency() ),
-                'line_items[0][price_data][product_data][name]'    => sprintf( __( 'Order #%s', 'tfa-payment-hub' ), $order->get_order_number() ),
+                'line_items[0][price_data][product_data][name]'    => sprintf( __( 'Order #%s', 'wp-payment-hub' ), $order->get_order_number() ),
                 'line_items[0][price_data][unit_amount]'           => $this->get_stripe_minor_amount( $order->get_total(), $order->get_currency() ),
                 'line_items[0][quantity]'                          => 1,
                 'metadata[order_id]'                               => (string) $order->get_id(),
                 'metadata[payment_method]'                         => 'apple_google_pay',
                 'payment_intent_data[metadata][order_id]'          => (string) $order->get_id(),
-                'payment_intent_data[description]'                 => sprintf( __( 'WooCommerce order #%s', 'tfa-payment-hub' ), $order->get_order_number() ),
+                'payment_intent_data[description]'                 => sprintf( __( 'WooCommerce order #%s', 'wp-payment-hub' ), $order->get_order_number() ),
                 'locale'                                           => 'auto',
                 'submit_type'                                      => 'pay',
             );
@@ -1549,14 +1549,14 @@ function tfa_payment_hub_init() {
             $order     = wc_get_order( $order_id );
 
             if ( ! $order || empty( $session_id ) || ! hash_equals( $order->get_order_key(), $key ) ) {
-                wc_add_notice( __( 'The express wallet response could not be verified.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'The express wallet response could not be verified.', 'wp-payment-hub' ), 'error' );
                 wp_safe_redirect( wc_get_checkout_url() );
                 exit;
             }
 
             $secret_key = $this->get_stripe_order_credential( $order, 'secret_key' );
             if ( empty( $secret_key ) ) {
-                wc_add_notice( __( 'The express wallet connection is unavailable.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'The express wallet connection is unavailable.', 'wp-payment-hub' ), 'error' );
                 wp_safe_redirect( wc_get_checkout_url() );
                 exit;
             }
@@ -1564,13 +1564,13 @@ function tfa_payment_hub_init() {
             $session = $this->stripe_api_request( 'GET', '/v1/checkout/sessions/' . rawurlencode( $session_id ), $secret_key );
             if ( is_wp_error( $session ) || ! $this->stripe_session_matches_order( $session, $order ) ) {
                 $this->log( 'Stripe return verification failed for order ' . $order_id );
-                wc_add_notice( __( 'The express wallet payment could not be verified.', 'tfa-payment-hub' ), 'error' );
+                wc_add_notice( __( 'The express wallet payment could not be verified.', 'wp-payment-hub' ), 'error' );
                 wp_safe_redirect( wc_get_checkout_url() );
                 exit;
             }
 
             if ( 'paid' === ( isset( $session['payment_status'] ) ? $session['payment_status'] : '' ) ) {
-                $this->complete_stripe_order( $order, $session, __( 'Stripe Checkout return verified.', 'tfa-payment-hub' ) );
+                $this->complete_stripe_order( $order, $session, __( 'Stripe Checkout return verified.', 'wp-payment-hub' ) );
                 if ( WC()->cart ) {
                     WC()->cart->empty_cart();
                 }
@@ -1578,8 +1578,8 @@ function tfa_payment_hub_init() {
                 exit;
             }
 
-            $order->add_order_note( __( 'Stripe Checkout returned before payment was confirmed. The order remains pending.', 'tfa-payment-hub' ) );
-            wc_add_notice( __( 'Your payment is still being confirmed. Please check the order status shortly.', 'tfa-payment-hub' ), 'notice' );
+            $order->add_order_note( __( 'Stripe Checkout returned before payment was confirmed. The order remains pending.', 'wp-payment-hub' ) );
+            wc_add_notice( __( 'Your payment is still being confirmed. Please check the order status shortly.', 'wp-payment-hub' ), 'notice' );
             wp_safe_redirect( $this->get_return_url( $order ) );
             exit;
         }
@@ -1612,9 +1612,9 @@ function tfa_payment_hub_init() {
 
             $event_type = isset( $event['type'] ) ? sanitize_text_field( $event['type'] ) : '';
             if ( in_array( $event_type, array( 'checkout.session.completed', 'checkout.session.async_payment_succeeded' ), true ) && 'paid' === ( isset( $session['payment_status'] ) ? $session['payment_status'] : '' ) ) {
-                $this->complete_stripe_order( $order, $session, sprintf( __( 'Stripe webhook confirmed %s.', 'tfa-payment-hub' ), $event_type ) );
+                $this->complete_stripe_order( $order, $session, sprintf( __( 'Stripe webhook confirmed %s.', 'wp-payment-hub' ), $event_type ) );
             } elseif ( 'checkout.session.async_payment_failed' === $event_type && ! $order->is_paid() ) {
-                $order->update_status( 'failed', __( 'Stripe reported that the express wallet payment failed.', 'tfa-payment-hub' ) );
+                $order->update_status( 'failed', __( 'Stripe reported that the express wallet payment failed.', 'wp-payment-hub' ) );
             }
 
             status_header( 200 );
@@ -1697,7 +1697,7 @@ function tfa_payment_hub_init() {
                 return;
             }
             $provider_id = $this->get_order_provider_id( $order );
-            echo '<section class="woocommerce-order-details tfa-manual-dd-instructions"><h2>' . esc_html__( 'Direct Debit instructions', 'tfa-payment-hub' ) . '</h2><p>' . wp_kses_post( nl2br( $this->get_manual_instructions( $provider_id ) ) ) . '</p></section>';
+            echo '<section class="woocommerce-order-details wp-manual-dd-instructions"><h2>' . esc_html__( 'Direct Debit instructions', 'wp-payment-hub' ) . '</h2><p>' . wp_kses_post( nl2br( $this->get_manual_instructions( $provider_id ) ) ) . '</p></section>';
         }
 
         public function email_manual_instructions( $order, $sent_to_admin, $plain_text ) {
@@ -1707,9 +1707,9 @@ function tfa_payment_hub_init() {
             $provider_id = $this->get_order_provider_id( $order );
             $instructions = $this->get_manual_instructions( $provider_id );
             if ( $plain_text ) {
-                echo "\n" . esc_html__( 'Direct Debit instructions:', 'tfa-payment-hub' ) . "\n" . wp_strip_all_tags( $instructions ) . "\n";
+                echo "\n" . esc_html__( 'Direct Debit instructions:', 'wp-payment-hub' ) . "\n" . wp_strip_all_tags( $instructions ) . "\n";
             } else {
-                echo '<h2>' . esc_html__( 'Direct Debit instructions', 'tfa-payment-hub' ) . '</h2><p>' . wp_kses_post( nl2br( $instructions ) ) . '</p>';
+                echo '<h2>' . esc_html__( 'Direct Debit instructions', 'wp-payment-hub' ) . '</h2><p>' . wp_kses_post( nl2br( $instructions ) ) . '</p>';
             }
         }
 
@@ -1718,7 +1718,7 @@ function tfa_payment_hub_init() {
             if ( ! empty( $config['manual_instructions'] ) ) {
                 return $config['manual_instructions'];
             }
-            return $this->get_option( 'manual_dd_instructions', __( 'We will contact you with the approved Direct Debit mandate instructions.', 'tfa-payment-hub' ) );
+            return $this->get_option( 'manual_dd_instructions', __( 'We will contact you with the approved Direct Debit mandate instructions.', 'wp-payment-hub' ) );
         }
 
         private function clean_gateway_fields( $fields, $required_fields ) {
@@ -1912,7 +1912,7 @@ function tfa_payment_hub_init() {
                 return;
             }
             $logger = wc_get_logger();
-            $logger->info( $message, array( 'source' => 'tfa-payment-hub' ) );
+            $logger->info( $message, array( 'source' => 'wp-payment-hub' ) );
         }
     }
 
@@ -1956,20 +1956,20 @@ function tfa_payment_hub_blocks_loaded() {
             $script_path = plugin_dir_path( __FILE__ ) . 'assets/js/checkout-blocks.js';
             $style_path  = plugin_dir_path( __FILE__ ) . 'assets/css/checkout-blocks.css';
             wp_register_script(
-                'tfa-payment-hub-blocks',
+                'wp-payment-hub-blocks',
                 plugins_url( 'assets/js/checkout-blocks.js', __FILE__ ),
                 array( 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-html-entities', 'wp-i18n' ),
                 file_exists( $script_path ) ? (string) filemtime( $script_path ) : '2.3.0',
                 true
             );
             wp_register_style(
-                'tfa-payment-hub-blocks',
+                'wp-payment-hub-blocks',
                 plugins_url( 'assets/css/checkout-blocks.css', __FILE__ ),
                 array(),
                 file_exists( $style_path ) ? (string) filemtime( $style_path ) : '2.3.0'
             );
-            wp_enqueue_style( 'tfa-payment-hub-blocks' );
-            return array( 'tfa-payment-hub-blocks' );
+            wp_enqueue_style( 'wp-payment-hub-blocks' );
+            return array( 'wp-payment-hub-blocks' );
         }
 
         public function get_payment_method_data() {
@@ -1991,6 +1991,6 @@ function tfa_payment_hub_blocks_loaded() {
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'tfa_payment_hub_action_links' );
 function tfa_payment_hub_action_links( $links ) {
     $settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=universal_payments_gateway' );
-    array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'tfa-payment-hub' ) . '</a>' );
+    array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'wp-payment-hub' ) . '</a>' );
     return $links;
 }

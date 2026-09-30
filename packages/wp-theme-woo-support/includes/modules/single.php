@@ -202,7 +202,7 @@ add_filter( 'woocommerce_blocks_product_grid_item_html', function( $html, $data,
 			'#<a[^>]+(?:add_to_cart_button|wp-block-button__link)[^>]*>.*?</a>#is',
 			function( $matches ) {
 				$link = $matches[0];
-				if ( preg_match( '/(?:quote|tfa-quote-button|tfa-wc-quote-button|tfa-add-to-quote|add-to-quote|add_to_quote_button|theme-auto-quote-btn|get-quote-btn)/i', $link ) ) {
+				if ( preg_match( '/(?:quote|wp-quote-button|wp-wc-quote-button|wp-add-to-quote|add-to-quote|add_to_quote_button|theme-auto-quote-btn|get-quote-btn)/i', $link ) ) {
 					return $link;
 				}
 				return '';
@@ -220,10 +220,10 @@ add_action( 'wp_head', function() {
 	}
 	?>
 	<style>
-		body .product.iws-cart-disabled .add_to_cart_button:not(.tfa-quote-button):not(.tfa-wc-quote-button):not(.tfa-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn),
-		body .product.iws-cart-disabled .ajax_add_to_cart:not(.tfa-quote-button):not(.tfa-wc-quote-button):not(.tfa-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn),
-		body .product.iws-cart-disabled a[href*="add-to-cart"]:not(.tfa-quote-button):not(.tfa-wc-quote-button):not(.tfa-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn),
-		body.single-product.iws-cart-disabled-product form.cart .single_add_to_cart_button:not(.tfa-quote-button):not(.tfa-wc-quote-button):not(.tfa-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn):not([name*="quote"]),
+		body .product.iws-cart-disabled .add_to_cart_button:not(.wp-quote-button):not(.wp-wc-quote-button):not(.wp-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn),
+		body .product.iws-cart-disabled .ajax_add_to_cart:not(.wp-quote-button):not(.wp-wc-quote-button):not(.wp-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn),
+		body .product.iws-cart-disabled a[href*="add-to-cart"]:not(.wp-quote-button):not(.wp-wc-quote-button):not(.wp-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn),
+		body.single-product.iws-cart-disabled-product form.cart .single_add_to_cart_button:not(.wp-quote-button):not(.wp-wc-quote-button):not(.wp-add-to-quote):not(.add-to-quote):not(.add_to_quote_button):not(.theme-auto-quote-btn):not(.get-quote-btn):not([name*="quote"]),
 		body.single-product.iws-cart-disabled-product form.cart button[name="add-to-cart"],
 		body.single-product.iws-cart-disabled-product form.cart input[name="add-to-cart"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 	</style>
@@ -268,7 +268,7 @@ add_action( 'wp_footer', function() {
 	<script>
 	(function(){
 		function isQuoteButton(el){
-			return !!(el && (el.matches('.tfa-quote-button,.tfa-wc-quote-button,.tfa-add-to-quote,.add-to-quote,.add_to_quote_button,.theme-auto-quote-btn,.get-quote-btn') || /quote/i.test(el.getAttribute('name') || '') || /quote/i.test(el.getAttribute('class') || '')));
+			return !!(el && (el.matches('.wp-quote-button,.wp-wc-quote-button,.wp-add-to-quote,.add-to-quote,.add_to_quote_button,.theme-auto-quote-btn,.get-quote-btn') || /quote/i.test(el.getAttribute('name') || '') || /quote/i.test(el.getAttribute('class') || '')));
 		}
 		function hideElement(el){
 			el.style.setProperty('display','none','important');

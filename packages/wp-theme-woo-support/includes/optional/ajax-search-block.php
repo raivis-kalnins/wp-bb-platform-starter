@@ -142,7 +142,7 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
     wp_enqueue_script('wp-server-side-render');
     wp_enqueue_script('wp-i18n');
 
-    $handle = 'tfa-ajax-search-editor';
+    $handle = 'wp-ajax-search-editor';
     wp_register_script($handle, '', ['wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-server-side-render', 'wp-i18n'], '1.1.0', true);
 
     wp_localize_script($handle, 'tfaAjaxSearchEditor', [
@@ -211,7 +211,7 @@ function tfa_ajax_search_enqueue_editor_assets(): void {
         },
         edit: function(props) {
             const attrs = props.attributes;
-            const blockProps = useBlockProps({ className: 'tfa-ajax-search-editor-preview' });
+            const blockProps = useBlockProps({ className: 'wp-ajax-search-editor-preview' });
             const selectedPostTypes = attrs.postTypes || [];
             const productsEnabled = selectedPostTypes.includes('product');
             const categoryOptions = [{ label: __('All product categories', 'wp'), value: '' }]
@@ -348,7 +348,7 @@ function tfa_ajax_search_frontend_config(): void {
         return;
     }
 
-    wp_localize_script('tfa-script', 'tfaAjaxSearch', [
+    wp_localize_script('wp-script', 'tfaAjaxSearch', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce'   => wp_create_nonce('tfa_ajax_search_nonce'),
         'labels'  => [
@@ -370,7 +370,7 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
         $post_types = ['post'];
     }
 
-    $wrapper_classes = ['wp-block-tfa-ajax-search', 'tfa-ajax-search'];
+    $wrapper_classes = ['wp-block-wp-ajax-search', 'wp-ajax-search'];
     if (!empty($attributes['className'])) {
         foreach (preg_split('/\s+/', (string) $attributes['className']) as $class_name) {
             $class_name = sanitize_html_class($class_name);
@@ -438,12 +438,12 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
     // WooCommerce redirecting product searches to the shop/product archive.
     $search_url = home_url('/');
 
-    $input_id = wp_unique_id('tfa-search-');
+    $input_id = wp_unique_id('wp-search-');
 
     ob_start();
     ?>
     <?php if ($header_products_only) : ?>
-        <style>.iws-header-search .tfa-ajax-search__scope-select,.header-product-search .tfa-ajax-search__scope-select{display:none!important}</style>
+        <style>.iws-header-search .wp-ajax-search__scope-select,.header-product-search .wp-ajax-search__scope-select{display:none!important}</style>
     <?php endif; ?>
     <div class="<?php echo esc_attr(implode(' ', array_filter($wrapper_classes))); ?>"
         data-min-chars="<?php echo esc_attr((string) $min_chars); ?>"
@@ -460,12 +460,12 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
         data-current-scope="<?php echo esc_attr($current_scope); ?>"
         data-site-search-url="<?php echo esc_url(home_url('/')); ?>"
         data-product-search-url="<?php echo esc_url(home_url('/')); ?>">
-        <form class="tfa-ajax-search__form" role="search" method="get" action="<?php echo esc_url($search_url); ?>">
+        <form class="wp-ajax-search__form" role="search" method="get" action="<?php echo esc_url($search_url); ?>">
             <label class="screen-reader-text" for="<?php echo esc_attr($input_id); ?>"><?php esc_html_e('Search', 'wp'); ?></label>
-            <div class="tfa-ajax-search__field-wrap">
+            <div class="wp-ajax-search__field-wrap">
                 <?php if ($scope_control === 'select') : ?>
                     <label class="screen-reader-text" for="<?php echo esc_attr($input_id . '-scope'); ?>"><?php esc_html_e('Search in', 'wp'); ?></label>
-                    <select id="<?php echo esc_attr($input_id . '-scope'); ?>" class="tfa-ajax-search__scope-select" name="iws_search_scope" aria-label="<?php esc_attr_e('Search in', 'wp'); ?>" data-no-select2="1">
+                    <select id="<?php echo esc_attr($input_id . '-scope'); ?>" class="wp-ajax-search__scope-select" name="iws_search_scope" aria-label="<?php esc_attr_e('Search in', 'wp'); ?>" data-no-select2="1">
                         <option value="products" <?php selected($current_scope, 'products'); ?>><?php esc_html_e('Products', 'wp'); ?></option>
                         <option value="posts" <?php selected($current_scope, 'posts'); ?>><?php esc_html_e('Blogs', 'wp'); ?></option>
                         <option value="all" <?php selected($current_scope, 'all'); ?>><?php esc_html_e('All', 'wp'); ?></option>
@@ -473,7 +473,7 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
                 <?php endif; ?>
                 <input
                     id="<?php echo esc_attr($input_id); ?>"
-                    class="tfa-ajax-search__input"
+                    class="wp-ajax-search__input"
                     type="search"
                     name="s"
                     value="<?php echo isset($_GET['s']) ? esc_attr(sanitize_text_field(wp_unslash($_GET['s']))) : ''; ?>"
@@ -482,22 +482,22 @@ function tfa_ajax_search_render_block(array $attributes = []): string {
                     aria-label="<?php esc_attr_e('Search site', 'wp'); ?>"
                 />
                 <?php if ($search_button) : ?>
-                    <button class="tfa-ajax-search__button" type="submit" aria-label="<?php esc_attr_e('Search', 'wp'); ?>"><?php echo $button_text !== '' ? esc_html($button_text) : '<span aria-hidden="true">⌕</span>'; ?></button>
+                    <button class="wp-ajax-search__button" type="submit" aria-label="<?php esc_attr_e('Search', 'wp'); ?>"><?php echo $button_text !== '' ? esc_html($button_text) : '<span aria-hidden="true">⌕</span>'; ?></button>
                 <?php endif; ?>
             </div>
             <?php if ($scope_control === 'radio') : ?>
-                <fieldset class="tfa-ajax-search__scope tfa-ajax-search__scope--radio" aria-label="<?php esc_attr_e('Search in', 'wp'); ?>">
+                <fieldset class="wp-ajax-search__scope wp-ajax-search__scope--radio" aria-label="<?php esc_attr_e('Search in', 'wp'); ?>">
                     <label><input type="radio" name="iws_search_scope" value="products" <?php checked($current_scope, 'products'); ?> /> <span><?php esc_html_e('Products', 'wp'); ?></span></label>
                     <label><input type="radio" name="iws_search_scope" value="posts" <?php checked($current_scope, 'posts'); ?> /> <span><?php esc_html_e('Blogs', 'wp'); ?></span></label>
                     <label><input type="radio" name="iws_search_scope" value="all" <?php checked($current_scope, 'all'); ?> /> <span><?php esc_html_e('All', 'wp'); ?></span></label>
                 </fieldset>
             <?php endif; ?>
-            <input class="tfa-ajax-search__post-type" type="hidden" name="post_type" value="" disabled />
+            <input class="wp-ajax-search__post-type" type="hidden" name="post_type" value="" disabled />
             <?php if ($product_category) : ?>
                 <input type="hidden" name="product_cat" value="<?php echo esc_attr($product_category); ?>" />
             <?php endif; ?>
         </form>
-        <div class="tfa-ajax-search__results" aria-live="polite" hidden></div>
+        <div class="wp-ajax-search__results" aria-live="polite" hidden></div>
     </div>
     <?php
     return (string) ob_get_clean();
@@ -578,40 +578,40 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
     ob_start();
 
     if (!empty($grouped)) {
-        echo '<div class="tfa-ajax-search__panel">';
+        echo '<div class="wp-ajax-search__panel">';
         foreach ($grouped as $post_type => $posts) {
-            echo '<div class="tfa-ajax-search__group">';
+            echo '<div class="wp-ajax-search__group">';
             if ($show_type_label) {
-                echo '<div class="tfa-ajax-search__group-title">' . esc_html(tfa_ajax_search_result_type_label($post_type)) . '</div>';
+                echo '<div class="wp-ajax-search__group-title">' . esc_html(tfa_ajax_search_result_type_label($post_type)) . '</div>';
             }
-            echo '<ul class="tfa-ajax-search__list">';
+            echo '<ul class="wp-ajax-search__list">';
             foreach ($posts as $post) {
                 $permalink = get_permalink($post);
                 $title = get_the_title($post) ?: __('Untitled', 'wp');
                 $excerpt = $show_excerpt ? wp_trim_words(wp_strip_all_tags(get_the_excerpt($post) ?: $post->post_content), 16) : '';
                 $thumb = $show_image ? get_the_post_thumbnail_url($post, 'thumbnail') : '';
 
-                echo '<li class="tfa-ajax-search__item">';
-                echo '<a class="tfa-ajax-search__result" href="' . esc_url($permalink) . '">';
+                echo '<li class="wp-ajax-search__item">';
+                echo '<a class="wp-ajax-search__result" href="' . esc_url($permalink) . '">';
                 if ($thumb) {
-                    echo '<span class="tfa-ajax-search__media"><img src="' . esc_url($thumb) . '" alt="" loading="lazy" /></span>';
+                    echo '<span class="wp-ajax-search__media"><img src="' . esc_url($thumb) . '" alt="" loading="lazy" /></span>';
                 }
-                echo '<span class="tfa-ajax-search__content">';
-                echo '<span class="tfa-ajax-search__title">' . wp_kses(tfa_ajax_search_highlight($title, $term, $highlight_terms), ['mark' => []]) . '</span>';
+                echo '<span class="wp-ajax-search__content">';
+                echo '<span class="wp-ajax-search__title">' . wp_kses(tfa_ajax_search_highlight($title, $term, $highlight_terms), ['mark' => []]) . '</span>';
                 if ($show_price && $post_type === 'product' && function_exists('wc_get_product')) {
                     $product = wc_get_product($post->ID);
                     if ($product) {
-                        echo '<span class="tfa-ajax-search__meta tfa-ajax-search__price">' . wp_kses_post($product->get_price_html()) . '</span>';
+                        echo '<span class="wp-ajax-search__meta wp-ajax-search__price">' . wp_kses_post($product->get_price_html()) . '</span>';
                     }
                 }
                 if ($post_type === 'product' && function_exists('wc_get_product')) {
                     $product = isset($product) && $product ? $product : wc_get_product($post->ID);
                     if ($product && $product->get_sku()) {
-                        echo '<span class="tfa-ajax-search__meta tfa-ajax-search__sku">' . esc_html__('SKU:', 'wp') . ' ' . esc_html($product->get_sku()) . '</span>';
+                        echo '<span class="wp-ajax-search__meta wp-ajax-search__sku">' . esc_html__('SKU:', 'wp') . ' ' . esc_html($product->get_sku()) . '</span>';
                     }
                 }
                 if ($excerpt) {
-                    echo '<span class="tfa-ajax-search__excerpt">' . wp_kses(tfa_ajax_search_highlight($excerpt, $term, $highlight_terms), ['mark' => []]) . '</span>';
+                    echo '<span class="wp-ajax-search__excerpt">' . wp_kses(tfa_ajax_search_highlight($excerpt, $term, $highlight_terms), ['mark' => []]) . '</span>';
                 }
                 echo '</span>';
                 echo '</a>';
@@ -635,10 +635,10 @@ function tfa_ajax_search_render_results_html(array $grouped, string $term, bool 
             $view_all_url = add_query_arg(['s' => $term, 'post_type' => 'post', 'iws_search_scope' => 'posts'], home_url('/'));
         }
 
-        echo '<div class="tfa-ajax-search__footer"><a class="tfa-ajax-search__view-all" href="' . esc_url($view_all_url) . '">' . esc_html__('View all results', 'wp') . '</a></div>';
+        echo '<div class="wp-ajax-search__footer"><a class="wp-ajax-search__view-all" href="' . esc_url($view_all_url) . '">' . esc_html__('View all results', 'wp') . '</a></div>';
         echo '</div>';
     } else {
-        echo '<div class="tfa-ajax-search__empty">' . esc_html__('No results found.', 'wp') . '</div>';
+        echo '<div class="wp-ajax-search__empty">' . esc_html__('No results found.', 'wp') . '</div>';
     }
 
     return (string) ob_get_clean();
@@ -669,7 +669,7 @@ function tfa_ajax_search_ajax_handler(): void {
 
     if (mb_strlen($term) < 1) {
         wp_send_json_success([
-            'html' => '<div class="tfa-ajax-search__empty">' . esc_html__('Type to search…', 'wp') . '</div>',
+            'html' => '<div class="wp-ajax-search__empty">' . esc_html__('Type to search…', 'wp') . '</div>',
         ]);
     }
 
@@ -821,28 +821,28 @@ add_filter('render_block', 'tfa_ajax_search_append_sku_to_search_result_title', 
 
 
 add_action('wp_enqueue_scripts', function () {
-    wp_register_style('tfa-ajax-search-theme-polish', false, [], '1.0.0');
-    wp_enqueue_style('tfa-ajax-search-theme-polish');
-    wp_add_inline_style('tfa-ajax-search-theme-polish', '
-        .iws-header-search.tfa-ajax-search,.header-product-search,.main-menu-search.tfa-ajax-search{width:100%;max-width:420px;position:relative;z-index:40}
-        .search-page-search.tfa-ajax-search,.error-404-search.tfa-ajax-search{width:100%;max-width:720px;margin:0 auto 24px 0;position:relative;z-index:40;text-align:left}
-        .error-404-search.tfa-ajax-search{margin:0 auto 24px auto;}
-        .iws-header-search .tfa-ajax-search__field-wrap,.header-product-search .tfa-ajax-search__field-wrap,.main-menu-search .tfa-ajax-search__field-wrap,.search-page-search .tfa-ajax-search__field-wrap,.error-404-search .tfa-ajax-search__field-wrap{display:flex;width:100%;border:1px solid #ececec;background:#fff;border-radius:0 15px 0 0;overflow:hidden;transition:border-color .18s ease,box-shadow .18s ease}
-        .search-page-search .tfa-ajax-search__field-wrap,.error-404-search .tfa-ajax-search__field-wrap{box-shadow:0 8px 24px rgba(0,0,0,.08)}
-        .iws-header-search .tfa-ajax-search__field-wrap:hover,.iws-header-search .tfa-ajax-search__field-wrap:focus-within,.header-product-search .tfa-ajax-search__field-wrap:hover,.header-product-search .tfa-ajax-search__field-wrap:focus-within{border-color:#d7d7d7;box-shadow:0 4px 18px rgba(0,0,0,.08)}
-        .iws-header-search .tfa-ajax-search__input,.header-product-search .tfa-ajax-search__input,.main-menu-search .tfa-ajax-search__input,.search-page-search .tfa-ajax-search__input,.error-404-search .tfa-ajax-search__input{height:42px;min-height:42px;border:0!important;box-shadow:none!important;padding:0 10px 0 12px!important;font-size:14px;background:#fff;flex:1 1 auto;min-width:0}
-        .iws-header-search .tfa-ajax-search__button,.header-product-search .tfa-ajax-search__button,.main-menu-search .tfa-ajax-search__button,.search-page-search .tfa-ajax-search__button,.error-404-search .tfa-ajax-search__button{width:34px!important;min-width:34px!important;height:42px;border:0!important;background:#fff!important;background-image:none!important;color:#9f9f9f!important;font-size:0!important;line-height:0!important;display:flex;align-items:center;justify-content:center;padding:0!important;position:relative!important;transition:color .18s ease,background .18s ease}
-        .iws-header-search .tfa-ajax-search__button:before,.header-product-search .tfa-ajax-search__button:before,.main-menu-search .tfa-ajax-search__button:before,.search-page-search .tfa-ajax-search__button:before,.error-404-search .tfa-ajax-search__button:before{content:"";width:14px;height:14px;border:2px solid #9f9f9f;border-radius:50%;box-sizing:border-box}
-        .iws-header-search .tfa-ajax-search__button:after,.header-product-search .tfa-ajax-search__button:after,.main-menu-search .tfa-ajax-search__button:after,.search-page-search .tfa-ajax-search__button:after,.error-404-search .tfa-ajax-search__button:after{content:"";width:8px;height:2px;background:#9f9f9f;position:absolute;right:8px;bottom:12px;transform:rotate(45deg)}
-        .iws-header-search .tfa-ajax-search__button:hover,.iws-header-search .tfa-ajax-search__button:focus,.iws-header-search .tfa-ajax-search__button:active,.header-product-search .tfa-ajax-search__button:hover,.header-product-search .tfa-ajax-search__button:focus,.header-product-search .tfa-ajax-search__button:active,.main-menu-search .tfa-ajax-search__button:hover,.main-menu-search .tfa-ajax-search__button:focus,.main-menu-search .tfa-ajax-search__button:active{color:#777!important;background:#fff!important;background-image:none!important;box-shadow:none!important}
-        .iws-header-search .tfa-ajax-search__results,.header-product-search .tfa-ajax-search__results,.main-menu-search .tfa-ajax-search__results,.search-page-search .tfa-ajax-search__results,.error-404-search .tfa-ajax-search__results,.shop-search .tfa-ajax-search__results{margin-top:10px;border-radius:0 0 12px 12px;box-shadow:0 16px 36px rgba(0,0,0,.16);overflow:auto;z-index:9999;max-height:70vh}
-        .tfa-ajax-search__scope{border:0;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px}.tfa-ajax-search__scope label{display:inline-flex;align-items:center;gap:6px;margin:0;cursor:pointer;font-weight:600}.tfa-ajax-search__scope input[type=radio]{accent-color:var(--tfa-brand-color,#111);margin:0}.tfa-ajax-search__scope-select{height:42px;min-width:105px;border:0;border-left:1px solid #ececec!important;border-radius:0!important;background:#fff!important;padding:0 28px 0 10px!important;font-size:12px;font-weight:700;color:#333;box-shadow:none!important;align-self:stretch}.iws-header-search .tfa-ajax-search__form,.header-product-search .tfa-ajax-search__form{display:block;width:100%}.iws-header-search .tfa-ajax-search__field-wrap,.header-product-search .tfa-ajax-search__field-wrap{display:flex;align-items:stretch;width:100%;min-width:0}.iws-header-search .tfa-ajax-search__scope-select,.header-product-search .tfa-ajax-search__scope-select{display:none!important;order:0;flex:0 0 108px;width:108px;max-width:108px;border-left:0!important;border-right:1px solid #ececec!important}.iws-header-search-products-only .tfa-ajax-search__scope-select,.iws-header-search.iws-header-search-products-only .tfa-ajax-search__scope-select,.header-product-search.iws-header-search-products-only .tfa-ajax-search__scope-select{display:none!important}.tfa-ajax-search__sku,.iws-search-result-sku{display:block;color:#555;font-size:12px;font-weight:700;line-height:1.35;margin-top:2px}.iws-search-result-sku{margin:2px 0 10px;color:#666}
-        @media (max-width:1199.98px){.iws-header-search .tfa-ajax-search__results,.header-product-search .tfa-ajax-search__results,.main-menu-search .tfa-ajax-search__results,.search-page-search .tfa-ajax-search__results,.error-404-search .tfa-ajax-search__results{position:absolute;top:100%;right:0;left:0;z-index:9999;max-height:70vh;overflow-y:auto}}@media (max-width:767.98px){.search-page-search.tfa-ajax-search,.error-404-search.tfa-ajax-search{max-width:none;margin-left:0!important;margin-right:auto!important}.search-page-search .tfa-ajax-search__field-wrap,.error-404-search .tfa-ajax-search__field-wrap{border-radius:0!important}}
+    wp_register_style('wp-ajax-search-theme-polish', false, [], '1.0.0');
+    wp_enqueue_style('wp-ajax-search-theme-polish');
+    wp_add_inline_style('wp-ajax-search-theme-polish', '
+        .iws-header-search.wp-ajax-search,.header-product-search,.main-menu-search.wp-ajax-search{width:100%;max-width:420px;position:relative;z-index:40}
+        .search-page-search.wp-ajax-search,.error-404-search.wp-ajax-search{width:100%;max-width:720px;margin:0 auto 24px 0;position:relative;z-index:40;text-align:left}
+        .error-404-search.wp-ajax-search{margin:0 auto 24px auto;}
+        .iws-header-search .wp-ajax-search__field-wrap,.header-product-search .wp-ajax-search__field-wrap,.main-menu-search .wp-ajax-search__field-wrap,.search-page-search .wp-ajax-search__field-wrap,.error-404-search .wp-ajax-search__field-wrap{display:flex;width:100%;border:1px solid #ececec;background:#fff;border-radius:0 15px 0 0;overflow:hidden;transition:border-color .18s ease,box-shadow .18s ease}
+        .search-page-search .wp-ajax-search__field-wrap,.error-404-search .wp-ajax-search__field-wrap{box-shadow:0 8px 24px rgba(0,0,0,.08)}
+        .iws-header-search .wp-ajax-search__field-wrap:hover,.iws-header-search .wp-ajax-search__field-wrap:focus-within,.header-product-search .wp-ajax-search__field-wrap:hover,.header-product-search .wp-ajax-search__field-wrap:focus-within{border-color:#d7d7d7;box-shadow:0 4px 18px rgba(0,0,0,.08)}
+        .iws-header-search .wp-ajax-search__input,.header-product-search .wp-ajax-search__input,.main-menu-search .wp-ajax-search__input,.search-page-search .wp-ajax-search__input,.error-404-search .wp-ajax-search__input{height:42px;min-height:42px;border:0!important;box-shadow:none!important;padding:0 10px 0 12px!important;font-size:14px;background:#fff;flex:1 1 auto;min-width:0}
+        .iws-header-search .wp-ajax-search__button,.header-product-search .wp-ajax-search__button,.main-menu-search .wp-ajax-search__button,.search-page-search .wp-ajax-search__button,.error-404-search .wp-ajax-search__button{width:34px!important;min-width:34px!important;height:42px;border:0!important;background:#fff!important;background-image:none!important;color:#9f9f9f!important;font-size:0!important;line-height:0!important;display:flex;align-items:center;justify-content:center;padding:0!important;position:relative!important;transition:color .18s ease,background .18s ease}
+        .iws-header-search .wp-ajax-search__button:before,.header-product-search .wp-ajax-search__button:before,.main-menu-search .wp-ajax-search__button:before,.search-page-search .wp-ajax-search__button:before,.error-404-search .wp-ajax-search__button:before{content:"";width:14px;height:14px;border:2px solid #9f9f9f;border-radius:50%;box-sizing:border-box}
+        .iws-header-search .wp-ajax-search__button:after,.header-product-search .wp-ajax-search__button:after,.main-menu-search .wp-ajax-search__button:after,.search-page-search .wp-ajax-search__button:after,.error-404-search .wp-ajax-search__button:after{content:"";width:8px;height:2px;background:#9f9f9f;position:absolute;right:8px;bottom:12px;transform:rotate(45deg)}
+        .iws-header-search .wp-ajax-search__button:hover,.iws-header-search .wp-ajax-search__button:focus,.iws-header-search .wp-ajax-search__button:active,.header-product-search .wp-ajax-search__button:hover,.header-product-search .wp-ajax-search__button:focus,.header-product-search .wp-ajax-search__button:active,.main-menu-search .wp-ajax-search__button:hover,.main-menu-search .wp-ajax-search__button:focus,.main-menu-search .wp-ajax-search__button:active{color:#777!important;background:#fff!important;background-image:none!important;box-shadow:none!important}
+        .iws-header-search .wp-ajax-search__results,.header-product-search .wp-ajax-search__results,.main-menu-search .wp-ajax-search__results,.search-page-search .wp-ajax-search__results,.error-404-search .wp-ajax-search__results,.shop-search .wp-ajax-search__results{margin-top:10px;border-radius:0 0 12px 12px;box-shadow:0 16px 36px rgba(0,0,0,.16);overflow:auto;z-index:9999;max-height:70vh}
+        .wp-ajax-search__scope{border:0;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px}.wp-ajax-search__scope label{display:inline-flex;align-items:center;gap:6px;margin:0;cursor:pointer;font-weight:600}.wp-ajax-search__scope input[type=radio]{accent-color:var(--wp-brand-color,#111);margin:0}.wp-ajax-search__scope-select{height:42px;min-width:105px;border:0;border-left:1px solid #ececec!important;border-radius:0!important;background:#fff!important;padding:0 28px 0 10px!important;font-size:12px;font-weight:700;color:#333;box-shadow:none!important;align-self:stretch}.iws-header-search .wp-ajax-search__form,.header-product-search .wp-ajax-search__form{display:block;width:100%}.iws-header-search .wp-ajax-search__field-wrap,.header-product-search .wp-ajax-search__field-wrap{display:flex;align-items:stretch;width:100%;min-width:0}.iws-header-search .wp-ajax-search__scope-select,.header-product-search .wp-ajax-search__scope-select{display:none!important;order:0;flex:0 0 108px;width:108px;max-width:108px;border-left:0!important;border-right:1px solid #ececec!important}.iws-header-search-products-only .wp-ajax-search__scope-select,.iws-header-search.iws-header-search-products-only .wp-ajax-search__scope-select,.header-product-search.iws-header-search-products-only .wp-ajax-search__scope-select{display:none!important}.wp-ajax-search__sku,.iws-search-result-sku{display:block;color:#555;font-size:12px;font-weight:700;line-height:1.35;margin-top:2px}.iws-search-result-sku{margin:2px 0 10px;color:#666}
+        @media (max-width:1199.98px){.iws-header-search .wp-ajax-search__results,.header-product-search .wp-ajax-search__results,.main-menu-search .wp-ajax-search__results,.search-page-search .wp-ajax-search__results,.error-404-search .wp-ajax-search__results{position:absolute;top:100%;right:0;left:0;z-index:9999;max-height:70vh;overflow-y:auto}}@media (max-width:767.98px){.search-page-search.wp-ajax-search,.error-404-search.wp-ajax-search{max-width:none;margin-left:0!important;margin-right:auto!important}.search-page-search .wp-ajax-search__field-wrap,.error-404-search .wp-ajax-search__field-wrap{border-radius:0!important}}
     ');
 }, 30);
 
 add_action('wp_enqueue_scripts', function () {
-    wp_add_inline_style('tfa-ajax-search-theme-polish', '
+    wp_add_inline_style('wp-ajax-search-theme-polish', '
         body.search-results .iws-search-results-query,body.search .iws-search-results-query{max-width:980px}
         body.search-results .wp-block-post-template.iws-search-results-list,body.search-results .iws-search-results-list,body.search .wp-block-post-template.iws-search-results-list,body.search .iws-search-results-list{display:block;margin:0;padding:0;list-style:none}
         body.search-results .iws-search-results-list>li,body.search-results .iws-search-result-card,body.search .iws-search-results-list>li,body.search .iws-search-result-card{margin:0 0 24px;padding:0 0 24px;border-bottom:1px solid rgba(0,0,0,.14)}
@@ -853,21 +853,21 @@ add_action('wp_enqueue_scripts', function () {
         body.search-results .iws-search-result-title,body.search .iws-search-result-title{margin:0 0 6px;line-height:1.2}
         body.search-results .iws-search-result-date,body.search-results .iws-search-result-desc,body.search-results .iws-search-result-sku,body.search .iws-search-result-date,body.search .iws-search-result-desc,body.search .iws-search-result-sku{margin-top:0;margin-bottom:8px}
         body.search-results .iws-search-result-desc,body.search-results .iws-search-result-desc .wp-block-post-excerpt__excerpt,body.search .iws-search-result-desc,body.search .iws-search-result-desc .wp-block-post-excerpt__excerpt{max-width:820px;margin-bottom:12px;font-size:14px;line-height:1.45}
-        body.search-results .iws-search-result-button,body.search-results .wp-block-read-more,body.search-results .iws-search-result-card .wp-block-button,body.search-results .iws-search-result-card .wp-block-button__link,body.search-results .iws-search-result-card .button,body.search-results .iws-search-result-card .add_to_cart_button,body.search-results .iws-search-result-card .product_type_simple,body.search-results .iws-search-result-card .product_type_variable,body.search-results .iws-search-result-card .tfa-wcqb-loop-wrap,body.search-results .iws-search-result-card .tfa-quote-button,body.search .iws-search-result-button,body.search .wp-block-read-more,body.search .iws-search-result-card .wp-block-button,body.search .iws-search-result-card .wp-block-button__link,body.search .iws-search-result-card .button,body.search .iws-search-result-card .add_to_cart_button,body.search .iws-search-result-card .product_type_simple,body.search .iws-search-result-card .product_type_variable,body.search .iws-search-result-card .tfa-wcqb-loop-wrap,body.search .iws-search-result-card .tfa-quote-button{width:auto!important;max-width:max-content!important;min-width:0!important;margin-top:8px!important;margin-right:0!important;margin-left:0!important;align-self:flex-start!important}
-        body.search-results .iws-search-result-button,body.search-results .wp-block-read-more,body.search-results .iws-search-result-card .wp-block-button__link,body.search-results .iws-search-result-card .button,body.search-results .iws-search-result-card .add_to_cart_button,body.search-results .iws-search-result-card .product_type_simple,body.search-results .iws-search-result-card .product_type_variable,body.search-results .iws-search-result-card .tfa-quote-button,body.search .iws-search-result-button,body.search .wp-block-read-more,body.search .iws-search-result-card .wp-block-button__link,body.search .iws-search-result-card .button,body.search .iws-search-result-card .add_to_cart_button,body.search .iws-search-result-card .product_type_simple,body.search .iws-search-result-card .product_type_variable,body.search .iws-search-result-card .tfa-quote-button{display:inline-flex!important;align-items:center;justify-content:center;min-height:36px!important;padding:9px 18px!important;border-radius:0 12px 0 0!important;text-decoration:none!important;white-space:nowrap!important}
+        body.search-results .iws-search-result-button,body.search-results .wp-block-read-more,body.search-results .iws-search-result-card .wp-block-button,body.search-results .iws-search-result-card .wp-block-button__link,body.search-results .iws-search-result-card .button,body.search-results .iws-search-result-card .add_to_cart_button,body.search-results .iws-search-result-card .product_type_simple,body.search-results .iws-search-result-card .product_type_variable,body.search-results .iws-search-result-card .wp-wcqb-loop-wrap,body.search-results .iws-search-result-card .wp-quote-button,body.search .iws-search-result-button,body.search .wp-block-read-more,body.search .iws-search-result-card .wp-block-button,body.search .iws-search-result-card .wp-block-button__link,body.search .iws-search-result-card .button,body.search .iws-search-result-card .add_to_cart_button,body.search .iws-search-result-card .product_type_simple,body.search .iws-search-result-card .product_type_variable,body.search .iws-search-result-card .wp-wcqb-loop-wrap,body.search .iws-search-result-card .wp-quote-button{width:auto!important;max-width:max-content!important;min-width:0!important;margin-top:8px!important;margin-right:0!important;margin-left:0!important;align-self:flex-start!important}
+        body.search-results .iws-search-result-button,body.search-results .wp-block-read-more,body.search-results .iws-search-result-card .wp-block-button__link,body.search-results .iws-search-result-card .button,body.search-results .iws-search-result-card .add_to_cart_button,body.search-results .iws-search-result-card .product_type_simple,body.search-results .iws-search-result-card .product_type_variable,body.search-results .iws-search-result-card .wp-quote-button,body.search .iws-search-result-button,body.search .wp-block-read-more,body.search .iws-search-result-card .wp-block-button__link,body.search .iws-search-result-card .button,body.search .iws-search-result-card .add_to_cart_button,body.search .iws-search-result-card .product_type_simple,body.search .iws-search-result-card .product_type_variable,body.search .iws-search-result-card .wp-quote-button{display:inline-flex!important;align-items:center;justify-content:center;min-height:36px!important;padding:9px 18px!important;border-radius:0 12px 0 0!important;text-decoration:none!important;white-space:nowrap!important}
         header .d-flex.flex-row:has(.iws-header-search){align-items:center;justify-content:flex-end;gap:12px 16px}
         header .top-contacts{order:0;flex:0 0 100%;width:100%;margin:0 0 10px!important;text-align:right}
         header .iws-header-search--desktop{order:1;flex:0 1 430px;width:min(430px,40vw);margin:48px 14px 0 auto!important}
         header .mob-menu-wrap{order:2;flex:0 0 auto}
-        header .iws-header-search .tfa-ajax-search__field-wrap{top:auto!important}
+        header .iws-header-search .wp-ajax-search__field-wrap{top:auto!important}
         @media (min-width:1200px){header .main-top-menu .iws-header-search{display:none!important}}
-        @media (max-width:1199.98px){header .iws-header-search--desktop{order:3;flex:0 0 100%;width:100%;max-width:none;margin:0 0 0!important}header .iws-header-search.tfa-ajax-search{max-width:100%!important;width:100%!important;position:relative!important;overflow:visible!important}header .iws-header-search .tfa-ajax-search__results{position:absolute!important;top:calc(100% - 1px)!important;right:0!important;left:0!important;width:100%!important;margin-top:0!important;border-top:0;border-radius:0 0 12px 12px!important;z-index:99999!important}}
+        @media (max-width:1199.98px){header .iws-header-search--desktop{order:3;flex:0 0 100%;width:100%;max-width:none;margin:0 0 0!important}header .iws-header-search.wp-ajax-search{max-width:100%!important;width:100%!important;position:relative!important;overflow:visible!important}header .iws-header-search .wp-ajax-search__results{position:absolute!important;top:calc(100% - 1px)!important;right:0!important;left:0!important;width:100%!important;margin-top:0!important;border-top:0;border-radius:0 0 12px 12px!important;z-index:99999!important}}
 
-        body.search-results .tfa-wcqb-loop-wrap,body.search .tfa-wcqb-loop-wrap,body.search-results .iws-search-result-card .tfa-wcqb-loop-wrap,body.search .iws-search-result-card .tfa-wcqb-loop-wrap{display:inline-flex!important;width:fit-content!important;max-width:fit-content!important;min-width:0!important;flex:0 0 auto!important;align-self:flex-start!important;margin-left:0!important;margin-right:0!important}
-        body.search-results .tfa-wcqb-loop-wrap .tfa-quote-button.loop,body.search .tfa-wcqb-loop-wrap .tfa-quote-button.loop,body.search-results button.tfa-quote-button.loop,body.search button.tfa-quote-button.loop{position:relative!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:fit-content!important;max-width:fit-content!important;min-width:0!important;flex:0 0 auto!important;padding:9px 42px 9px 18px!important;overflow:hidden!important;white-space:nowrap!important;background-image:none!important;background-position:initial!important;background-repeat:no-repeat!important;background-size:0!important}
-        body.search-results .tfa-wcqb-loop-wrap .tfa-quote-button.loop::before,body.search .tfa-wcqb-loop-wrap .tfa-quote-button.loop::before,body.search-results button.tfa-quote-button.loop::before,body.search button.tfa-quote-button.loop::before,body.search-results .tfa-wcqb-loop-wrap::before,body.search .tfa-wcqb-loop-wrap::before,body.search-results .tfa-wcqb-loop-wrap::after,body.search .tfa-wcqb-loop-wrap::after{content:none!important;display:none!important;background-image:none!important}
-        body.search-results .tfa-wcqb-loop-wrap .tfa-quote-button.loop::after,body.search .tfa-wcqb-loop-wrap .tfa-quote-button.loop::after,body.search-results button.tfa-quote-button.loop::after,body.search button.tfa-quote-button.loop::after{content:""!important;position:absolute!important;top:50%!important;right:18px!important;left:auto!important;display:block!important;width:16px!important;height:16px!important;margin:0!important;opacity:1!important;pointer-events:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M5 12h12M13 6l6 6-6 6%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%222.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;transform:translate(42px,-50%)!important;transition:transform .22s ease!important}
-        body.search-results .tfa-wcqb-loop-wrap .tfa-quote-button.loop:hover::after,body.search .tfa-wcqb-loop-wrap .tfa-quote-button.loop:hover::after,body.search-results button.tfa-quote-button.loop:hover::after,body.search button.tfa-quote-button.loop:hover::after,body.search-results .tfa-wcqb-loop-wrap .tfa-quote-button.loop:focus::after,body.search .tfa-wcqb-loop-wrap .tfa-quote-button.loop:focus::after,body.search-results button.tfa-quote-button.loop:focus::after,body.search button.tfa-quote-button.loop:focus::after{transform:translate(0,-50%)!important}
+        body.search-results .wp-wcqb-loop-wrap,body.search .wp-wcqb-loop-wrap,body.search-results .iws-search-result-card .wp-wcqb-loop-wrap,body.search .iws-search-result-card .wp-wcqb-loop-wrap{display:inline-flex!important;width:fit-content!important;max-width:fit-content!important;min-width:0!important;flex:0 0 auto!important;align-self:flex-start!important;margin-left:0!important;margin-right:0!important}
+        body.search-results .wp-wcqb-loop-wrap .wp-quote-button.loop,body.search .wp-wcqb-loop-wrap .wp-quote-button.loop,body.search-results button.wp-quote-button.loop,body.search button.wp-quote-button.loop{position:relative!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:fit-content!important;max-width:fit-content!important;min-width:0!important;flex:0 0 auto!important;padding:9px 42px 9px 18px!important;overflow:hidden!important;white-space:nowrap!important;background-image:none!important;background-position:initial!important;background-repeat:no-repeat!important;background-size:0!important}
+        body.search-results .wp-wcqb-loop-wrap .wp-quote-button.loop::before,body.search .wp-wcqb-loop-wrap .wp-quote-button.loop::before,body.search-results button.wp-quote-button.loop::before,body.search button.wp-quote-button.loop::before,body.search-results .wp-wcqb-loop-wrap::before,body.search .wp-wcqb-loop-wrap::before,body.search-results .wp-wcqb-loop-wrap::after,body.search .wp-wcqb-loop-wrap::after{content:none!important;display:none!important;background-image:none!important}
+        body.search-results .wp-wcqb-loop-wrap .wp-quote-button.loop::after,body.search .wp-wcqb-loop-wrap .wp-quote-button.loop::after,body.search-results button.wp-quote-button.loop::after,body.search button.wp-quote-button.loop::after{content:""!important;position:absolute!important;top:50%!important;right:18px!important;left:auto!important;display:block!important;width:16px!important;height:16px!important;margin:0!important;opacity:1!important;pointer-events:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M5 12h12M13 6l6 6-6 6%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%222.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;transform:translate(42px,-50%)!important;transition:transform .22s ease!important}
+        body.search-results .wp-wcqb-loop-wrap .wp-quote-button.loop:hover::after,body.search .wp-wcqb-loop-wrap .wp-quote-button.loop:hover::after,body.search-results button.wp-quote-button.loop:hover::after,body.search button.wp-quote-button.loop:hover::after,body.search-results .wp-wcqb-loop-wrap .wp-quote-button.loop:focus::after,body.search .wp-wcqb-loop-wrap .wp-quote-button.loop:focus::after,body.search-results button.wp-quote-button.loop:focus::after,body.search button.wp-quote-button.loop:focus::after{transform:translate(0,-50%)!important}
         @media (max-width:767.98px){body.search-results .iws-search-result-card,body.search .iws-search-result-card{gap:12px}body.search-results .iws-search-result-thumb,body.search .iws-search-result-thumb{flex-basis:76px;width:76px!important;max-width:76px}body.search-results .iws-search-result-thumb img,body.search .iws-search-result-thumb img{width:76px!important;height:76px!important}}
     ');
 }, 40);

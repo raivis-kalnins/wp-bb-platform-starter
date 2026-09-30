@@ -1,7 +1,7 @@
 # TFA Payment Hub for WooCommerce
 
 **Version:** 2.3.0  
-**Plugin folder:** `tfa-payment-hub`  
+**Plugin folder:** `wp-payment-hub`  
 **Main file:** `universal-payment-gateway-for-woocommerce.php`  
 **WooCommerce gateway ID:** `universal_payments_gateway`
 
@@ -53,7 +53,7 @@ TFA Payment Hub adds one payment method to WooCommerce. Inside that payment meth
 The installed folder should be:
 
 ```text
-/wp-content/plugins/tfa-payment-hub/
+/wp-content/plugins/wp-payment-hub/
 ```
 
 ## Settings navigation
@@ -188,7 +188,7 @@ Enable **General > Logs & security > Debug log**. Logs are available under:
 WooCommerce > Status > Logs
 ```
 
-Select a log beginning with `tfa-payment-hub`. Disable logging after troubleshooting unless it is operationally required.
+Select a log beginning with `wp-payment-hub`. Disable logging after troubleshooting unless it is operationally required.
 
 ## Troubleshooting
 

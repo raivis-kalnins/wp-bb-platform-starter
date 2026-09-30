@@ -80,7 +80,7 @@ function wpbb_defaults() {
         'admin_spellcheck_language' => 'en',
         'redirect_wp_admin_home' => 0,
         'enable_custom_login_slug' => 0,
-        'custom_login_slug' => 'tfa-admin',
+        'custom_login_slug' => 'wp-admin',
     ];
 }
 function wpbb_get_option($key, $default = null) {

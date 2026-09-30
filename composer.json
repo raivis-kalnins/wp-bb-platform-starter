@@ -36,7 +36,7 @@
     },
     {
       "type": "path",
-      "url": "packages/tfa-payment-hub",
+      "url": "packages/wp-payment-hub",
       "options": { "symlink": true }
     }
   ],
@@ -55,7 +55,7 @@
     "wp-plugin/updraftplus": "1.26.8",
     "wp-plugin/woocommerce": "11.1.2",
     "wp-plugin/redis-cache": "^3.0",
-    "tfa/tfa-payment-hub": "*",
+    "tfa/wp-payment-hub": "*",
     "tfa/wp-bb-platform": "*",
     "tfa/wp-bbtheme": "*",
     "tfa/wp-bbtheme-child-woo-laravel-shop": "*",

@@ -135,7 +135,7 @@ $WP plugin activate \
   wp-theme-woo-support \
   polylang \
   updraftplus \
-  tfa-payment-hub
+  wp-payment-hub
 
 if $WP plugin is-installed advanced-custom-fields-pro >/dev/null 2>&1; then
   $WP plugin activate advanced-custom-fields-pro || true

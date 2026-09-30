@@ -98,8 +98,8 @@ final class WPBB_Settings {
         foreach (['default_success_message','default_error_message','default_validation_text','button_class','form_class','admin_max_width','hcaptcha_site_key','hcaptcha_secret_key','recaptcha_site_key','recaptcha_secret_key','smtp_host','smtp_username','smtp_from_name','form_spam_message','whatsapp_profile_name','whatsapp_phone','whatsapp_message','whatsapp_position','cookie_consent_text','cookie_accept_text','cookie_reject_text','cookie_position','custom_login_slug'] as $field) {
             $out[$field] = sanitize_text_field($input[$field] ?? ($out[$field] ?? ''));
         }
-        $out['custom_login_slug'] = sanitize_title(trim((string) ($out['custom_login_slug'] ?? 'tfa-admin'), '/ '));
-        if ($out['custom_login_slug'] === '') $out['custom_login_slug'] = 'tfa-admin';
+        $out['custom_login_slug'] = sanitize_title(trim((string) ($out['custom_login_slug'] ?? 'wp-admin'), '/ '));
+        if ($out['custom_login_slug'] === '') $out['custom_login_slug'] = 'wp-admin';
 
         $out['default_recipient_email'] = sanitize_email($input['default_recipient_email'] ?? ($out['default_recipient_email'] ?? ''));
         $out['smtp_from_email'] = sanitize_email($input['smtp_from_email'] ?? ($out['smtp_from_email'] ?? ''));

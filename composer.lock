@@ -6851,11 +6851,11 @@
             "time": "2026-09-03T16:02:27+00:00"
         },
         {
-            "name": "tfa/tfa-payment-hub",
+            "name": "tfa/wp-payment-hub",
             "version": "2.3.0",
             "dist": {
                 "type": "path",
-                "url": "packages/tfa-payment-hub",
+                "url": "packages/wp-payment-hub",
                 "reference": "dd5fb624c9849cc7b2fa0c0946e856f30106ca5c"
             },
             "require": {

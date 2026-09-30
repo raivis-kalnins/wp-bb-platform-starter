@@ -421,9 +421,9 @@ final class WPBB_Admin {
                         <p class="description"><?php esc_html_e('Move login entry-point controls out of the theme and keep them managed by BBuilder.', 'wp-bbuilder'); ?></p>
                         <label class="wpbb-check"><input type="checkbox" name="wpbb_settings[redirect_wp_admin_home]" value="1" <?php checked(!empty($opts['redirect_wp_admin_home'])); ?>> <?php esc_html_e('Redirect /wp-admin to homepage for logged-out users', 'wp-bbuilder'); ?></label>
                         <label class="wpbb-check"><input type="checkbox" name="wpbb_settings[enable_custom_login_slug]" value="1" <?php checked(!empty($opts['enable_custom_login_slug'])); ?>> <?php esc_html_e('Enable custom login slug', 'wp-bbuilder'); ?></label>
-                        <p><label><?php esc_html_e('Custom login slug', 'wp-bbuilder'); ?><br><input type="text" name="wpbb_settings[custom_login_slug]" value="<?php echo esc_attr($opts['custom_login_slug'] ?? 'tfa-admin'); ?>" placeholder="tfa-admin"></label></p>
-                        <p class="description"><?php esc_html_e('Example: tfa-admin. When enabled, the custom slug becomes the login entry point and direct wp-login.php access is redirected to the homepage.', 'wp-bbuilder'); ?></p>
-                        <p><strong><?php esc_html_e('Current custom login URL:', 'wp-bbuilder'); ?></strong> <code><?php echo esc_html(home_url('/' . sanitize_title($opts['custom_login_slug'] ?? 'tfa-admin') . '/')); ?></code></p>
+                        <p><label><?php esc_html_e('Custom login slug', 'wp-bbuilder'); ?><br><input type="text" name="wpbb_settings[custom_login_slug]" value="<?php echo esc_attr($opts['custom_login_slug'] ?? 'wp-admin'); ?>" placeholder="wp-admin"></label></p>
+                        <p class="description"><?php esc_html_e('Example: wp-admin. When enabled, the custom slug becomes the login entry point and direct wp-login.php access is redirected to the homepage.', 'wp-bbuilder'); ?></p>
+                        <p><strong><?php esc_html_e('Current custom login URL:', 'wp-bbuilder'); ?></strong> <code><?php echo esc_html(home_url('/' . sanitize_title($opts['custom_login_slug'] ?? 'wp-admin') . '/')); ?></code></p>
                     </div>
 
 <div class="wpbb-card" id="scss-builder">

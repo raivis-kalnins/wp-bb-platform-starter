@@ -174,7 +174,7 @@ packages/
 |-- wp-bbtheme-child-woo-laravel-shop/
 |-- wp-bbuilder/
 |-- wp-theme-woo-support/
-|-- tfa-payment-hub/
+|-- wp-payment-hub/
 `-- child-themes/
 ```
 

@@ -218,7 +218,7 @@ function wp_theme_menu_item_mega_markup( $item_output, $item, $depth, $args ) {
 	if ( ! $content ) {
 		return $item_output;
 	}
-	return $item_output . '<div class="wp-theme-mega-menu megamenu-modal tfa-mega-menu enterprise-megamenu" aria-hidden="true" data-mega-panel="' . absint( $item->wp_theme_mega_post_id ) . '">' . do_blocks( $content ) . '</div>';
+	return $item_output . '<div class="wp-theme-mega-menu megamenu-modal wp-mega-menu enterprise-megamenu" aria-hidden="true" data-mega-panel="' . absint( $item->wp_theme_mega_post_id ) . '">' . do_blocks( $content ) . '</div>';
 }
 add_filter( 'walker_nav_menu_start_el', 'wp_theme_menu_item_mega_markup', 10, 4 );
 

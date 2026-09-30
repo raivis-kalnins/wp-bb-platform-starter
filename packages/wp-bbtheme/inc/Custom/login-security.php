@@ -11,10 +11,10 @@ if (!function_exists('wp_theme_login_slug_enabled')) {
 
 if (!function_exists('wp_theme_get_login_slug')) {
     function wp_theme_get_login_slug() {
-        $slug = (string) wp_theme_acf_get('theme_custom_login_slug', 'option', 'tfa-admin');
+        $slug = (string) wp_theme_acf_get('theme_custom_login_slug', 'option', 'wp-admin');
         $slug = trim($slug, "/ \t\n\r\0\x0B");
         $slug = sanitize_title($slug);
-        return $slug ?: 'tfa-admin';
+        return $slug ?: 'wp-admin';
     }
 }
 

@@ -25,10 +25,10 @@ final class WPBB_Login_Security {
     }
 
     public function get_login_slug() {
-        $slug = (string) wpbb_get_option('custom_login_slug', 'tfa-admin');
+        $slug = (string) wpbb_get_option('custom_login_slug', 'wp-admin');
         $slug = trim($slug, "/ \t\n\r\0\x0B");
         $slug = sanitize_title($slug);
-        return $slug ?: 'tfa-admin';
+        return $slug ?: 'wp-admin';
     }
 
     public function custom_login_url() {

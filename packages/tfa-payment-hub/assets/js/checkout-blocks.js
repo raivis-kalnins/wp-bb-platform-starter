@@ -51,13 +51,13 @@
                 if (!provider || !selectedProvider) {
                     return {
                         type: responseTypes.ERROR,
-                        message: __('Please choose an available payment option.', 'tfa-payment-hub')
+                        message: __('Please choose an available payment option.', 'wp-payment-hub')
                     };
                 }
                 if (selectedProvider.group === 'direct_debit' && !consent) {
                     return {
                         type: responseTypes.ERROR,
-                        message: __('Please confirm the Direct Debit mandate statement.', 'tfa-payment-hub')
+                        message: __('Please confirm the Direct Debit mandate statement.', 'wp-payment-hub')
                     };
                 }
                 return {
@@ -80,7 +80,7 @@
                 {
                     type: 'button',
                     key: groupId,
-                    className: 'tfa-block-group-button' + (groupId === group ? ' is-active' : ''),
+                    className: 'wp-block-group-button' + (groupId === group ? ' is-active' : ''),
                     onClick: function () {
                         setGroup(groupId);
                         setProvider(firstKey(groups[groupId]));
@@ -95,44 +95,44 @@
             var item = currentProviders[providerId];
             return el(
                 'label',
-                { className: 'tfa-block-provider' + (providerId === provider ? ' is-active' : ''), key: providerId },
+                { className: 'wp-block-provider' + (providerId === provider ? ' is-active' : ''), key: providerId },
                 el('input', {
                     type: 'radio',
-                    name: 'tfa-block-payment-provider',
+                    name: 'wp-block-payment-provider',
                     value: providerId,
                     checked: providerId === provider,
                     onChange: function () { setProvider(providerId); }
                 }),
                 item.logo_url ? el(
                     'span',
-                    { className: 'tfa-block-provider-logo-wrap' },
-                    el('img', { className: 'tfa-block-provider-logo', src: item.logo_url, alt: decodeEntities(item.logo_alt || item.title || '') })
+                    { className: 'wp-block-provider-logo-wrap' },
+                    el('img', { className: 'wp-block-provider-logo', src: item.logo_url, alt: decodeEntities(item.logo_alt || item.title || '') })
                 ) : null,
                 el(
                     'span',
-                    { className: 'tfa-block-provider-copy' },
+                    { className: 'wp-block-provider-copy' },
                     el('strong', null, decodeEntities(item.title || item.name || providerId)),
                     item.description ? el('small', null, decodeEntities(item.description)) : null,
-                    item.flow === 'stripe_checkout' ? el('em', null, __('Apple Pay or Google Pay is shown on Stripe Checkout when available.', 'tfa-payment-hub')) : null,
-                    item.flow === 'manual' ? el('em', null, __('The order is held while the mandate is arranged.', 'tfa-payment-hub')) : null
+                    item.flow === 'stripe_checkout' ? el('em', null, __('Apple Pay or Google Pay is shown on Stripe Checkout when available.', 'wp-payment-hub')) : null,
+                    item.flow === 'manual' ? el('em', null, __('The order is held while the mandate is arranged.', 'wp-payment-hub')) : null
                 ),
                 item.icon_url ? el(
                     'span',
-                    { className: 'tfa-block-provider-icon-wrap' },
-                    el('img', { className: 'tfa-block-provider-icon', src: item.icon_url, alt: decodeEntities(item.icon_alt || '') })
+                    { className: 'wp-block-provider-icon-wrap' },
+                    el('img', { className: 'wp-block-provider-icon', src: item.icon_url, alt: decodeEntities(item.icon_alt || '') })
                 ) : null
             );
         });
 
         return el(
             'div',
-            { className: 'tfa-payment-hub-block' },
-            settings.description ? el('p', { className: 'tfa-block-description' }, decodeEntities(settings.description)) : null,
-            Object.keys(groups).length > 1 ? el('div', { className: 'tfa-block-groups' }, groupButtons) : null,
-            el('div', { className: 'tfa-block-providers' }, providerOptions),
+            { className: 'wp-payment-hub-block' },
+            settings.description ? el('p', { className: 'wp-block-description' }, decodeEntities(settings.description)) : null,
+            Object.keys(groups).length > 1 ? el('div', { className: 'wp-block-groups' }, groupButtons) : null,
+            el('div', { className: 'wp-block-providers' }, providerOptions),
             group === 'direct_debit' ? el(
                 'label',
-                { className: 'tfa-block-consent' },
+                { className: 'wp-block-consent' },
                 el('input', {
                     type: 'checkbox',
                     checked: consent,
@@ -144,7 +144,7 @@
     }
 
     function Label() {
-        return el('span', null, decodeEntities(settings.title || __('Secure payment', 'tfa-payment-hub')));
+        return el('span', null, decodeEntities(settings.title || __('Secure payment', 'wp-payment-hub')));
     }
 
     registerPaymentMethod({
@@ -153,7 +153,7 @@
         content: el(PaymentContent, null),
         edit: el(PaymentContent, null),
         canMakePayment: function () { return settings.available !== false; },
-        ariaLabel: decodeEntities(settings.title || __('Secure payment', 'tfa-payment-hub')),
+        ariaLabel: decodeEntities(settings.title || __('Secure payment', 'wp-payment-hub')),
         supports: {
             features: settings.supports || ['products']
         }

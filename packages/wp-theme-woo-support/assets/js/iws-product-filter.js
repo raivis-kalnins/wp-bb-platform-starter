@@ -1016,8 +1016,8 @@
       if (button.classList.contains('iws-compare-open--search')) {
         button.style.setProperty('position', 'relative', 'important');
         button.style.setProperty('overflow', 'visible', 'important');
-        button.style.setProperty('background-color', ids.length > 0 ? '#fff' : 'var(--tfa-brand-color)', 'important');
-        button.style.setProperty('border-color', 'var(--tfa-brand-color)', 'important');
+        button.style.setProperty('background-color', ids.length > 0 ? '#fff' : 'var(--wp-brand-color)', 'important');
+        button.style.setProperty('border-color', 'var(--wp-brand-color)', 'important');
         var count = button.querySelector('.iws-compare-count');
         if (count) {
           count.style.setProperty('position', 'absolute', 'important');

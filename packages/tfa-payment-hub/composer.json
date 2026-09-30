@@ -1,5 +1,5 @@
 {
-  "name": "tfa/tfa-payment-hub",
+  "name": "tfa/wp-payment-hub",
   "description": "TFA Payment Hub for WooCommerce.",
   "type": "wordpress-plugin",
   "version": "2.3.0",

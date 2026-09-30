@@ -10,9 +10,14 @@ auth.json
 # Composer-managed dependencies and WordPress runtime
 /vendor/
 /web/wp/
-/web/app/plugins/
+/web/app/plugins/advanced-custom-fields-pro/
+/web/app/plugins/redis-cache/
+/web/app/plugins/updraftplus/
+/web/app/plugins/woocommerce/
+/web/app/plugins/polylang/
+/web/app/plugins/acf-options-for-polylang/
 /web/app/mu-plugins/
-/web/app/themes/
+/web/app/themes/twentytwentyfive/
 composer.phar
 
 # WordPress-generated content
