@@ -1,74 +1,72 @@
-cd ~/platform
-
-cat > .gitignore <<'EOF'
+# Environment and credentials
 .env
 .env.*
 !.env.example
-
 auth.json
 *.pem
 *.key
 *.crt
 
+# Composer-managed dependencies and WordPress runtime
 /vendor/
-composer.phar
-
 /web/wp/
-
 /web/app/plugins/
 /web/app/mu-plugins/
 /web/app/themes/
+composer.phar
 
+# WordPress-generated content
 /web/app/uploads/
 /web/app/upgrade/
+/web/app/upgrade-temp-backup/
 /web/app/cache/
 /web/app/backups/
 /web/app/backup-db/
 /web/app/ai1wm-backups/
+/web/app/updraft/
 /web/app/wflogs/
 /web/app/litespeed/
+/web/app/languages/
+/web/app/object-cache.php
+/web/app/advanced-cache.php
 
-/storage/logs/*
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*
+# Runtime/application state
+/storage/
+/tmp/
+/temp/
 
+# Licensed packages are supplied locally and must not be committed
+/packages/private/
+
+# Frontend dependencies and build logs
 **/node_modules/
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .pnpm-store/
 
+# Releases and tool caches
 /releases/
 *.tar.gz
-
 .phpunit.result.cache
 .php-cs-fixer.cache
 .phpstan.cache
 
+# Local tooling and operating-system files
 .idea/
 .vscode/
 *.code-workspace
-
 *.swp
 *.swo
 *~
-
 .DS_Store
 .AppleDouble
 .LSOverride
 Thumbs.db
 Desktop.ini
-
 *.log
 *.tmp
 *.temp
 *.bak
-
-/tmp/
-/temp/
-
 docker-compose.override.yml
-EOF

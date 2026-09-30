@@ -171,12 +171,14 @@ The complete distribution can additionally provide local project packages such a
 packages/
 |-- wp-bb-platform/
 |-- wp-bbtheme/
+|-- wp-bbtheme-child-woo-laravel-shop/
 |-- wp-bbuilder/
 |-- wp-theme-woo-support/
+|-- tfa-payment-hub/
 `-- child-themes/
 ```
 
-These are connected through Composer path repositories during development. The GitHub starter acts as the common platform shell; private/commercial packages can be supplied separately without committing them to the public starter.
+These sources are committed to the main repository and connected to `web/app/` through Composer path packages. The installed `web/app/plugins`, `web/app/mu-plugins` and `web/app/themes` directories remain ignored runtime output, so a clean clone has one authoritative copy of every project-owned theme and plugin. Public third-party plugins are pinned in `composer.lock`; private/commercial packages are supplied separately without committing licensed code.
 
 ---
 
@@ -364,12 +366,12 @@ Set-ExecutionPolicy -Scope Process Bypass
 
 ```bash
 cd ~/projects/wp-bb-platform
-cp .env.example .env
-chmod +x bin/*
 ./bin/install
 ```
 
-The installer validates Docker/Compose, creates `.env` when needed, generates database passwords and WordPress salts, builds the PHP container, starts MariaDB/Redis/Mailpit/phpMyAdmin, runs Composer, installs WordPress through WP-CLI, activates WooCommerce/Redis/BBuilder/Woo Support, activates BBTheme and configures permalinks and Redis.
+The installer validates Docker/Compose, creates `.env` when needed, generates database passwords and WordPress salts, builds the PHP container, starts MariaDB/Redis/Mailpit/phpMyAdmin, runs Composer as the host user, creates the writable WordPress/Acorn directories, installs WordPress through WP-CLI, activates the managed plugins and the Home & Garden child theme, and configures permalinks and Redis.
+
+Project-owned theme/plugin source belongs under `packages/`, not the ignored `web/app/` install tree. Composer currently installs the parent theme, Home & Garden child theme, BBuilder, Woo Support and TFA Payment Hub from those tracked source packages. WooCommerce, Redis Object Cache, Polylang, ACF Options for Polylang and UpdraftPlus are reproducible public Composer dependencies.
 
 ---
 
@@ -474,6 +476,8 @@ ACF Pro is commercial software and is intentionally not redistributed by this st
 ```bash
 bin/install-acf-pro /path/to/advanced-custom-fields-pro.zip
 ```
+
+For an automatic clean install, place the licensed file at `packages/private/advanced-custom-fields-pro.zip` before running `bin/install`. The private package directory is excluded from Git.
 
 The platform and BBuilder continue to run without ACF Pro; ACF-specific features are enabled when a compatible licensed installation is present.
 

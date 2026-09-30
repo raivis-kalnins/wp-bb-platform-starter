@@ -1,0 +1,1 @@
+<?php get_header(); ?><main class="wpbbshop-container wpbbshop-content"><?php if (function_exists('wpbbshop_seo_breadcrumbs_235')) { echo wpbbshop_seo_breadcrumbs_235(); } ?><?php while (have_posts()) : the_post(); ?><article <?php post_class('wpbbshop-entry'); ?>><h1><?php the_title(); ?></h1><?php the_content(); ?></article><?php endwhile; ?></main><?php get_footer();

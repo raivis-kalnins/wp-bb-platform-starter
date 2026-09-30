@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c0e76d8aca179d4946d85a202a9bbf9",
+    "content-hash": "a10226e9c19f0f7383f76023669f400c",
     "packages": [
         {
             "name": "brick/math",
@@ -6851,6 +6851,28 @@
             "time": "2026-09-03T16:02:27+00:00"
         },
         {
+            "name": "tfa/tfa-payment-hub",
+            "version": "2.3.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/tfa-payment-hub",
+                "reference": "dd5fb624c9849cc7b2fa0c0946e856f30106ca5c"
+            },
+            "require": {
+                "php": ">=7.4",
+                "wp-plugin/woocommerce": "^11.1"
+            },
+            "type": "wordpress-plugin",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "TFA Payment Hub for WooCommerce.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "tfa/wp-bb-platform",
             "version": "0.1.0",
             "dist": {
@@ -6892,6 +6914,29 @@
                 "proprietary"
             ],
             "description": "WP BBTheme parent theme with optional Acorn/Blade view support.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "tfa/wp-bbtheme-child-woo-laravel-shop",
+            "version": "3.1.3",
+            "dist": {
+                "type": "path",
+                "url": "packages/wp-bbtheme-child-woo-laravel-shop",
+                "reference": "d97280fc52e90f034e04dfe8aa6c220d0eecbff0"
+            },
+            "require": {
+                "php": ">=8.0",
+                "tfa/wp-bbtheme": "*",
+                "wp-plugin/woocommerce": "^11.1"
+            },
+            "type": "wordpress-theme",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Home and Garden WooCommerce child theme for WP BB Platform.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -7098,6 +7143,68 @@
             "time": "2026-04-26T05:33:54+00:00"
         },
         {
+            "name": "wp-plugin/acf-options-for-polylang",
+            "version": "2.0.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/acf-options-for-polylang/",
+                "reference": "tags/2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/acf-options-for-polylang.2.0.0.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Amaury Balmer"
+                }
+            ],
+            "description": "Improves Polylang by adding per-language support for ACF options pages—each language can have its own option values.",
+            "homepage": "https://github.com/BeAPI/acf-options-for-polylang",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/acf-options-for-polylang/#developers",
+                "issues": "https://wordpress.org/support/plugin/acf-options-for-polylang",
+                "source": "https://plugins.svn.wordpress.org/acf-options-for-polylang"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
+        },
+        {
+            "name": "wp-plugin/polylang",
+            "version": "3.8.10",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/polylang/",
+                "reference": "tags/3.8.10"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/polylang.3.8.10.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Chouby"
+                }
+            ],
+            "description": "Go multilingual in a simple and efficient way. Keep writing posts and taxonomy terms as usual while defining their languages all at once.",
+            "homepage": "https://polylang.pro",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/polylang/#developers",
+                "issues": "https://wordpress.org/support/plugin/polylang",
+                "source": "https://plugins.svn.wordpress.org/polylang"
+            },
+            "time": "2026-09-28T09:50:58+00:00"
+        },
+        {
             "name": "wp-plugin/redis-cache",
             "version": "3.0.0",
             "source": {
@@ -7127,6 +7234,37 @@
                 "source": "https://plugins.svn.wordpress.org/redis-cache"
             },
             "time": "2026-09-18T18:36:32+00:00"
+        },
+        {
+            "name": "wp-plugin/updraftplus",
+            "version": "1.26.8",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/updraftplus/",
+                "reference": "tags/1.26.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/updraftplus.1.26.8.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "David Anderson / Team Updraft"
+                }
+            ],
+            "description": "Backup, restore or migrate your WordPress website to another host or domain. Schedule backups or run manually. Migrate in minutes.",
+            "homepage": "https://updraftplus.com",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/updraftplus/#developers",
+                "issues": "https://wordpress.org/support/plugin/updraftplus",
+                "source": "https://plugins.svn.wordpress.org/updraftplus"
+            },
+            "time": "2026-09-21T14:58:27+00:00"
         },
         {
             "name": "wp-plugin/woocommerce",

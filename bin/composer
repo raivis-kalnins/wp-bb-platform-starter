@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-docker compose exec -T app composer "$@"
+HOST_UID=$(id -u)
+HOST_GID=$(id -g)
+docker compose exec -T \
+  -u "${HOST_UID}:${HOST_GID}" \
+  -e "COMPOSER_HOME=/tmp/wpbb-composer-${HOST_UID}" \
+  app composer "$@"

@@ -4,10 +4,10 @@
 Bedrock project
   |
   +-- web/wp                  WordPress core managed by Composer
-  +-- web/app/plugins         Composer/local WordPress plugins
+  +-- web/app/plugins         ignored Composer install output
   +-- web/app/mu-plugins      always-on platform layer
-  +-- web/app/themes          parent + active child theme
-  +-- packages                source for your local packages
+  +-- web/app/themes          ignored Composer install output
+  +-- packages                tracked project theme/plugin source
   +-- config                  environment-aware WordPress config
   +-- docker                  local PHP/Apache toolchain
 ```

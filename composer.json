@@ -28,6 +28,16 @@
       "type": "path",
       "url": "packages/wp-theme-woo-support",
       "options": { "symlink": true }
+    },
+    {
+      "type": "path",
+      "url": "packages/wp-bbtheme-child-woo-laravel-shop",
+      "options": { "symlink": true }
+    },
+    {
+      "type": "path",
+      "url": "packages/tfa-payment-hub",
+      "options": { "symlink": true }
     }
   ],
   "require": {
@@ -40,10 +50,15 @@
     "roots/wordpress": "7.1.2",
     "roots/wp-config": "^1.0",
     "vlucas/phpdotenv": "^5.0",
+    "wp-plugin/acf-options-for-polylang": "2.0.0",
+    "wp-plugin/polylang": "3.8.10",
+    "wp-plugin/updraftplus": "1.26.8",
     "wp-plugin/woocommerce": "11.1.2",
     "wp-plugin/redis-cache": "^3.0",
+    "tfa/tfa-payment-hub": "*",
     "tfa/wp-bb-platform": "*",
     "tfa/wp-bbtheme": "*",
+    "tfa/wp-bbtheme-child-woo-laravel-shop": "*",
     "tfa/wp-bbuilder": "*",
     "tfa/wp-theme-woo-support": "*"
   },

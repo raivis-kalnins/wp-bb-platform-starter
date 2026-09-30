@@ -24,28 +24,46 @@ set_env() {
   fi
 }
 
+get_env() {
+  local key="$1"
+  local value
+  value=$(grep -m 1 "^${key}=" .env 2>/dev/null | cut -d= -f2- || true)
+  value=${value#\'}
+  value=${value%\'}
+  value=${value#\"}
+  value=${value%\"}
+  printf '%s' "$value"
+}
+
 random_hex() { openssl rand -hex "${1:-24}"; }
 random_b64() { openssl rand -base64 48 | tr -d '\n' | tr '/+' '_-'; }
 
-DB_PASSWORD_VALUE=${DB_PASSWORD:-$(random_hex 16)}
-DB_ROOT_PASSWORD_VALUE=${DB_ROOT_PASSWORD:-$(random_hex 20)}
-set_env DB_PASSWORD "$DB_PASSWORD_VALUE"
-if grep -q '^DB_ROOT_PASSWORD=' .env; then
-  set_env DB_ROOT_PASSWORD "$DB_ROOT_PASSWORD_VALUE"
-else
-  printf "DB_ROOT_PASSWORD='%s'\n" "$DB_ROOT_PASSWORD_VALUE" >> .env
+DB_PASSWORD_VALUE=${DB_PASSWORD:-$(get_env DB_PASSWORD)}
+DB_ROOT_PASSWORD_VALUE=${DB_ROOT_PASSWORD:-$(get_env DB_ROOT_PASSWORD)}
+
+if [ -z "$DB_PASSWORD_VALUE" ] || [ "$DB_PASSWORD_VALUE" = "change-me" ]; then
+  DB_PASSWORD_VALUE=$(random_hex 16)
 fi
+if [ -z "$DB_ROOT_PASSWORD_VALUE" ] || [ "$DB_ROOT_PASSWORD_VALUE" = "root-change-me" ]; then
+  DB_ROOT_PASSWORD_VALUE=$(random_hex 20)
+fi
+
+set_env DB_PASSWORD "$DB_PASSWORD_VALUE"
+set_env DB_ROOT_PASSWORD "$DB_ROOT_PASSWORD_VALUE"
 
 for key in AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT; do
   if grep -q "^${key}='generateme'" .env || ! grep -q "^${key}=" .env; then
     set_env "$key" "$(random_b64)"
   fi
 done
+chmod 600 .env
 
 SITE_TITLE=${SITE_TITLE:-"WP BB Platform"}
 ADMIN_USER=${WP_ADMIN_USER:-admin}
 ADMIN_EMAIL=${WP_ADMIN_EMAIL:-admin@example.test}
 ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-$(random_b64 | cut -c1-28)}
+HOST_UID=$(id -u)
+HOST_GID=$(id -g)
 
 if [ -t 0 ]; then
   read -r -p "Site title [$SITE_TITLE]: " input || true
@@ -62,16 +80,32 @@ docker compose build app
 echo "Starting database, Redis and app..."
 docker compose up -d db redis app mailpit phpmyadmin
 
-echo "Installing Composer dependencies (WordPress, Acorn, WooCommerce, Redis and local BB packages)..."
-docker compose exec -T -e COMPOSER_ALLOW_SUPERUSER=1 app composer install --no-interaction --prefer-dist
+docker compose exec -T app chown "${HOST_UID}:www-data" /var/www/html/.env
+docker compose exec -T app chmod 640 /var/www/html/.env
 
-docker compose exec -T app mkdir -p /var/www/html/storage/logs /var/www/html/web/app/uploads
-docker compose exec -T app chown -R www-data:www-data /var/www/html/storage /var/www/html/web/app/uploads
+echo "Installing Composer dependencies (WordPress, Acorn, WooCommerce, Redis and local BB packages)..."
+docker compose exec -T \
+  -u "${HOST_UID}:${HOST_GID}" \
+  -e "COMPOSER_HOME=/tmp/wpbb-composer-${HOST_UID}" \
+  app composer install --no-interaction --prefer-dist
+
+echo "Preparing WordPress and Acorn writable directories..."
+docker compose exec -T app chown "${HOST_UID}:www-data" /var/www/html/web/app
+docker compose exec -T app chmod 2775 /var/www/html/web/app
+docker compose exec -T app install -d -o www-data -g www-data -m 2775 \
+  /var/www/html/storage/logs \
+  /var/www/html/storage/framework/cache/data \
+  /var/www/html/storage/framework/sessions \
+  /var/www/html/storage/framework/views \
+  /var/www/html/web/app/uploads \
+  /var/www/html/web/app/upgrade \
+  /var/www/html/web/app/cache
 
 WP="docker compose exec -T -u www-data app wp --path=/var/www/html/web/wp"
 WP_HOME_VALUE=$(grep '^WP_HOME=' .env | head -n 1 | cut -d= -f2- | tr -d "\'\"")
 WP_HOME_VALUE=${WP_HOME_VALUE:-http://localhost:8080}
 
+WORDPRESS_INSTALLED=false
 if ! $WP core is-installed >/dev/null 2>&1; then
   echo "Installing WordPress..."
   $WP core install \
@@ -81,14 +115,39 @@ if ! $WP core is-installed >/dev/null 2>&1; then
     --admin_password="$ADMIN_PASSWORD" \
     --admin_email="$ADMIN_EMAIL" \
     --skip-email
+  WORDPRESS_INSTALLED=true
 fi
 
-$WP plugin activate woocommerce redis-cache wp-bbuilder wp-theme-woo-support || true
-$WP theme activate wp-bbtheme || true
-$WP rewrite flush || true
-$WP redis enable || true
+if [ -f packages/private/advanced-custom-fields-pro.zip ]; then
+  echo "Installing licensed ACF Pro package..."
+  bin/install-acf-pro packages/private/advanced-custom-fields-pro.zip
+fi
+
+# Migrate the old development folder name before activating the packaged plugin.
+if $WP plugin is-active woo-payment-gateway-master >/dev/null 2>&1; then
+  $WP plugin deactivate woo-payment-gateway-master
+fi
+
+$WP plugin activate \
+  woocommerce \
+  redis-cache \
+  wp-bbuilder \
+  wp-theme-woo-support \
+  polylang \
+  updraftplus \
+  tfa-payment-hub
+
+if $WP plugin is-installed advanced-custom-fields-pro >/dev/null 2>&1; then
+  $WP plugin activate advanced-custom-fields-pro || true
+  $WP plugin activate acf-options-for-polylang
+else
+  echo "ACF Pro is not installed. Place the licensed ZIP at packages/private/advanced-custom-fields-pro.zip and run bin/install-acf-pro."
+fi
+
+$WP theme activate wp-bbtheme-child-woo-laravel-shop
 $WP option update permalink_structure '/%postname%/' || true
 $WP rewrite flush || true
+$WP redis enable
 
 echo
 echo "Installation complete."
@@ -97,7 +156,11 @@ echo "WP Admin:   ${WP_HOME_VALUE%/}/wp/wp-admin/"
 echo "Mailpit:    http://localhost:8025"
 echo "phpMyAdmin: http://localhost:8081"
 echo "Admin user: $ADMIN_USER"
-echo "Admin pass: $ADMIN_PASSWORD"
+if [ "$WORDPRESS_INSTALLED" = true ]; then
+  echo "Admin pass: $ADMIN_PASSWORD"
+else
+  echo "Admin pass: unchanged (WordPress was already installed)"
+fi
 echo
 echo "CLI:        bin/wp plugin list"
 echo "Acorn:      bin/artisan about"
