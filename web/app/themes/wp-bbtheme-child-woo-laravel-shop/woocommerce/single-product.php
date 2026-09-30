@@ -16,7 +16,7 @@ while (have_posts()) : the_post();
   <article id="product-<?php the_ID(); ?>" <?php wc_product_class('llg-single-product-card',$product); ?>>
     <section class="llg-single-gallery-panel">
       <?php if ($product->is_on_sale()) : ?><span class="llg-single-sale"><?php echo esc_html($is_en?'Sale':'Akcija'); ?></span><?php endif; ?>
-      <?php echo function_exists('wpbbshop_render_v38_product_gallery') ? wpbbshop_render_v38_product_gallery($product) : $product->get_image('woocommerce_single'); ?>
+      <?php $demo_gallery = function_exists('wpbbshop_v405_single_demo_image') ? wpbbshop_v405_single_demo_image($product) : ''; echo $demo_gallery ? $demo_gallery : (function_exists('wpbbshop_render_v38_product_gallery') ? wpbbshop_render_v38_product_gallery($product) : $product->get_image('woocommerce_single')); ?>
     </section>
     <section class="llg-single-summary-panel">
       <div class="llg-single-status-row"><span class="llg-single-stock <?php echo $product->is_in_stock()?'is-in':'is-out'; ?>"><?php echo esc_html($product->is_in_stock()?($is_en?'In stock':'Ir noliktavā'):($is_en?'Out of stock':'Nav noliktavā')); ?></span><?php if ($product->get_sku()) : ?><span class="llg-single-sku">SKU: <?php echo esc_html($product->get_sku()); ?></span><?php endif; ?></div>

@@ -8,7 +8,7 @@
 defined('ABSPATH') || exit;
 
 if (!defined('WPBBSHOP_V400_VERSION')) {
-    define('WPBBSHOP_V400_VERSION', '4.0.4');
+    define('WPBBSHOP_V400_VERSION', '4.0.5');
 }
 
 function wpbbshop_v400_primary_language() {
@@ -51,32 +51,14 @@ function wpbbshop_v400_demo_images() {
  * WebP set remains a fallback when a remote URL is unavailable.
  */
 function wpbbshop_v400_remote_demo_images() {
-    $keywords = array(
-        'garden-machinery'     => 'lawnmower,garden',
-        'garden-tools'         => 'garden,tools',
-        'watering-irrigation'  => 'garden,watering',
-        'greenhouses'          => 'greenhouse,garden',
-        'garden-furniture'     => 'garden,furniture',
-        'plants-seeds'         => 'plants,garden',
-        'fertilisers-care'     => 'garden,plants',
-        'fences-gates'         => 'garden,fence',
-        'outdoor-storage'      => 'garden,shed',
-        'bbq-outdoor-cooking'  => 'barbecue,garden',
-        'power-tools'          => 'power,tools',
-        'hand-tools'           => 'hand,tools',
-        'building-materials'   => 'building,materials',
-        'paint-finishing'      => 'paint,tools',
-        'plumbing-heating'     => 'plumbing,tools',
-        'lighting-electrical'  => 'lighting,home',
-        'home-storage'         => 'home,storage',
-        'cleaning'             => 'cleaning,home',
-        'workwear-safety'      => 'workwear,safety',
-        'pet-outdoor-living'   => 'outdoor,garden',
-    );
+    $files = wpbbshop_v400_demo_images();
+    $departments = function_exists('wpbbshop_megastore_departments_312') ? wpbbshop_megastore_departments_312() : array();
     $urls = array();
-    $lock = 4100;
-    foreach ($keywords as $slug => $keyword) {
-        $urls[$slug] = 'https://loremflickr.com/720/720/' . rawurlencode($keyword) . '?lock=' . $lock++;
+    foreach ((array) $departments as $i => $department) {
+        $slug = isset($department['slug']) ? sanitize_key($department['slug']) : '';
+        if (!$slug || !$files) { continue; }
+        $file = $files[$i % count($files)];
+        $urls[$slug] = get_stylesheet_directory_uri() . '/assets/demo-products/' . rawurlencode($file);
     }
     return $urls;
 }

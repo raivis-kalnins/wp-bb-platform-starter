@@ -1758,3 +1758,6 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v400-platform.php';
 
 /* 4.0.4 stability: one shell, non-blocking cache/network maintenance, admin guard. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v404-stability.php';
+
+/* 4.0.5 language/product/cookie/TOP/pattern experience fixes. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v405-experience.php';

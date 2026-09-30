@@ -164,3 +164,15 @@ No manual SQL edits are required.
 - Guards WordPress admin menu globals against early `remove_menu_page()` calls from third-party code.
 - Comparison feed links use direct WordPress query endpoints and do not require writable root XML files or `.htaccess`.
 - Adds a WordPress theme-directory `screenshot.png` generated from the current Home & Garden storefront.
+
+
+## 4.0.5 experience fixes
+
+- Repairs `/lv/` routing and ensures English/Latvian home translations.
+- Keeps demo/single products accessible while translations are being prepared.
+- Uses bundled local WebP demo images everywhere, including product singles.
+- Disables the parent cookie/PWA footer layer and supplies a compact child-owned EN/LV cookie banner.
+- Replaces the old Latvian-only “3 picks” workflow with multilingual **TOP products**, supporting up to 20 selected products in a swipe/slider row.
+- Registers Home & Garden block patterns for the Pattern Library.
+- Improves admin notice contrast.
+- Keeps the improved theme screenshot, fallback favicon assets and child-owned header/footer.

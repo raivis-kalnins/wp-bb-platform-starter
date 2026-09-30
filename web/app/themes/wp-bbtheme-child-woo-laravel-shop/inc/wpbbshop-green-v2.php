@@ -370,7 +370,7 @@ function wpbbshop_green_home_shortcode() {
     $shop=function_exists('wc_get_page_permalink')?wc_get_page_permalink('shop'):home_url('/shop/');
     $is_en=function_exists('wpbbshop_v305_is_english')&&wpbbshop_v305_is_english();
     $categories=wpbbshop_green_category_links_309(10);
-    $monthly_promo=function_exists('wpbbshop_v333_monthly_promo_html') ? wpbbshop_v333_monthly_promo_html($is_en) : '';
+    $monthly_promo=function_exists('wpbbshop_v405_top_products_html') ? wpbbshop_v405_top_products_html($is_en) : (function_exists('wpbbshop_v333_monthly_promo_html') ? wpbbshop_v333_monthly_promo_html($is_en) : '');
     ob_start(); ?>
     <main class="llg-home llg-clean-home">
       <div class="wpbbshop-container llg-home-stage">
