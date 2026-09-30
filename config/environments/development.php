@@ -15,4 +15,4 @@ Config::define('DISALLOW_FILE_MODS', false);
 /* Local Docker/WSL: allow WordPress to write directly */
 Config::define('FS_METHOD', 'direct');
 // PHP error log
-ini_set('display_errors', '0');
+ini_set('display_errors', '1');
