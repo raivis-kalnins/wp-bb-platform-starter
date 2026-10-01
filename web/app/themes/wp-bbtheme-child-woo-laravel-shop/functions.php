@@ -69,11 +69,20 @@ function wpbbshop_logo_attachment_class($attachment_id) {
 }
 
 function wpbbshop_logo_html() {
-    if (function_exists('has_custom_logo') && has_custom_logo()) {
-        return get_custom_logo();
+    $logo_id = absint(function_exists('wpbbshop_get_theme_option') ? wpbbshop_get_theme_option('logo_id', '') : 0);
+    if ($logo_id) {
+        $img = wp_get_attachment_image($logo_id, 'full', false, array(
+            'class' => 'wpbbshop-logo-image wpbbshop-logo-image-custom',
+            'loading' => 'eager',
+            'decoding' => 'async',
+            'alt' => get_bloginfo('name') ?: 'WP BB Home & Garden',
+        ));
+        if ($img) {
+            return '<a class="wpbbshop-logo wpbbshop-brand-v410 is-custom" href="' . esc_url(home_url('/')) . '" aria-label="WP BB Home & Garden">' . $img . '</a>';
+        }
     }
-    $mark = '<svg class="wpbbshop-brand-svg" viewBox="0 0 56 56" aria-hidden="true" focusable="false"><path d="M11 31c0-9 7-16 17-16 10 0 17 7 17 16v13H11V31Z" fill="currentColor" opacity=".12"/><path d="M15 28 28 16l13 12v15H15V28Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M28 16c1-7 6-11 14-11-1 8-5 12-14 13" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M28 18c-2-6-7-9-13-8 1 7 5 10 13 10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
-    return '<a class="wpbbshop-logo wpbbshop-brand-v400" href="' . esc_url(home_url('/')) . '" aria-label="WP BB Home & Garden">' . $mark . '<span class="wpbbshop-brand-copy-v400"><strong>WP BB</strong><small>HOME &amp; GARDEN</small></span></a>';
+    $src = trailingslashit(get_stylesheet_directory_uri()) . 'assets/img/wpbb-home-garden-logo.svg?v=410';
+    return '<a class="wpbbshop-logo wpbbshop-brand-v410" href="' . esc_url(home_url('/')) . '" aria-label="WP BB Home & Garden"><img class="wpbbshop-logo-image" src="' . esc_url($src) . '" alt="WP BB Home & Garden" width="620" height="136" loading="eager" decoding="async"></a>';
 }
 
 function wpbbshop_category_icon_html($term = null, $force_default = true) {
@@ -484,6 +493,12 @@ function wpbbshop_yith_wishlist_button($product_id) {
 }
 
 function wpbbshop_yith_compare_button($product_id) {
+    if (function_exists('wp_theme_woo_support_compare_button') && function_exists('wc_get_product')) {
+        $product = wc_get_product(absint($product_id));
+        if ($product instanceof WC_Product) {
+            return wp_theme_woo_support_compare_button($product);
+        }
+    }
     return wpbbshop_native_action_button('compare', $product_id, __('Salīdzināt', 'wpbbshop'), '⇄');
 }
 
@@ -1543,16 +1558,20 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-green-v2.php';
 
 /* 2.2.0: bundled screenshot, favicon fallback, admin cleanup and frontend language trimming */
 function wpbbshop_favicon_fallback() {
-    if (function_exists('has_site_icon') && has_site_icon()) {
-        return;
-    }
     $base = trailingslashit(get_stylesheet_directory_uri()) . 'assets/img/';
-    echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url($base . 'favicon-32.png') . '">';
-    echo '<link rel="apple-touch-icon" sizes="180x180" href="' . esc_url($base . 'apple-touch-icon.png') . '">';
-    echo '<link rel="icon" type="image/png" sizes="192x192" href="' . esc_url($base . 'site-icon-192.png') . '">';
+    echo '<link rel="icon" type="image/svg+xml" href="' . esc_url($base . 'favicon.svg?v=410') . '">';
+    echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url($base . 'favicon-32.png?v=410') . '">';
+    echo '<link rel="apple-touch-icon" sizes="180x180" href="' . esc_url($base . 'apple-touch-icon.png?v=410') . '">';
+    echo '<link rel="icon" type="image/png" sizes="192x192" href="' . esc_url($base . 'site-icon-192.png?v=410') . '">';
 }
-add_action('wp_head', 'wpbbshop_favicon_fallback', 2);
-add_action('admin_head', 'wpbbshop_favicon_fallback', 2);
+add_action('after_setup_theme', function(){
+    remove_action('wp_head', 'wp_site_icon', 99);
+    remove_action('admin_head', 'wp_site_icon', 99);
+    remove_action('login_head', 'wp_site_icon', 99);
+}, 999);
+add_action('wp_head', 'wpbbshop_favicon_fallback', 1000);
+add_action('admin_head', 'wpbbshop_favicon_fallback', 1000);
+add_action('login_head', 'wpbbshop_favicon_fallback', 1000);
 
 function wpbbshop_admin_cleanup_assets() {
     $css = '.theme .theme-name#wp-bbtheme-child-woo-tech-shop-wpbbshop{font-weight:700;}';
@@ -1772,3 +1791,18 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v407-polylang-permalink
 
 /* 4.0.8 market-aware LV/UK shopping and comparison feeds. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v408-market-feeds.php';
+
+/* 4.0.9 scalable catalogue: language-safe category browsing, AJAX filters and load more. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v409-catalog-ajax.php';
+
+/* 4.0.10 final visual system: hero, compact departments, shop density, forced bundled branding. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v410-visual.php';
+
+/* 4.0.11 shop/category readability, filter alignment and variations quick-filter. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v411-shop-polish.php';
+
+/* 4.0.12 WP Theme Woo Support smart-filter/compare integration + header visibility. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v412-woo-support-integration.php';
+
+/* 4.0.13 final UI polish: green smart-filter controls + compact homepage hero/departments. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v413-ui-polish.php';

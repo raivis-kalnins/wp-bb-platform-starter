@@ -73,29 +73,6 @@ body.wpbbshop-theme a{ text-underline-offset:3px }
 .llg-logo .wpbbshop-brand-v400,
 .wpbbshop-logo-wrap .wpbbshop-brand-v400{overflow:visible!important;height:auto!important}
 
-/* Keep the fallback header logo readable beside the search field. */
-body.wpbbshop-theme #wpbbshop-desktop-mainbar>.ll24-logo .wpbbshop-logo.wpbbshop-brand-v400{
-  display:inline-flex!important;
-  align-items:center!important;
-  width:100%!important;
-  min-width:0!important;
-  max-width:100%!important;
-  gap:10px;
-}
-body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-svg{
-  width:54px;
-  height:54px;
-  flex:0 0 54px;
-}
-body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 strong{
-  font-size:30px!important;
-  line-height:1!important;
-}
-@media(max-width:1279px){
-  body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-svg{width:42px;height:42px;flex-basis:42px}
-  body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 strong{font-size:26px!important}
-  body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 small{font-size:10px!important}
-}
 /* Header scale/readability */
 @media(min-width:821px){
   body.wpbbshop-theme .llg-mainbar-preview{
@@ -146,10 +123,10 @@ body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 strong{
   max-width:760px;
   margin:0 0 18px!important;
   color:#fff!important;
-  font-size:clamp(34px,3.6vw,56px)!important;
-  line-height:1.12!important;
-  letter-spacing:-.03em;
-  font-weight:600;
+  font-size:clamp(42px,5vw,78px)!important;
+  line-height:.96!important;
+  letter-spacing:-.05em;
+  font-weight:850;
 }
 .wpbb-v400-hero-copy>p{
   max-width:700px;
@@ -190,13 +167,10 @@ body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 strong{
   background:var(--wpbb-v4-surface);
   box-shadow:0 22px 55px rgba(7,55,38,.09);
 }
-body.wpbbshop-theme .wpbb-v400-hero-media>img{
-  position:absolute;
-  inset:0;
+.wpbb-v400-hero-media>img{
   width:100%;
   height:100%;
-  max-height:none;
-  min-height:0;
+  min-height:500px;
   object-fit:cover;
   display:block;
 }
@@ -379,7 +353,7 @@ body.wpbbshop-theme .llg-site-footer{font-size:13px}
 @media(max-width:980px){
   body.wpbbshop-theme .wpbbshop-container,body.wpbbshop-theme .wpbb-v400-shell{width:min(100% - 30px,var(--wpbb-v4-shell))!important}
   .wpbb-v400-hero{grid-template-columns:1fr}
-  .wpbb-v400-hero-copy,.wpbb-v400-hero-media{min-height:430px}
+  .wpbb-v400-hero-copy,.wpbb-v400-hero-media,.wpbb-v400-hero-media>img{min-height:430px}
   .wpbb-v400-dept-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .wpbb-v400-projects{grid-template-columns:1fr}
   .wpbb-v400-services{grid-template-columns:1fr 1fr}
@@ -388,8 +362,8 @@ body.wpbbshop-theme .llg-site-footer{font-size:13px}
   body.wpbbshop-theme .wpbbshop-container,body.wpbbshop-theme .wpbb-v400-shell{width:min(100% - 22px,var(--wpbb-v4-shell))!important}
   .wpbb-v400-hero{padding-top:12px}
   .wpbb-v400-hero-copy{min-height:0;padding:34px 24px;border-radius:19px}
-  .wpbb-v400-hero h1{font-size:clamp(30px,6vw,38px)!important}
-  .wpbb-v400-hero-media{min-height:310px}
+  .wpbb-v400-hero h1{font-size:42px!important}
+  .wpbb-v400-hero-media,.wpbb-v400-hero-media>img{min-height:310px}
   .wpbb-v400-hero-card{left:12px;right:12px;bottom:12px;align-items:flex-start;flex-direction:column}
   .wpbb-v400-dept-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wpbb-v400-dept{grid-template-columns:38px minmax(0,1fr);padding:14px;min-height:104px}

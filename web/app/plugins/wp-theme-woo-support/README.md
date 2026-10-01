@@ -42,3 +42,15 @@ Store demo imports create a real WooCommerce Shop page menu item and product-cat
 ## Compatibility
 
 Requires WooCommerce for store features. Targets WordPress 6.6+ and PHP 8.0+. HPOS and Cart/Checkout block compatibility are declared by the plugin.
+
+
+## 3.5.0 archive integration
+
+The smart product filter and comparison engine can now be embedded by custom child themes without using the legacy IWS shortcode names directly:
+
+- `wp_theme_woo_support_filter_markup()`
+- `wp_theme_woo_support_filter_results_markup()`
+- `wp_theme_woo_support_compare_button()`
+- `wp_theme_woo_support_filter_product_item_html` filter for custom product-card rendering
+
+Store profile defaults to 24 products per request. On catalogues above 10,000 published products the expensive dynamic attribute-availability scan is skipped automatically; the cached filter options remain available. Parent-product SKU search uses WooCommerce's `wc_product_meta_lookup` table.

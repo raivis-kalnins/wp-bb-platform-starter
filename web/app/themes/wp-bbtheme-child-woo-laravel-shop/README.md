@@ -1,209 +1,76 @@
-# WP BB Home & Garden v4.0.8
+# WP BBTheme Child Woo Home & Garden Shop 4.0.13
 
-Polylang native front-page/category repair and WooCommerce permalink fallback for the shared demo catalogue.
+# WP BB Home & Garden Child Theme v4.0.11
 
-# WP BB Home & Garden Child Theme v4.0.0
+Large bilingual WooCommerce child theme for the WP BB Platform, designed for Home & Garden / DIY catalogues from small demos to very large product sets.
 
-Large bilingual WooCommerce child theme for the WP BB platform.
+## v4.0.11 visual + catalogue polish
 
-## v4 goals
+- Keeps the restored v4.0.10 homepage visual system: larger hero headline, better hero image crop, bundled WP BB Home & Garden logo/favicon assets, and compact 20-department grid.
+- Makes the Shop hero badges easier to read with high-contrast green pills and check icons.
+- Keeps category-first browsing but increases category-card text readability.
+- Rebuilds the desktop filter area into two aligned rows: search/category/price/sort first, quick filters/actions second.
+- Quick filters are now clear pill controls for **In stock**, **On sale**, and **Variations**.
+- The Variations filter uses WooCommerce's `product_type=variable` taxonomy rather than expensive post-meta scanning.
+- Apply/Reset buttons are the same height and aligned to the right on desktop.
+- Mobile filters remain collapsible and stack cleanly.
+- The centred green AJAX **Load more products** button remains the catalogue pagination model.
+- Existing indexed WooCommerce price/stock/SKU/popularity filtering remains in place.
 
-- Home & Garden / DIY catalogue UX suitable for tens of thousands of products.
-- English and Latvian storefront UI with a switchable default language.
-- One unified **Appearance → Home & Garden** administration page.
-- 500 lightweight demo products across 20 departments.
-- Demo product images served directly from bundled WebP assets (no Media Library/Imagick import required).
-- Market-aware comparison feeds: Latvia (KurPirkt.lv, Salidzini.lv, Ceno.lv) and UK (Google Merchant, PriceRunner, PriceSpy, idealo, Kelkoo).
-- Bedrock-safe feed routing: the theme no longer requires writing `kurpirkt.xml`, `salidzini.xml`, `ceno.xml` or `.htaccess` into the WordPress Core directory.
-- Riga pickup/contact address: **Bauskas 63 - 1a/k1, Riga, LV-1004**.
-- Cleaner WP BB Home & Garden fallback logo; WordPress Custom Logo remains supported and is no longer cleared by migration code.
-- Acorn/Blade child view support.
-- Svelte component source plus a live REST-powered admin status widget.
-- Compatibility status for WooCommerce, Polylang, ACF, BBuilder, Woo Support, UpdraftPlus, HPOS and object caching.
-- Bright high-contrast green design direction inspired by modern enterprise WordPress work, without copying another site's branding.
+## Language URLs
 
-## Unified admin
+With English first:
 
-Open:
+- English: `/`
+- Latvian: `/lv/`
 
-`Appearance → Home & Garden`
+With Latvian first:
 
-Tabs:
+- Latvian: `/`
+- English: `/en/`
 
-1. Demo catalogue
-2. Languages
-3. XML feeds
-4. Laravel / Svelte
-5. Performance
+## Market feeds
 
-The two legacy demo menu pages are hidden and legacy refresh actions now use the same 500-product catalogue engine.
+Market selection is independent from storefront language.
 
-## Demo catalogue
+Latvia:
+- KurPirkt
+- Salidzini
+- Ceno
 
-The demo generator uses SKUs:
+United Kingdom:
+- Google Merchant / Shopping
+- PriceRunner UK
+- PriceSpy UK
+- idealo UK
+- Kelkoo UK
 
-`HG-DEMO-0001` … `HG-DEMO-0500`
+## Large catalogue notes
 
-Demo products:
+For 100k+ products:
 
-- are safe to refresh in place;
-- keep their IDs;
-- receive bundled WebP product imagery;
-- do not create hundreds of Media Library attachments;
-- remain excluded from comparison feeds until replaced with real catalogue products.
+- keep product and category pages server-rendered for SEO;
+- use AJAX only for archive filters and load-more interactions;
+- use WooCommerce lookup tables and indexed taxonomies for filters;
+- keep Redis available but fail-fast;
+- use real cron/queues for feeds and imports;
+- consider OpenSearch/Elasticsearch/Meilisearch or a dedicated catalogue index when fuzzy search and faceting exceed what MySQL/Woo lookup tables should handle.
 
-## Languages
 
-Supported storefront languages:
+## 4.0.12 smart Woo Support integration
 
-- English (`en`)
-- Latvian (`lv`)
+- Uses WP Theme Woo Support 3.5.0 for the RackGroup-style smart AJAX filter engine.
+- Search, stock, sale, sort, category, brand, rating, price/dimensions and Woo attribute filters live in the reusable plugin.
+- Product compare now opens the plugin comparison modal from Home & Garden cards and the header.
+- Custom Home & Garden product cards are preserved inside plugin AJAX results.
+- Header logo is enlarged on desktop without shrinking the search/actions area.
 
-The default language can be changed from the Home & Garden admin page.
 
-The theme provides a WooCommerce-aware Polylang compatibility layer for page URLs and presentation. For complex translated variation/stock synchronisation, the official Polylang for WooCommerce add-on is still recommended.
+## 4.0.13 UI polish
 
-## Market-aware comparison feeds
-
-The commerce market is independent from Polylang language. In **Auto** mode the theme reads the WooCommerce base country:
-
-- `LV` -> KurPirkt.lv, Salidzini.lv, Ceno.lv
-- `GB` -> Google Merchant / Shopping, PriceRunner UK, PriceSpy UK, idealo UK, Kelkoo UK
-
-Manual Latvia/United Kingdom override is available under **Appearance -> Home & Garden -> XML feeds**. This means a UK shop can still use Latvian content, and a Latvian shop can still use English content.
-
-Public Latvia endpoints:
-
-- `/kurpirkt.xml`
-- `/salidzini.xml`
-- `/ceno.xml`
-
-Public UK endpoints:
-
-- `/google-shopping.xml` (Google Merchant RSS/XML)
-- `/pricerunner.tsv` (PriceRunner-oriented tab-separated feed)
-- `/pricespy.xml` (Google/Prisjakt-style XML)
-- `/idealo.csv` (idealo CSV importer fields)
-- `/kelkoo.xml` (Google Shopping XML, accepted by Kelkoo)
-
-Feeds are generated by WordPress and cached under the normal Bedrock uploads directory (`web/app/uploads/wpbbshop-feeds/`). Demo products stay excluded by `_wpbbshop_feed_exclude=yes`.
-
-## Laravel / Blade
-
-When the WP BB parent theme has Acorn available, the child theme renders the home page through:
-
-`resources/views/home-garden/home.blade.php`
-
-If Acorn/Blade is unavailable, the PHP renderer remains as a safe fallback.
-
-The admin Laravel/Svelte tab also lists Blade templates from both parent and child themes.
-
-## Svelte
-
-Development source:
-
-`resources/svelte/CatalogStatus.svelte`
-
-A dependency-free status widget is active in wp-admin immediately and uses:
-
-`/wp-json/wpbb/v1/catalog-status`
-
-The Svelte source can be compiled later with:
-
-```bash
-npm install
-npm run build:svelte
-```
-
-No `node_modules` directory is distributed.
-
-## Performance direction
-
-For large catalogues:
-
-- department terms are cached;
-- search uses WooCommerce's indexed product lookup table for SKU matching;
-- demo imagery is loaded from theme files instead of generating attachment sizes;
-- XML feeds are cached and invalidated/deferred after product changes;
-- homepage sections use lazy/progressive rendering;
-- product grids remain WooCommerce-native for plugin compatibility;
-- HPOS and persistent object caching are detected in the platform status screen.
-
-## Parent/theme/plugin compatibility
-
-Designed to run with:
-
-- WP BBTheme parent
-- WooCommerce
-- WP BBuilder
-- WP Theme Woo Support
-- ACF / ACF Pro
-- Polylang
-- UpdraftPlus
-- Bedrock + Acorn
-
-## Restore notes
-
-When restoring an UpdraftPlus set, restore the database, plugins and the fixed themes archive together. On the first admin request v4 runs a migration that:
-
-- updates Home & Garden theme settings;
-- enables all three comparison feeds;
-- removes the old XML-root permission warning;
-- backfills demo image mappings;
-- updates managed Riga/contact content;
-- preserves the selected English/Latvian default;
-- refreshes rewrite rules and creates the feed cache directory.
-
-No manual SQL edits are required.
-
-
-## 4.0.3 maintenance
-
-- Dynamic KurPirkt, Salidzini and Ceno feeds only; no root XML/.htaccess writes.
-- Clears obsolete v3 feed-write warning.
-- Intended to be paired with the WP BB Platform Apache fallback/rewrite configuration.
-
-## 4.0.3 feed compatibility fix
-
-- Canonical feed URLs use the direct WordPress query endpoint (`/?wpbbshop_compare_feed=kurpirkt`, etc.), so feeds do not depend on writable root XML files or `.htaccess`.
-- Pretty `/kurpirkt.xml`, `/salidzini.xml`, `/ceno.xml` routes remain supported when the server already routes requests through WordPress.
-- The obsolete v3 XML-root/.htaccess warning is cleared on theme setup, `init`, and admin requests.
-
-## 4.0.4 stability fixes
-
-- Disables the parent WP BBTheme managed shell for this bespoke shop child theme, preventing duplicate headers and footers.
-- Removes legacy one-time full `wp_cache_flush()` hooks that can block Redis/object-cache on larger catalogues.
-- Defers Omniva locker refresh to WP-Cron instead of blocking the current page request.
-- Guards WordPress admin menu globals against early `remove_menu_page()` calls from third-party code.
-- Comparison feed links use direct WordPress query endpoints and do not require writable root XML files or `.htaccess`.
-- Adds a WordPress theme-directory `screenshot.png` generated from the current Home & Garden storefront.
-
-
-## 4.0.6 experience fixes
-
-- Repairs `/lv/` routing and ensures English/Latvian home translations.
-- Keeps demo/single products accessible while translations are being prepared.
-- Uses bundled local WebP demo images everywhere, including product singles.
-- Disables the parent cookie/PWA footer layer and supplies a compact child-owned EN/LV cookie banner.
-- Replaces the old Latvian-only “3 picks” workflow with multilingual **TOP products**, supporting up to 20 selected products in a swipe/slider row.
-- Registers Home & Garden block patterns for the Pattern Library.
-- Improves admin notice contrast.
-- Keeps the improved theme screenshot, fallback favicon assets and child-owned header/footer.
-
-## 4.0.6 bilingual catalogue repair
-
-- Primary language can be changed between English and Latvian without hard-coded `/lv/` or `/en/` assumptions.
-- Header/mobile language switcher always exposes both EN and LV using Polylang-aware destination URLs.
-- Creates and links real EN/LV WooCommerce product-category translation pairs for all 20 Home & Garden departments.
-- Existing HG-DEMO products are attached to both translated department terms without duplicating products or stock.
-- Woo shop/category queries share the same demo inventory across EN/LV while the interface/category labels follow the active language.
-- Opening WP Admin once after update runs the repair automatically; switching the primary language re-runs the lightweight repair and flushes rewrites.
-
-## v4.0.8
-
-- Added Auto / Latvia / United Kingdom commerce-market selector.
-- Added Google Merchant, PriceRunner, PriceSpy, idealo and Kelkoo UK feeds.
-- Latvia feeds automatically disable in UK mode; UK feeds automatically disable in Latvia mode.
-- Market selection is independent from EN/LV Polylang language.
-- Added UK delivery defaults and idealo delivery-provider mapping.
-- Footer and Home & Garden feed status follow the active market.
+- Forces WP Theme Woo Support filter, range, compare and AJAX buttons into the Home & Garden green palette.
+- Prevents plugin result add-to-cart buttons from reverting to default blue.
+- Reduces the homepage hero H1 size/weight and prevents the action buttons from overlapping.
+- Rebalances the mower image crop and hero card spacing.
+- Makes the 20-department area a compact fixed-row grid without large vertical gaps.
+- Tightens project cards and homepage section spacing while preserving responsive layouts.

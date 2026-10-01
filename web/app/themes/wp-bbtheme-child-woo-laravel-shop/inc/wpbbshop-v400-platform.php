@@ -570,7 +570,7 @@ function wpbbshop_v400_admin_page() {
 add_action('admin_enqueue_scripts', function() {
     $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
     if ($page !== 'wpbbshop-platform') { return; }
-    wp_enqueue_style('wpbbshop-v400-admin', get_stylesheet_directory_uri().'/assets/css/v400-admin.css', array(), filemtime(get_stylesheet_directory().'/assets/css/v400-admin.css'));
+    wp_enqueue_style('wpbbshop-v400-admin', get_stylesheet_directory_uri().'/assets/css/v400-admin.css', array(), WPBBSHOP_V400_VERSION);
     wp_enqueue_script('wpbbshop-v400-status', get_stylesheet_directory_uri().'/assets/js/v400-admin-status.js', array(), WPBBSHOP_V400_VERSION, true);
     wp_localize_script('wpbbshop-v400-status', 'WPBBShopV400', array(
         'restUrl'=>esc_url_raw(rest_url('wpbb/v1/catalog-status')),
@@ -688,16 +688,6 @@ function wpbbshop_v400_home() {
 remove_shortcode('wpbbshop_home');
 add_shortcode('wpbbshop_home', 'wpbbshop_v400_home');
 
-// Block templates expand shortcodes before rendering core/shortcode blocks.
-// Preserve the homepage HTML instead of inserting paragraphs and grid-breaking line breaks.
-add_filter('render_block_core/shortcode', function($content, $block) {
-    $html = isset($block['innerHTML']) ? $block['innerHTML'] : '';
-    if (strpos($html, 'class="wpbb-v400-home"') !== false) {
-        return $html;
-    }
-    return $content;
-}, 10, 2);
-
 add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_style('wpbbshop-v400', get_stylesheet_directory_uri().'/assets/css/v400.css', array('wpbbshop-theme'), filemtime(get_stylesheet_directory().'/assets/css/v400.css'));
+    wp_enqueue_style('wpbbshop-v400', get_stylesheet_directory_uri().'/assets/css/v400.css', array('wpbbshop-theme'), WPBBSHOP_V400_VERSION);
 }, 999);

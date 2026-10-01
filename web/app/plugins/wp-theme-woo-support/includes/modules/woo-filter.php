@@ -21,7 +21,7 @@ function iws_filter_defaults() {
 	return array(
 		'enabled'         => 'yes',
 		'instant'         => 'yes',
-		'posts_per_page'  => 8,
+		'posts_per_page'  => function_exists( 'wp_theme_woo_support_profile' ) && 'store' === wp_theme_woo_support_profile() ? 24 : 8,
 		'price_max'       => 10000,
 		'dimension_max'   => 5000,
 		'show_price'      => 'yes',
@@ -175,6 +175,18 @@ function iws_filter_settings_page() {
 function iws_filter_register_shortcodes() {
 	add_shortcode( 'iws_product_filter', 'iws_product_filter_shortcode' );
 	add_shortcode( 'iws_product_filter_results', 'iws_product_filter_results_shortcode' );
+}
+
+/**
+ * Public integration API for WP BBTheme child themes.
+ * Themes can render the plugin-owned filter/results without depending on the
+ * historical IWS shortcode names.
+ */
+function wp_theme_woo_support_filter_markup( $args = array() ) {
+	return iws_product_filter_shortcode( is_array( $args ) ? $args : array() );
+}
+function wp_theme_woo_support_filter_results_markup( $args = array() ) {
+	return iws_product_filter_results_shortcode( is_array( $args ) ? $args : array() );
 }
 function iws_filter_frontend_needs_assets() {
 	if ( is_admin() ) {
@@ -398,6 +410,9 @@ function iws_product_filter_shortcode( $atts ) {
 			<input type="hidden" name="iws_filter_nonce" value="<?php echo esc_attr( wp_create_nonce( 'iws_filter_products' ) ); ?>">
 			<input type="hidden" name="paged" value="1">
 			<input type="hidden" name="posts_per_page" value="<?php echo esc_attr( $ppp ); ?>">
+			<?php if ( function_exists( 'pll_current_language' ) && pll_current_language( 'slug' ) ) : ?>
+				<input type="hidden" name="lang" value="<?php echo esc_attr( pll_current_language( 'slug' ) ); ?>">
+			<?php endif; ?>
 			<?php $iws_filter_context = iws_filter_current_taxonomy_context(); ?>
 			<?php if ( ! empty( $iws_filter_context['taxonomy'] ) && ! empty( $iws_filter_context['slug'] ) ) : ?>
 				<input type="hidden" name="iws_filter_context_taxonomy" value="<?php echo esc_attr( $iws_filter_context['taxonomy'] ); ?>">
@@ -686,6 +701,16 @@ function iws_filter_products_ajax() {
 }
 function iws_filter_available_attribute_values( $source ) {
 	global $wpdb;
+	// Dynamic availability is useful on small/medium stores, but building a
+	// complete product-id set on every filter request is too expensive on very
+	// large catalogues. Above the threshold, keep the cached attribute options
+	// visible instead of running an unbounded availability scan.
+	$counts = wp_count_posts( 'product' );
+	$published = isset( $counts->publish ) ? (int) $counts->publish : 0;
+	$dynamic_limit = (int) apply_filters( 'wp_theme_woo_support_dynamic_attribute_product_limit', 10000 );
+	if ( $dynamic_limit > 0 && $published > $dynamic_limit ) {
+		return array();
+	}
 	$source       = is_array( $source ) ? $source : array();
 	$clean_source = $source;
 	foreach ( $clean_source as $key => $value ) {
@@ -751,6 +776,9 @@ function iws_filter_build_query_args( $source ) {
 		'order'          => 'ASC',
 		'cache_results'  => true,
 	);
+	if ( ! empty( $source['lang'] ) ) {
+		$args['lang'] = sanitize_key( wp_unslash( $source['lang'] ) );
+	}
 	if ( is_array( $post_in ) ) {
 		$args['post__in'] = ! empty( $post_in ) ? array_values( array_unique( array_map( 'absint', $post_in ) ) ) : array( 0 );
 	}
@@ -844,14 +872,15 @@ function iws_filter_intersect_ids( $base, $ids ) {
 function iws_filter_search_product_ids( $term ) {
 	global $wpdb;
 	$like = '%' . $wpdb->esc_like( $term ) . '%';
+	$lookup = $wpdb->wc_product_meta_lookup;
 	$ids = $wpdb->get_col(
 		$wpdb->prepare(
 			"SELECT DISTINCT p.ID
 			FROM {$wpdb->posts} p
-			LEFT JOIN {$wpdb->postmeta} sku ON sku.post_id = p.ID AND sku.meta_key = '_sku'
+			LEFT JOIN {$lookup} l ON l.product_id = p.ID
 			WHERE p.post_type = 'product'
 			AND p.post_status = 'publish'
-			AND (p.post_title LIKE %s OR p.post_excerpt LIKE %s OR p.post_content LIKE %s OR sku.meta_value LIKE %s)",
+			AND (p.post_title LIKE %s OR p.post_excerpt LIKE %s OR p.post_content LIKE %s OR l.sku LIKE %s)",
 			$like,
 			$like,
 			$like,
@@ -970,7 +999,15 @@ function iws_filter_render_products_only( $q ) {
 	if ( $q->have_posts() ) {
 		while ( $q->have_posts() ) {
 			$q->the_post();
-			wc_get_template_part( 'content', 'product' );
+			$product = wc_get_product( get_the_ID() );
+			$custom_html = $product instanceof WC_Product
+				? apply_filters( 'wp_theme_woo_support_filter_product_item_html', '', $product )
+				: '';
+			if ( is_string( $custom_html ) && '' !== trim( $custom_html ) ) {
+				echo $custom_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			} else {
+				wc_get_template_part( 'content', 'product' );
+			}
 		}
 	} else {
 		echo '<li class="product iws-no-products">' . esc_html__( 'No products found.', 'wp-theme-woo-support' ) . '</li>';
@@ -1101,21 +1138,24 @@ function iws_compare_product_payload( WC_Product $product ) {
 		'variations' => iws_compare_variations_payload( $product ),
 	);
 }
-function iws_compare_loop_button() {
-	if ( ! iws_filter_frontend_needs_assets() ) {
-		return;
+function wp_theme_woo_support_compare_button( $product = null ) {
+	if ( null === $product ) {
+		global $product;
 	}
-	global $product;
 	if ( ! $product instanceof WC_Product ) {
-		return;
-	}
-	if ( function_exists( 'is_product' ) && is_product() ) {
-		return;
+		return '';
 	}
 	$GLOBALS['iws_compare_has_products'] = true;
 	$payload = iws_compare_product_payload( $product );
-	echo '<button type="button" class="iws-compare-toggle" data-product-id="' . esc_attr( $product->get_id() ) . '" aria-label="' . esc_attr__( 'Add to comparison', 'wp-theme-woo-support' ) . '" aria-pressed="false"><span class="iws-compare-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" role="img"><path d="M5 8.5h14M5 15.5h14"/></svg></span></button>';
-	echo '<script type="application/json" class="iws-compare-product-data" data-product-id="' . esc_attr( $product->get_id() ) . '">' . wp_json_encode( $payload ) . '</script>';
+	return '<button type="button" class="iws-compare-toggle" data-product-id="' . esc_attr( $product->get_id() ) . '" aria-label="' . esc_attr__( 'Add to comparison', 'wp-theme-woo-support' ) . '" aria-pressed="false"><span class="iws-compare-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" role="img"><path d="M5 8.5h14M5 15.5h14"/></svg></span></button>'
+		. '<script type="application/json" class="iws-compare-product-data" data-product-id="' . esc_attr( $product->get_id() ) . '">' . wp_json_encode( $payload ) . '</script>';
+}
+function iws_compare_loop_button() {
+	if ( ! iws_filter_frontend_needs_assets() || ( function_exists( 'is_product' ) && is_product() ) ) {
+		return;
+	}
+	global $product;
+	echo wp_theme_woo_support_compare_button( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 function iws_compare_modal_markup() {
 	if ( is_admin() || empty( $GLOBALS['iws_compare_has_products'] ) ) {

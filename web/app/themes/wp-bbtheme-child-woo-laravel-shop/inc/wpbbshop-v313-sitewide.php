@@ -190,7 +190,7 @@ function wpbbshop_v313_css() {
     body.wpbbshop-theme .llg-archive-page{padding:28px 0 54px!important;background:#f5f7f9!important}
     body.wpbbshop-theme .llg-archive-page .wpbbshop-container{width:min(1480px,calc(100% - 48px))!important;max-width:1480px!important}
     body.wpbbshop-theme .wpbbshop-archive-layout{display:block!important;margin-top:18px!important}
-    body.wpbbshop-theme .wpbbshop-archive-filter-col{display:none!important}
+    body.wpbbshop-theme .wpbbshop-archive-filter-col{display:none!important} /* legacy sidebar replaced by v4.0.9 filter bar */
     body.wpbbshop-theme .wpbbshop-archive-products-col{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;float:none!important}
     body.wpbbshop-theme .wpbbshop-bootstrap-products,body.wpbbshop-theme .llg-v313-list-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important;width:100%!important;margin:0!important;padding:0!important}
     body.wpbbshop-theme .wpbbshop-bs-product-col{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;padding:0!important;float:none!important}
