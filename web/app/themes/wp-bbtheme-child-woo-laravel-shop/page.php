@@ -8,7 +8,7 @@ get_header(); ?>
 <?php if (function_exists('wpbbshop_seo_breadcrumbs_235')) { echo wpbbshop_seo_breadcrumbs_235(); } ?>
 <?php while (have_posts()) : the_post();
     $slug = get_post_field('post_name', get_the_ID());
-    $is_info = (function_exists('wpbbshop_information_page_definitions') && array_key_exists($slug, wpbbshop_information_page_definitions())) || in_array($slug, array('piegade-un-apmaksa','delivery-payment','about-us'), true);
+    $is_info = (function_exists('wpbbshop_information_page_definitions') && array_key_exists($slug, wpbbshop_information_page_definitions())) || in_array($slug, array('piegade-un-apmaksa','delivery-payment','atgriesana-un-garantija','returns-warranty','pirksanas-noteikumi','terms-and-conditions','terms-conditions','about-us'), true);
 ?>
   <header class="wpbbshop-page-heading<?php echo $is_info ? ' wpbbshop-info-heading' : ''; ?>">
     <?php if ($is_info) : ?><span class="wpbbshop-page-kicker">WP BB HOME & GARDEN</span><?php endif; ?>

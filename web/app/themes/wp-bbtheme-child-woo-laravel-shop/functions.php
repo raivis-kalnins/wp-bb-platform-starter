@@ -1222,7 +1222,7 @@ function wpbbshop_ensure_wc_core_pages_v18() {
         wp_insert_post(array(
             'post_type' => 'page',
             'post_status' => 'publish',
-            'post_title' => 'Preču atriešana',
+            'post_title' => 'Sekot pasūtījumam',
             'post_name' => 'track-your-order',
             'post_content' => '[woocommerce_order_tracking]',
         ));
@@ -1806,3 +1806,6 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v412-woo-support-integr
 
 /* 4.0.13 final UI polish: green smart-filter controls + compact homepage hero/departments. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v413-ui-polish.php';
+
+/* 4.0.14 final department grid + smart-filter range/compare control polish. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v414-final-ui.php';

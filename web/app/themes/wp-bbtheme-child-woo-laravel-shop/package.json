@@ -1,7 +1,7 @@
 {
   "name": "wpbb-home-garden-child",
   "private": true,
-  "version": "4.0.13",
+  "version": "4.0.14",
   "scripts": {
     "dev:svelte": "vite --config vite.svelte.config.js",
     "build:svelte": "vite build --config vite.svelte.config.js"
