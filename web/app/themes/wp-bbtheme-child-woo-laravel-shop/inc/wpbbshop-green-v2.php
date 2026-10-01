@@ -35,6 +35,8 @@ function wpbbshop_green_icon($name, $class = '') {
 }
 
 function wpbbshop_green_language_switcher_234() {
+    if (function_exists('wpbbshop_v407_language_switcher')) { return wpbbshop_v407_language_switcher(); }
+    if (function_exists('wpbbshop_v406_language_switcher')) { return wpbbshop_v406_language_switcher(); }
     $links = array();
     if (function_exists('pll_the_languages')) {
         $raw = pll_the_languages(array('raw'=>1,'hide_if_empty'=>0,'hide_if_no_translation'=>0));
@@ -66,6 +68,13 @@ function wpbbshop_green_category_links_309($limit = 12) {
     if (is_wp_error($terms) || !$terms) { return ''; }
     $blocked = array('accessories','apparel','bundles','home-living','office','tech');
     $terms = array_values(array_filter((array)$terms, function($term) use ($blocked){ return !empty($term->slug) && !in_array($term->slug,$blocked,true); }));
+    if (function_exists('pll_get_term_language') && function_exists('wpbbshop_v400_current_language')) {
+        $wanted = wpbbshop_v400_current_language();
+        $terms = array_values(array_filter($terms, function($term) use ($wanted){
+            $lang = pll_get_term_language($term->term_id, 'slug');
+            return !$lang || $lang === $wanted;
+        }));
+    }
     if (function_exists('wpbbshop_category_display_order')) { $terms = wpbbshop_category_display_order($terms); }
     $out='';
     foreach ($terms as $term) {
@@ -89,7 +98,7 @@ function wpbbshop_green_header_html() {
     $phone = trim((string) wpbbshop_get_theme_option('phone', ''));
     $email = trim((string) wpbbshop_get_theme_option('email', ''));
     $is_en = function_exists('wpbbshop_v305_is_english') ? wpbbshop_v305_is_english() : false;
-    $home = $is_en ? home_url('/') : home_url('/lv/');
+    $home = function_exists('wpbbshop_v407_language_home_url') ? wpbbshop_v407_language_home_url($is_en ? 'en' : 'lv') : ($is_en ? home_url('/') : home_url('/lv/'));
     $search_action = $home;
     $top_categories = get_terms(array('taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>20,'orderby'=>'count','order'=>'DESC','slug'=>array('instrumenti','specinstrumenti','servisa-aprikojums','darza-tehnika','rezerves-dalas','saimniecibas-preces')));
     $keywords = $is_en ? array('trimmer head','chain saw','compressor','generator','hand tools') : array('trimmera galva','ķēdes zāģis','kompresors','ģenerators','darba rīki');
@@ -436,7 +445,7 @@ function wpbbshop_green_footer_html() {
         <div class="llg-footer-col"><h4><?php echo $is_en?'Customers':'Klientiem'; ?></h4><?php echo wpbbshop_nav_menu('service',$service_fallback); ?></div>
         <div class="llg-footer-col"><h4><?php echo $is_en?'Contact':'Kontakti'; ?></h4><p class="llg-contact-list"><span><?php echo wpbbshop_green_icon('location'); ?> <?php echo esc_html($address); ?></span><?php if($phone): ?><span><?php echo wpbbshop_green_icon('phone'); ?> <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/','',$phone)); ?>"><?php echo esc_html($phone); ?></a></span><?php endif; ?><?php if($email): ?><span><?php echo wpbbshop_green_icon('mail'); ?> <a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></span><?php endif; ?><?php if($hours): ?><span><?php echo wpbbshop_green_icon('clock'); ?> <?php echo esc_html($hours); ?></span><?php endif; ?></p></div>
         <div class="llg-footer-col llg-footer-delivery"><h4><?php echo $is_en?'Delivery & payment':'Piegāde un apmaksa'; ?></h4><div class="llg-footer-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_delivery_partners','Unisend,Omniva,Latvijas Pasts,Kurjers')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div><div class="llg-footer-pills llg-payment-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_payment_methods','Skaidrā naudā,Bankas pārskaitījums,EveryPay / Swedbank')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div></div>
-        <div class="llg-footer-col llg-footer-partners-col"><h4><?php echo $is_en?'Price comparison':'Cenu salīdzināšana'; ?></h4><div class="llg-comparison-sites"><a href="https://www.kurpirkt.lv/" target="_blank" rel="noopener noreferrer">KurPirkt.lv</a><a href="https://www.salidzini.lv/" target="_blank" rel="noopener noreferrer">Salidzini.lv</a><a href="https://ceno.lv/" target="_blank" rel="noopener noreferrer">Ceno.lv</a></div><div class="llg-comparison-xml"><span><?php echo $is_en?'Product XML feeds':'Produktu XML plūsmas'; ?></span><a href="<?php echo esc_url(function_exists('wpbbshop_compare_feed_url') ? wpbbshop_compare_feed_url('kurpirkt') : home_url('/?wpbbshop_compare_feed=kurpirkt')); ?>" target="_blank" rel="noopener">KurPirkt XML</a><a href="<?php echo esc_url(function_exists('wpbbshop_compare_feed_url') ? wpbbshop_compare_feed_url('salidzini') : home_url('/?wpbbshop_compare_feed=salidzini')); ?>" target="_blank" rel="noopener">Salidzini XML</a><a href="<?php echo esc_url(function_exists('wpbbshop_compare_feed_url') ? wpbbshop_compare_feed_url('ceno') : home_url('/?wpbbshop_compare_feed=ceno')); ?>" target="_blank" rel="noopener">Ceno XML</a></div></div>
+        <div class="llg-footer-col llg-footer-partners-col"><h4><?php echo $is_en?'Price comparison':'Cenu salīdzināšana'; ?></h4><?php echo function_exists('wpbbshop_v408_footer_comparison_html') ? wpbbshop_v408_footer_comparison_html($is_en) : '<div class="llg-comparison-sites"><a href="https://www.kurpirkt.lv/" target="_blank" rel="noopener noreferrer">KurPirkt.lv</a><a href="https://www.salidzini.lv/" target="_blank" rel="noopener noreferrer">Salidzini.lv</a><a href="https://ceno.lv/" target="_blank" rel="noopener noreferrer">Ceno.lv</a></div>'; ?></div>
       </div></div>
       <div class="llg-footer-bottom"><div class="wpbbshop-container"><span>© <?php echo esc_html(date('Y')); ?> WP BB Home & Garden. <?php echo $is_en?'All rights reserved.':'Visas tiesības aizsargātas.'; ?></span><span class="llg-footer-meta">Riga • <?php echo $is_en?'Latvia':'Latvija'; ?> <span class="llg-footer-sep">•</span> <?php echo $is_en?'Developed by':'Izstrādāja'; ?> <a class="llg-developer-link" href="https://digitalpulse.click/" target="_blank" rel="noopener noreferrer">DigitalPulse.click</a></span></div></div>
     </footer>

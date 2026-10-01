@@ -1,5 +1,6 @@
 
 .wpbb-v400-admin{max-width:1280px;margin-top:20px}
+.wpbb-v400-admin .notice.is-dismissible .notice-dismiss{top:50%;transform:translateY(-50%)}
 .wpbb-v400-admin-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 30px;border-radius:20px;background:linear-gradient(135deg,#0d432f,#178f55);color:#fff;margin-bottom:18px}
 .wpbb-v400-admin-hero h1{color:#fff;margin:5px 0 6px;font-size:34px}
 .wpbb-v400-admin-hero p{margin:0;color:#dceee4;max-width:800px}
@@ -18,3 +19,6 @@
 .wpbb-v400-svelte{min-height:110px;padding:16px;border:1px dashed #98b7a2;border-radius:14px;background:#f4faf5}
 .wpbb-v400-svelte-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.wpbb-v400-svelte-grid div{padding:12px;border-radius:10px;background:#fff;border:1px solid #dce7df}.wpbb-v400-svelte-grid strong{display:block;font-size:20px;color:#0d432f}.wpbb-v400-svelte-grid span{font-size:11px;color:#607168}
 @media(max-width:800px){.wpbb-v400-admin-hero{align-items:flex-start}.wpbb-v400-admin-brand{display:none}.wpbb-v400-status-grid,.wpbb-v400-checks,.wpbb-v400-svelte-grid{grid-template-columns:1fr 1fr}.wpbb-v400-feed-list>div{grid-template-columns:1fr}}
+
+/* v4.0.8 market-aware feeds */
+.wpbb-v400-feed-market-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}.wpbb-v400-feed-market-card{padding:18px;border:1px solid #dce7df;border-radius:16px;background:#f9fbf9}.wpbb-v400-feed-market-card h3{margin:0 0 12px}.wpbb-v400-feed-market-card>label:not(.wpbb-v400-choice){display:grid;gap:6px;margin:10px 0;font-weight:600}.wpbb-v400-feed-market-card input[type=text],.wpbb-v400-feed-market-card input[type=number]{width:100%;max-width:320px}.wpbb-v400-feed-list>div{grid-template-columns:180px 48px minmax(0,1fr) auto}.wpbb-v400-feed-state{display:inline-flex;align-items:center;justify-content:center;min-width:40px;padding:3px 7px;border-radius:999px;background:#e9f7ee;color:#176b34;font-weight:700;font-size:11px}.wpbb-v400-feed-list .is-inactive-market{opacity:.55}.wpbb-v400-feed-list .is-inactive-market .wpbb-v400-feed-state{background:#f0f0f1;color:#646970}.wpbb-v408-feed-toggle{display:flex;align-items:center;gap:7px}.wpbb-v408-feed-toggle input{margin:0}@media(max-width:900px){.wpbb-v400-feed-market-grid{grid-template-columns:1fr}.wpbb-v400-feed-list>div{grid-template-columns:1fr}.wpbb-v400-feed-state{justify-self:start}}

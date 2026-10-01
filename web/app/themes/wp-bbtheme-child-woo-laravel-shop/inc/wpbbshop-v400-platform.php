@@ -8,7 +8,7 @@
 defined('ABSPATH') || exit;
 
 if (!defined('WPBBSHOP_V400_VERSION')) {
-    define('WPBBSHOP_V400_VERSION', '4.0.5');
+    define('WPBBSHOP_V400_VERSION', '4.0.8');
 }
 
 function wpbbshop_v400_primary_language() {
@@ -22,6 +22,13 @@ function wpbbshop_v400_primary_language() {
 }
 
 function wpbbshop_v400_current_language() {
+    // Respect an explicit /en/ or /lv/ prefix even when product queries are
+    // language-neutral so one WooCommerce inventory can be shared safely.
+    if (!empty($_SERVER['REQUEST_URI'])) {
+        $path = trim((string) parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH), '/');
+        $first = $path === '' ? '' : sanitize_key((string) strtok($path, '/'));
+        if (in_array($first, array('en', 'lv'), true)) { return $first; }
+    }
     if (function_exists('pll_current_language')) {
         $lang = sanitize_key((string) pll_current_language('slug'));
         if (in_array($lang, array('en', 'lv'), true)) { return $lang; }
@@ -141,6 +148,7 @@ function wpbbshop_v400_set_primary_language($lang) {
     update_option('WPLANG', $lang === 'lv' ? 'lv' : 'en_GB', false);
 
     wpbbshop_v400_ensure_home_translations($lang);
+    do_action('wpbbshop_primary_language_changed', $lang);
     return $lang;
 }
 
@@ -463,19 +471,60 @@ function wpbbshop_v400_admin_page() {
         </form>
         <p class="description"><?php echo esc_html($lv ? 'Sarežģītai daudzvalodu produktu/variāciju noliktavas sinhronizācijai ieteicams oficiālais Polylang for WooCommerce papildinājums.' : 'For complex multilingual product/variation stock synchronisation, the official Polylang for WooCommerce add-on remains recommended.'); ?></p>
       <?php elseif ($tab === 'feeds') : ?>
-        <h2>KurPirkt.lv / Salidzini.lv / Ceno.lv</h2>
-        <p><?php echo esc_html($lv ? 'Plūsmas tiek ģenerētas dinamiski un kešotas uploads mapē. Nav nepieciešami rakstāmi XML faili WordPress saknē vai .htaccess izmaiņas.' : 'Feeds are generated dynamically and cached under uploads. Writable XML files in the WordPress root and theme-managed .htaccess changes are not required.'); ?></p>
-        <div class="wpbb-v400-feed-list">
-          <?php foreach (array('kurpirkt','salidzini','ceno') as $feed) : ?>
-            <div><strong><?php echo esc_html(ucfirst($feed)); ?></strong><code><?php echo esc_html(home_url('/'.$feed.'.xml')); ?></code><a class="button button-small" target="_blank" href="<?php echo esc_url(home_url('/'.$feed.'.xml')); ?>"><?php echo esc_html($lv ? 'Atvērt XML' : 'Open XML'); ?></a></div>
+        <?php
+          $market = function_exists('wpbbshop_v408_resolved_market') ? wpbbshop_v408_resolved_market() : 'lv';
+          $base_country = function_exists('wpbbshop_v408_base_country') ? wpbbshop_v408_base_country() : 'LV';
+          $market_settings = function_exists('wpbbshop_v408_market_settings') ? wpbbshop_v408_market_settings() : array();
+          $services = function_exists('wpbbshop_v408_services') ? wpbbshop_v408_services() : array();
+        ?>
+        <h2><?php echo esc_html($lv ? 'Cenu salīdzināšanas un iepirkšanās plūsmas' : 'Comparison & shopping feeds'); ?></h2>
+        <p><?php echo esc_html($lv ? 'Tirgus ir neatkarīgs no vietnes valodas. Auto režīms izmanto WooCommerce bāzes valsti; vari paturēt latviešu valodu arī UK veikalam.' : 'Market selection is independent from site language. Auto mode follows the WooCommerce base country, so a UK shop can still keep Latvian content.'); ?></p>
+        <div class="wpbb-v400-status-row"><span><?php echo esc_html($lv ? 'Aktīvais tirgus' : 'Active market'); ?> · Woo <?php echo esc_html($base_country); ?></span><strong><?php echo esc_html($market === 'gb' ? 'UNITED KINGDOM' : 'LATVIA'); ?></strong></div>
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top:18px">
+          <input type="hidden" name="action" value="wpbbshop_v408_market_feeds">
+          <?php wp_nonce_field('wpbbshop_v408_market_feeds'); ?>
+          <div class="wpbb-v400-feed-market-grid">
+            <section class="wpbb-v400-feed-market-card">
+              <h3><?php echo esc_html($lv ? 'Tirgus režīms' : 'Market mode'); ?></h3>
+              <label class="wpbb-v400-choice"><input type="radio" name="wpbbshop_market[market_mode]" value="auto" <?php checked(isset($market_settings['market_mode'])?$market_settings['market_mode']:'auto','auto'); ?>> <?php echo esc_html($lv ? 'Auto — WooCommerce bāzes valsts' : 'Auto — WooCommerce base country'); ?></label>
+              <label class="wpbb-v400-choice"><input type="radio" name="wpbbshop_market[market_mode]" value="lv" <?php checked(isset($market_settings['market_mode'])?$market_settings['market_mode']:'auto','lv'); ?>> Latvia</label>
+              <label class="wpbb-v400-choice"><input type="radio" name="wpbbshop_market[market_mode]" value="gb" <?php checked(isset($market_settings['market_mode'])?$market_settings['market_mode']:'auto','gb'); ?>> United Kingdom</label>
+            </section>
+            <section class="wpbb-v400-feed-market-card">
+              <h3><?php echo esc_html($lv ? 'UK piegādes noklusējumi' : 'UK delivery defaults'); ?></h3>
+              <label><?php echo esc_html($lv ? 'Piegādes cena' : 'Delivery cost'); ?><input type="text" name="wpbbshop_market[uk_delivery_cost]" value="<?php echo esc_attr(isset($market_settings['uk_delivery_cost'])?$market_settings['uk_delivery_cost']:'4.95'); ?>"></label>
+              <label><?php echo esc_html($lv ? 'Piegādes dienas' : 'Delivery days'); ?><input type="number" min="0" name="wpbbshop_market[uk_delivery_days]" value="<?php echo esc_attr(isset($market_settings['uk_delivery_days'])?$market_settings['uk_delivery_days']:'3'); ?>"></label>
+              <label>idealo delivery provider<input type="text" name="wpbbshop_market[idealo_delivery_provider]" value="<?php echo esc_attr(isset($market_settings['idealo_delivery_provider'])?$market_settings['idealo_delivery_provider']:'dpd'); ?>" placeholder="dpd"></label>
+            </section>
+          </div>
+          <h3 style="margin-top:22px">Latvia</h3>
+          <div class="wpbb-v400-feed-list">
+          <?php foreach (array('kurpirkt','salidzini','ceno') as $feed) :
+              $meta = isset($services['lv'][$feed]) ? $services['lv'][$feed] : array('name'=>ucfirst($feed),'format'=>'XML');
+              $enabled = function_exists('wpbbshop_compare_feed_enabled') && wpbbshop_compare_feed_enabled($feed);
+              $url = function_exists('wpbbshop_compare_feed_url') ? wpbbshop_compare_feed_url($feed) : home_url('/?wpbbshop_compare_feed='.$feed); ?>
+            <div class="<?php echo $market==='lv'?'is-active-market':'is-inactive-market'; ?>"><strong><?php echo esc_html($meta['name']); ?></strong><span class="wpbb-v400-feed-state"><?php echo esc_html($enabled ? 'ON' : 'OFF'); ?></span><code><?php echo esc_html($url); ?></code><a class="button button-small" target="_blank" href="<?php echo esc_url($url); ?>">Open</a></div>
           <?php endforeach; ?>
-        </div>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-          <input type="hidden" name="action" value="wpbbshop_v400_feeds">
-          <?php wp_nonce_field('wpbbshop_v400_feeds'); ?>
-          <?php submit_button($lv ? 'Atjaunot XML kešu' : 'Regenerate XML cache'); ?>
+          </div>
+          <h3 style="margin-top:22px">United Kingdom</h3>
+          <div class="wpbb-v400-feed-list wpbb-v408-uk-feeds">
+          <?php foreach (array('google','pricerunner','pricespy','idealo','kelkoo') as $feed) :
+              $meta = isset($services['gb'][$feed]) ? $services['gb'][$feed] : array('name'=>ucfirst($feed),'format'=>'XML');
+              $checked = !empty($market_settings['enable_'.$feed]);
+              $enabled = function_exists('wpbbshop_v408_uk_service_enabled') && wpbbshop_v408_uk_service_enabled($feed);
+              $url = function_exists('wpbbshop_v408_market_feed_url') ? wpbbshop_v408_market_feed_url($feed) : ''; ?>
+            <div class="<?php echo $market==='gb'?'is-active-market':'is-inactive-market'; ?>"><label class="wpbb-v408-feed-toggle"><input type="checkbox" name="wpbbshop_market[enable_<?php echo esc_attr($feed); ?>]" value="1" <?php checked($checked); ?>><strong><?php echo esc_html($meta['name']); ?></strong></label><span class="wpbb-v400-feed-state"><?php echo esc_html($enabled ? 'ON' : 'OFF'); ?></span><code><?php echo esc_html($url); ?></code><a class="button button-small" target="_blank" href="<?php echo esc_url($url); ?>">Open <?php echo esc_html($meta['format']); ?></a></div>
+          <?php endforeach; ?>
+          </div>
+          <?php submit_button($lv ? 'Saglabāt tirgu un plūsmas' : 'Save market & feeds'); ?>
         </form>
-        <p class="description"><?php echo esc_html($lv ? '500 demo preces pēc noklusējuma netiek eksportētas uz cenu salīdzināšanas vietnēm. Reālie produkti tiek eksportēti.' : 'The 500 demo products are excluded from comparison services by default. Real products are exported.'); ?></p>
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+          <input type="hidden" name="action" value="wpbbshop_v408_regenerate_market_feeds">
+          <?php wp_nonce_field('wpbbshop_v408_regenerate_market_feeds'); ?>
+          <?php submit_button($lv ? 'Atjaunot aktīvā tirgus plūsmas' : 'Regenerate active market feeds', 'secondary'); ?>
+        </form>
+        <p class="description"><?php echo esc_html($lv ? 'Demo preces paliek izslēgtas. Google/Kelkoo izmanto Google Merchant XML; PriceSpy izmanto Google/Prisjakt XML; PriceRunner ir TSV; idealo ir CSV. Valoda un tirgus ir neatkarīgi.' : 'Demo products stay excluded. Google/Kelkoo use Google Merchant XML; PriceSpy uses Google/Prisjakt XML; PriceRunner uses TSV; idealo uses CSV. Language and market remain independent.'); ?></p>
+        <p class="description"><?php echo esc_html($lv ? 'Google gadījumā oficiālo WooCommerce Google Listings & Ads papildinājumu vari izmantot API sinhronizācijai; tēmas XML paliek kā faila plūsmas variants. PriceRunner/idealo partnera konts var prasīt konkrētu lauku kartējumu pirms produkcijas palaišanas.' : 'For Google you can still use the official WooCommerce Google Listings & Ads extension for API sync; the theme XML remains available as a file-feed option. PriceRunner/idealo onboarding can require account-specific field mapping before production use.'); ?></p>
       <?php elseif ($tab === 'templates') :
           $templates = wpbbshop_v400_blade_templates(); ?>
         <h2>Laravel / Acorn / Blade</h2>
@@ -521,7 +570,7 @@ function wpbbshop_v400_admin_page() {
 add_action('admin_enqueue_scripts', function() {
     $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
     if ($page !== 'wpbbshop-platform') { return; }
-    wp_enqueue_style('wpbbshop-v400-admin', get_stylesheet_directory_uri().'/assets/css/v400-admin.css', array(), WPBBSHOP_V400_VERSION);
+    wp_enqueue_style('wpbbshop-v400-admin', get_stylesheet_directory_uri().'/assets/css/v400-admin.css', array(), filemtime(get_stylesheet_directory().'/assets/css/v400-admin.css'));
     wp_enqueue_script('wpbbshop-v400-status', get_stylesheet_directory_uri().'/assets/js/v400-admin-status.js', array(), WPBBSHOP_V400_VERSION, true);
     wp_localize_script('wpbbshop-v400-status', 'WPBBShopV400', array(
         'restUrl'=>esc_url_raw(rest_url('wpbb/v1/catalog-status')),
@@ -629,7 +678,7 @@ function wpbbshop_v400_home() {
       <section class="wpbb-v400-shell wpbb-v400-services">
         <div><strong><?php echo esc_html($is_en?'Fast search':'Ātra meklēšana'); ?></strong><span><?php echo esc_html($is_en?'Name, brand, SKU and barcode.':'Nosaukums, zīmols, SKU un svītrkods.'); ?></span></div>
         <div><strong><?php echo esc_html($is_en?'Real stock':'Reāls atlikums'); ?></strong><span><?php echo esc_html($is_en?'WooCommerce stock and HPOS-ready commerce.':'WooCommerce noliktava un HPOS gatava komercija.'); ?></span></div>
-        <div><strong><?php echo esc_html($is_en?'Comparison feeds':'Cenu salīdzināšana'); ?></strong><span>KurPirkt.lv • Salidzini.lv • Ceno.lv</span></div>
+        <div><strong><?php echo esc_html($is_en?'Comparison feeds':'Cenu salīdzināšana'); ?></strong><span><?php echo esc_html(function_exists('wpbbshop_v408_active_service_names') ? implode(' • ', wpbbshop_v408_active_service_names()) : 'KurPirkt.lv • Salidzini.lv • Ceno.lv'); ?></span></div>
         <div><strong><?php echo esc_html($is_en?'Pickup in Riga':'Saņemšana Rīgā'); ?></strong><span>Bauskas 63 - 1a/k1, Riga, LV-1004</span></div>
       </section>
     </main>
@@ -639,6 +688,16 @@ function wpbbshop_v400_home() {
 remove_shortcode('wpbbshop_home');
 add_shortcode('wpbbshop_home', 'wpbbshop_v400_home');
 
+// Block templates expand shortcodes before rendering core/shortcode blocks.
+// Preserve the homepage HTML instead of inserting paragraphs and grid-breaking line breaks.
+add_filter('render_block_core/shortcode', function($content, $block) {
+    $html = isset($block['innerHTML']) ? $block['innerHTML'] : '';
+    if (strpos($html, 'class="wpbb-v400-home"') !== false) {
+        return $html;
+    }
+    return $content;
+}, 10, 2);
+
 add_action('wp_enqueue_scripts', function() {
-    wp_enqueue_style('wpbbshop-v400', get_stylesheet_directory_uri().'/assets/css/v400.css', array('wpbbshop-theme'), WPBBSHOP_V400_VERSION);
+    wp_enqueue_style('wpbbshop-v400', get_stylesheet_directory_uri().'/assets/css/v400.css', array('wpbbshop-theme'), filemtime(get_stylesheet_directory().'/assets/css/v400.css'));
 }, 999);

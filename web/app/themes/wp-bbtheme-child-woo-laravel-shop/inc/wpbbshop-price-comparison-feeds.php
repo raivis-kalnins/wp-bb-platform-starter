@@ -8,6 +8,7 @@
 defined('ABSPATH') || exit;
 
 function wpbbshop_compare_feed_enabled($feed) {
+    if (function_exists('wpbbshop_v408_market_allows_feed') && !wpbbshop_v408_market_allows_feed($feed)) { return false; }
     $key = $feed === 'salidzini' ? 'enable_salidzini_feed' : ($feed === 'ceno' ? 'enable_ceno_feed' : 'enable_kurpirkt_feed');
     return function_exists('wpbbshop_get_theme_option') && wpbbshop_get_theme_option($key, '1') === '1';
 }

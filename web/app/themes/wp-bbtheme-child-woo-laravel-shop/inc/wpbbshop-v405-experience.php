@@ -10,6 +10,7 @@ add_filter('wp_theme_site_essentials_enabled', '__return_false', PHP_INT_MAX);
 /* ---------- Language routing ---------- */
 add_filter('query_vars', function($vars){ $vars[]='wpbbshop_lv_home'; return $vars; });
 add_action('init', function(){
+    if (function_exists('wpbbshop_v407_polylang_native') && wpbbshop_v407_polylang_native()) return;
     add_rewrite_rule('^lv/?$', 'index.php?lang=lv&wpbbshop_lv_home=1', 'top');
     if ((string)get_option('wpbbshop_v405_rewrite_version','') !== WPBBSHOP_V405_VERSION) {
         flush_rewrite_rules(false);
@@ -17,6 +18,7 @@ add_action('init', function(){
     }
 }, 8);
 add_action('template_redirect', function(){
+    if (function_exists('wpbbshop_v407_polylang_native') && wpbbshop_v407_polylang_native()) return;
     if (!get_query_var('wpbbshop_lv_home')) return;
     status_header(200); nocache_headers();
     get_header(); echo do_shortcode('[wpbbshop_home]'); get_footer(); exit;

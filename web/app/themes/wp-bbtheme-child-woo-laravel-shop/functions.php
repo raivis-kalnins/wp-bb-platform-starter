@@ -1761,3 +1761,14 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v404-stability.php';
 
 /* 4.0.5 language/product/cookie/TOP/pattern experience fixes. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v405-experience.php';
+
+
+/* 4.0.6 bilingual category + language switch repair. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v406-language-sync.php';
+
+
+/* 4.0.7 native Polylang + Woo permalink repair. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v407-polylang-permalinks.php';
+
+/* 4.0.8 market-aware LV/UK shopping and comparison feeds. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v408-market-feeds.php';
