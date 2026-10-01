@@ -73,6 +73,29 @@ body.wpbbshop-theme a{ text-underline-offset:3px }
 .llg-logo .wpbbshop-brand-v400,
 .wpbbshop-logo-wrap .wpbbshop-brand-v400{overflow:visible!important;height:auto!important}
 
+/* Keep the fallback header logo readable beside the search field. */
+body.wpbbshop-theme #wpbbshop-desktop-mainbar>.ll24-logo .wpbbshop-logo.wpbbshop-brand-v400{
+  display:inline-flex!important;
+  align-items:center!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  gap:10px;
+}
+body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-svg{
+  width:54px;
+  height:54px;
+  flex:0 0 54px;
+}
+body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 strong{
+  font-size:30px!important;
+  line-height:1!important;
+}
+@media(max-width:1279px){
+  body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-svg{width:42px;height:42px;flex-basis:42px}
+  body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 strong{font-size:26px!important}
+  body.wpbbshop-theme #wpbbshop-desktop-mainbar .wpbbshop-brand-copy-v400 small{font-size:10px!important}
+}
 /* Header scale/readability */
 @media(min-width:821px){
   body.wpbbshop-theme .llg-mainbar-preview{
