@@ -3,9 +3,10 @@
 
   function departmentColumns() {
     var width = window.innerWidth || document.documentElement.clientWidth || 1280;
-    if (width > 1180) return 5;
-    if (width > 820) return 4;
-    return 2;
+    if (width > 1100) return 4;
+    if (width > 760) return 3;
+    if (width > 480) return 2;
+    return 1;
   }
 
   function enforceDepartmentGrid() {
@@ -13,7 +14,7 @@
     if (!grid) return;
 
     var cols = departmentColumns();
-    var gap = cols === 2 ? 5 : 6;
+    var gap = cols === 1 ? 0 : 10;
     var usedGap = gap * (cols - 1);
     var basis = 'calc((100% - ' + usedGap + 'px) / ' + cols + ')';
 
@@ -95,18 +96,53 @@
         icon.setAttribute('aria-hidden', 'true');
         button.insertBefore(icon, button.firstChild);
       }
-      if (!icon.querySelector('svg') || icon.getAttribute('data-wpbb-icon') !== '414') {
+      if (!icon.querySelector('svg') || icon.getAttribute('data-wpbb-icon') !== '414-final4') {
         icon.innerHTML = compareSvg();
-        icon.setAttribute('data-wpbb-icon', '414');
+        icon.setAttribute('data-wpbb-icon', '414-final4');
       }
 
       var countNode = button.querySelector('.iws-compare-count');
       var count = countNode ? parseInt((countNode.textContent || '0').replace(/[^0-9]/g, ''), 10) || 0 : 0;
       var pressed = button.getAttribute('aria-pressed') === 'true';
-      var active = count > 0 || pressed || button.classList.contains('is-selected') || button.classList.contains('is-active');
+      var active = count > 0 || pressed || button.classList.contains('is-selected') || button.classList.contains('is-active') || button.classList.contains('active');
+      var green = '#0f7a49';
+      var ink = '#173426';
+      var fg = active ? '#ffffff' : green;
 
       button.setAttribute('data-wpbb-has-compare', active ? '1' : '0');
       button.classList.toggle('has-products', active);
+
+      /* Woo Support 3.5 writes background-color inline with !important after
+         compare updates. CSS cannot beat that, so the theme owns the final
+         inline state too. */
+      button.style.setProperty('background-color', active ? green : '#ffffff', 'important');
+      button.style.setProperty('background-image', 'none', 'important');
+      button.style.setProperty('border-color', green, 'important');
+      button.style.setProperty('color', active ? '#ffffff' : ink, 'important');
+
+      icon.style.setProperty('display', 'inline-flex', 'important');
+      icon.style.setProperty('align-items', 'center', 'important');
+      icon.style.setProperty('justify-content', 'center', 'important');
+      icon.style.setProperty('width', '22px', 'important');
+      icon.style.setProperty('height', '22px', 'important');
+      icon.style.setProperty('color', fg, 'important');
+      icon.style.setProperty('opacity', '1', 'important');
+      icon.style.setProperty('visibility', 'visible', 'important');
+
+      icon.querySelectorAll('svg, path, line, polyline').forEach(function (node) {
+        node.style.setProperty('color', fg, 'important');
+        node.style.setProperty('stroke', fg, 'important');
+        node.style.setProperty('fill', 'none', 'important');
+        node.style.setProperty('opacity', '1', 'important');
+        node.style.setProperty('visibility', 'visible', 'important');
+      });
+
+      if (countNode) {
+        countNode.style.setProperty('display', active ? 'inline-flex' : 'none', 'important');
+        countNode.style.setProperty('background-color', active ? '#0b603a' : green, 'important');
+        countNode.style.setProperty('color', '#ffffff', 'important');
+        countNode.style.setProperty('border-color', '#ffffff', 'important');
+      }
     });
   }
 
@@ -154,7 +190,25 @@
     }, 120);
   });
 
-  document.addEventListener('iws:filter:loaded', queueCompareSync);
-  document.addEventListener('iws:filter:updated', queueCompareSync);
-  document.addEventListener('iwsProductsUpdated', queueCompareSync);
+  function settleCompareState() {
+    queueCompareSync();
+    window.setTimeout(syncCompareButtons, 0);
+    window.setTimeout(syncCompareButtons, 60);
+    window.setTimeout(syncCompareButtons, 180);
+  }
+
+  document.addEventListener('click', function (event) {
+    if (event.target && event.target.closest && event.target.closest('.iws-compare-toggle, .iws-compare-open--search, .iws-compare-remove, .iws-compare-clear-all')) {
+      settleCompareState();
+    }
+  }, true);
+  document.addEventListener('iws_compare_updated', settleCompareState);
+  document.addEventListener('iws:filter:loaded', settleCompareState);
+  document.addEventListener('iws:filter:updated', settleCompareState);
+  document.addEventListener('iwsProductsUpdated', settleCompareState);
+  window.addEventListener('storage', function (event) {
+    if (!event.key || event.key.toLowerCase().indexOf('compare') !== -1) {
+      settleCompareState();
+    }
+  });
 }());

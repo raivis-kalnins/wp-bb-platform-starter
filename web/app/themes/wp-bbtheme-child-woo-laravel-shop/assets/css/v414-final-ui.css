@@ -901,3 +901,161 @@ body.wpbbshop-theme .wpbbshop-404-actions a:hover{transform:translateY(-1px)!imp
   body.wpbbshop-theme .wpbbshop-404-page>.wpbbshop-container{width:calc(100% - 20px)!important}
   body.wpbbshop-theme .wpbbshop-404-card{padding:30px 18px!important;border-radius:15px!important}
 }
+
+/* ========================================================================
+ * v4.0.14 FINAL-4 — homepage readable department grid + hard compare state
+ * ===================================================================== */
+
+/* Keep all main homepage sections on exactly the same horizontal rhythm. */
+body.wpbbshop-theme .wpbb-v400-home > .wpbb-v400-shell,
+body.wpbbshop-theme .wpbb-v400-projects{
+  width:min(var(--wpbb-v4-shell,1480px),calc(100% - 48px))!important;
+  max-width:var(--wpbb-v4-shell,1480px)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  box-sizing:border-box!important;
+}
+
+/* Slightly calmer hero scale so the first card aligns visually with the grid. */
+@media (min-width:821px){
+  body.wpbbshop-theme .wpbb-v400-hero-copy,
+  body.wpbbshop-theme .wpbb-v400-hero-media{
+    height:410px!important;
+    min-height:410px!important;
+  }
+  body.wpbbshop-theme .wpbb-v400-hero h1{
+    max-width:610px!important;
+    font-size:clamp(38px,3.05vw,52px)!important;
+    line-height:1!important;
+  }
+}
+
+/* Departments: 4 wide readable columns on desktop, no tiny 5-column cards. */
+body.wpbbshop-theme .wpbb-v400-departments{
+  padding-top:22px!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-section-head{
+  margin-bottom:12px!important;
+  align-items:end!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-section-head h2{
+  font-size:clamp(27px,2.1vw,36px)!important;
+  line-height:1.08!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid{
+  display:flex!important;
+  flex-flow:row wrap!important;
+  gap:10px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:0!important;
+  height:auto!important;
+  align-items:stretch!important;
+  align-content:flex-start!important;
+  justify-content:flex-start!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid > .wpbb-v400-dept{
+  flex:0 0 calc((100% - 30px)/4)!important;
+  width:calc((100% - 30px)/4)!important;
+  max-width:calc((100% - 30px)/4)!important;
+  min-width:0!important;
+  min-height:72px!important;
+  height:auto!important;
+  padding:12px 14px!important;
+  border-radius:11px!important;
+  display:grid!important;
+  grid-template-columns:36px minmax(0,1fr)!important;
+  grid-template-rows:auto auto!important;
+  column-gap:10px!important;
+  row-gap:3px!important;
+  align-content:center!important;
+  align-items:center!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-icon{
+  grid-column:1!important;
+  grid-row:1/3!important;
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  border-radius:9px!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-icon svg{
+  width:19px!important;
+  height:19px!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept strong{
+  grid-column:2!important;
+  grid-row:1!important;
+  align-self:end!important;
+  margin:0!important;
+  min-width:0!important;
+  font-size:14px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere!important;
+}
+body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept small{
+  grid-column:2!important;
+  grid-row:2!important;
+  align-self:start!important;
+  margin:0!important;
+  font-size:10px!important;
+  line-height:1.2!important;
+  white-space:normal!important;
+  color:#687b70!important;
+}
+body.wpbbshop-theme .wpbb-v400-projects{
+  gap:12px!important;
+  margin-top:16px!important;
+}
+body.wpbbshop-theme .wpbb-v400-products,
+body.wpbbshop-theme .wpbb-v400-products + .wpbb-v400-products{
+  padding-top:26px!important;
+}
+
+@media (max-width:1100px) and (min-width:761px){
+  body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid > .wpbb-v400-dept{
+    flex-basis:calc((100% - 20px)/3)!important;
+    width:calc((100% - 20px)/3)!important;
+    max-width:calc((100% - 20px)/3)!important;
+  }
+}
+@media (max-width:760px) and (min-width:481px){
+  body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid > .wpbb-v400-dept{
+    flex-basis:calc((100% - 10px)/2)!important;
+    width:calc((100% - 10px)/2)!important;
+    max-width:calc((100% - 10px)/2)!important;
+    min-height:68px!important;
+  }
+}
+@media (max-width:480px){
+  body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid{gap:8px!important}
+  body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid > .wpbb-v400-dept{
+    flex-basis:100%!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:66px!important;
+  }
+}
+
+/* Compare search button: stylesheet fallback. JS also writes the same values
+   inline with !important because Woo Support writes competing inline styles. */
+body.wpbbshop-theme .wpbbshop-v412-smart-filter button.iws-compare-open.iws-compare-open--search[data-wpbb-has-compare='1']{
+  background-color:var(--wpbb414-green)!important;
+  background-image:none!important;
+  border-color:var(--wpbb414-green)!important;
+  color:#fff!important;
+}
+body.wpbbshop-theme .wpbbshop-v412-smart-filter button.iws-compare-open.iws-compare-open--search[data-wpbb-has-compare='1'] .iws-compare-icon,
+body.wpbbshop-theme .wpbbshop-v412-smart-filter button.iws-compare-open.iws-compare-open--search[data-wpbb-has-compare='1'] .iws-compare-icon svg,
+body.wpbbshop-theme .wpbbshop-v412-smart-filter button.iws-compare-open.iws-compare-open--search[data-wpbb-has-compare='1'] .iws-compare-icon svg path{
+  color:#fff!important;
+  stroke:#fff!important;
+  opacity:1!important;
+  visibility:visible!important;
+}

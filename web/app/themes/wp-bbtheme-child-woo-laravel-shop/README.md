@@ -157,3 +157,12 @@ Build: **full fixed child-theme package**
 - Forces homepage department cards into a continuous flex row layout (5 / 4 / 2 columns), eliminating inherited grid placement that could create alternating blank cells.
 - Removes stale intrinsic-height spacing between departments, project cards and product sections.
 - Keeps the smart-filter compare icon visible with a real inline SVG and automatically turns the compare button green whenever its count is greater than zero.
+
+
+## v4.0.14 final-4 storefront corrections
+
+- Enlarges the homepage department/category cards to a readable 4-column desktop grid that uses the full storefront shell width.
+- Keeps category cards consecutive with no inherited staggered/empty grid cells.
+- Tightens alignment between hero, departments, project cards and product sections.
+- Fixes the Woo Support compare search button after selection by overriding its conflicting inline `!important` background state from the theme JavaScript layer.
+- Keeps the compare icon visible: green on white when empty, white on green when one or more products are selected.
