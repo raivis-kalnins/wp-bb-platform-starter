@@ -224,6 +224,9 @@ function wpbbshop_get_theme_options() {
 }
 
 function wpbbshop_get_theme_option($key, $default = '') {
+    if ($key === 'address' && function_exists('wpbbshop_v414_store_address')) {
+        return wpbbshop_v414_store_address();
+    }
     $options = wpbbshop_get_theme_options();
     return isset($options[$key]) ? $options[$key] : $default;
 }

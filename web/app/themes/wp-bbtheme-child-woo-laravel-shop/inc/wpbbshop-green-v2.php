@@ -98,6 +98,9 @@ function wpbbshop_green_header_html() {
     $phone = trim((string) wpbbshop_get_theme_option('phone', ''));
     $email = trim((string) wpbbshop_get_theme_option('email', ''));
     $is_en = function_exists('wpbbshop_v305_is_english') ? wpbbshop_v305_is_english() : false;
+    $is_uk = function_exists('wpbbshop_v414_is_uk_store') && wpbbshop_v414_is_uk_store();
+    $store_address = function_exists('wpbbshop_v414_store_address') ? wpbbshop_v414_store_address() : 'Bauskas 63 - 1a/k1, Riga, LV-1004';
+    $delivery_label = function_exists('wpbbshop_v414_delivery_label') ? wpbbshop_v414_delivery_label($is_en) : ($is_en ? 'Delivery across Latvia' : 'Piegāde visā Latvijā');
     $home = function_exists('wpbbshop_v407_language_home_url') ? wpbbshop_v407_language_home_url($is_en ? 'en' : 'lv') : ($is_en ? home_url('/') : home_url('/lv/'));
     $search_action = $home;
     $top_categories = get_terms(array('taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>20,'orderby'=>'count','order'=>'DESC','slug'=>array('instrumenti','specinstrumenti','servisa-aprikojums','darza-tehnika','rezerves-dalas','saimniecibas-preces')));
@@ -118,8 +121,8 @@ function wpbbshop_green_header_html() {
             <div class="llg-topbar">
                 <div class="wpbbshop-container llg-topbar-inner">
                     <div class="llg-topbar-left">
-                        <span><?php echo wpbbshop_green_icon('location'); ?> Bauskas 63 - 1a/k1, Riga, LV-1004</span>
-                        <span><?php echo wpbbshop_green_icon('truck'); ?> <?php echo $is_en ? 'Delivery across Latvia' : 'Piegāde visā Latvijā'; ?></span>
+                        <span><?php echo wpbbshop_green_icon('location'); ?> <?php echo esc_html($store_address); ?></span>
+                        <span><?php echo wpbbshop_green_icon('truck'); ?> <?php echo esc_html($delivery_label); ?></span>
                         <?php if ($phone) : ?><span><?php echo wpbbshop_green_icon('phone'); ?> <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/','',$phone)); ?>"><?php echo esc_html($phone); ?></a></span><?php endif; ?>
                         <?php if ($email) : ?><span><?php echo wpbbshop_green_icon('mail'); ?> <a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></span><?php endif; ?>
                     </div>
@@ -158,7 +161,7 @@ function wpbbshop_green_header_html() {
         </div>
 
         <div id="wpbbshop-mobile-header" class="llg-mobile-shell ll29-mobile-shell">
-            <div class="llg-mobile-top"><span><?php echo wpbbshop_green_icon('location'); ?> Bauskas 63 - 1a/k1, Riga, LV-1004</span><?php echo wpbbshop_green_language_switcher_234(); ?></div>
+            <div class="llg-mobile-top"><span><?php echo wpbbshop_green_icon('location'); ?> <?php echo esc_html($store_address); ?></span><?php echo wpbbshop_green_language_switcher_234(); ?></div>
             <div class="llg-mobile-brand"><?php echo wpbbshop_logo_html(); ?></div>
             <form role="search" method="get" class="llg-mobile-search ll29-mobile-search wpbbshop-ajax-search" data-ll-search-v="3033" action="<?php echo esc_url($search_action); ?>" autocomplete="off" style="box-sizing:border-box!important;position:relative!important;display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;width:calc(100% - 16px)!important;max-width:calc(100% - 16px)!important;height:46px!important;min-height:46px!important;max-height:46px!important;margin:0 8px 8px!important;padding:0!important;border:1px solid #d7e0e5!important;border-radius:9px!important;background:#fff!important;box-shadow:none!important;overflow:visible!important">
                 <div class="llg-mobile-search-cat" style="box-sizing:border-box!important;position:relative!important;flex:0 0 106px!important;width:106px!important;max-width:106px!important;height:44px!important;min-height:44px!important;max-height:44px!important;margin:0!important;padding:0!important;border:0!important;border-right:1px solid #e1e7eb!important;border-radius:8px 0 0 8px!important;background:#f8fafb!important;overflow:hidden!important"><select name="product_cat" aria-label="<?php echo esc_attr($is_en?'Category':'Kategorija'); ?>"><option value=""><?php echo $is_en?'Categories':'Kategorijas'; ?></option><?php if(!is_wp_error($top_categories)): foreach($top_categories as $term): ?><option value="<?php echo esc_attr($term->slug); ?>"><?php echo esc_html(wpbbshop_green_category_label_309($term->name,$term->slug)); ?></option><?php endforeach; endif; ?></select></div>
@@ -420,8 +423,11 @@ function wpbbshop_green_footer_html() {
     $phone=trim((string)wpbbshop_get_theme_option('phone',''));
     $email=trim((string)wpbbshop_get_theme_option('email',''));
     $hours=trim((string)wpbbshop_get_theme_option('work_hours','P.-Pk. 9:00 - 18:00 / S. 9:00 - 14:00'));
-    $address='Bauskas 63 - 1a/k1, Riga, LV-1004';
     $is_en=function_exists('wpbbshop_v305_is_english')&&wpbbshop_v305_is_english();
+    $is_uk=function_exists('wpbbshop_v414_is_uk_store')&&wpbbshop_v414_is_uk_store();
+    $address=function_exists('wpbbshop_v414_store_address')?wpbbshop_v414_store_address():'Bauskas 63 - 1a/k1, Riga, LV-1004';
+    $store_city=function_exists('wpbbshop_v414_store_city')?wpbbshop_v414_store_city():'Riga';
+    $store_country=function_exists('wpbbshop_v414_store_country')?wpbbshop_v414_store_country($is_en):($is_en?'Latvia':'Latvija');
     $wa_number=preg_replace('/[^0-9]/','',$phone);
     $footer_fallback=$is_en ? array(
       'About us'=>wpbbshop_page_url('about-us'),'Delivery & payment'=>wpbbshop_page_url('delivery-payment'),
@@ -440,14 +446,14 @@ function wpbbshop_green_footer_html() {
     ob_start(); ?>
     <footer class="llg-footer llg-preview-footer llg-footer-fixed">
       <div class="wpbbshop-container llg-footer-main"><div class="llg-footer-grid llg-footer-grid-fixed">
-        <div class="llg-footer-brand llg-footer-brand-fixed"><?php echo wpbbshop_logo_html(); ?><p><?php echo $is_en?'Practical products for home, work and garden. Delivery throughout Latvia with pickup in Riga.':'Praktiskas lietas mājai, darbam un dārzam. Piegāde visā Latvijā, saņemšana Rīgā.'; ?></p><?php if($facebook): ?><a class="llg-footer-social" href="<?php echo esc_url($facebook); ?>" target="_blank" rel="noopener noreferrer"><?php echo wpbbshop_green_icon('facebook'); ?> <?php echo $is_en?'Follow on Facebook':'Sekot Facebook'; ?></a><?php endif; ?></div>
+        <div class="llg-footer-brand llg-footer-brand-fixed"><?php echo wpbbshop_logo_html(); ?><p><?php echo $is_en ? ($is_uk ? 'Practical products for home, work and garden. Delivery throughout the UK with pickup in Northampton.' : 'Practical products for home, work and garden. Delivery throughout Latvia with pickup in Riga.') : 'Praktiskas lietas mājai, darbam un dārzam. Piegāde visā Latvijā, saņemšana Rīgā.'; ?></p><?php if($facebook): ?><a class="llg-footer-social" href="<?php echo esc_url($facebook); ?>" target="_blank" rel="noopener noreferrer"><?php echo wpbbshop_green_icon('facebook'); ?> <?php echo $is_en?'Follow on Facebook':'Sekot Facebook'; ?></a><?php endif; ?></div>
         <div class="llg-footer-col"><h4><?php echo $is_en?'Information':'Informācija'; ?></h4><?php echo wpbbshop_nav_menu('footer',$footer_fallback); ?></div>
         <div class="llg-footer-col"><h4><?php echo $is_en?'Customers':'Klientiem'; ?></h4><?php echo wpbbshop_nav_menu('service',$service_fallback); ?></div>
         <div class="llg-footer-col"><h4><?php echo $is_en?'Contact':'Kontakti'; ?></h4><p class="llg-contact-list"><span><?php echo wpbbshop_green_icon('location'); ?> <?php echo esc_html($address); ?></span><?php if($phone): ?><span><?php echo wpbbshop_green_icon('phone'); ?> <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/','',$phone)); ?>"><?php echo esc_html($phone); ?></a></span><?php endif; ?><?php if($email): ?><span><?php echo wpbbshop_green_icon('mail'); ?> <a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></span><?php endif; ?><?php if($hours): ?><span><?php echo wpbbshop_green_icon('clock'); ?> <?php echo esc_html($hours); ?></span><?php endif; ?></p></div>
         <div class="llg-footer-col llg-footer-delivery"><h4><?php echo $is_en?'Delivery & payment':'Piegāde un apmaksa'; ?></h4><div class="llg-footer-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_delivery_partners','Unisend,Omniva,Latvijas Pasts,Kurjers')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div><div class="llg-footer-pills llg-payment-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_payment_methods','Skaidrā naudā,Bankas pārskaitījums,EveryPay / Swedbank')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div></div>
         <div class="llg-footer-col llg-footer-partners-col"><h4><?php echo $is_en?'Price comparison':'Cenu salīdzināšana'; ?></h4><?php echo function_exists('wpbbshop_v408_footer_comparison_html') ? wpbbshop_v408_footer_comparison_html($is_en) : '<div class="llg-comparison-sites"><a href="https://www.kurpirkt.lv/" target="_blank" rel="noopener noreferrer">KurPirkt.lv</a><a href="https://www.salidzini.lv/" target="_blank" rel="noopener noreferrer">Salidzini.lv</a><a href="https://ceno.lv/" target="_blank" rel="noopener noreferrer">Ceno.lv</a></div>'; ?></div>
       </div></div>
-      <div class="llg-footer-bottom"><div class="wpbbshop-container"><span>© <?php echo esc_html(date('Y')); ?> WP BB Home & Garden. <?php echo $is_en?'All rights reserved.':'Visas tiesības aizsargātas.'; ?></span><span class="llg-footer-meta">Riga • <?php echo $is_en?'Latvia':'Latvija'; ?> <span class="llg-footer-sep">•</span> <?php echo $is_en?'Developed by':'Izstrādāja'; ?> <a class="llg-developer-link" href="https://digitalpulse.click/" target="_blank" rel="noopener noreferrer">DigitalPulse.click</a></span></div></div>
+      <div class="llg-footer-bottom"><div class="wpbbshop-container"><span>© <?php echo esc_html(date('Y')); ?> WP BB Home & Garden. <?php echo $is_en?'All rights reserved.':'Visas tiesības aizsargātas.'; ?></span><span class="llg-footer-meta"><?php echo esc_html($store_city); ?> • <?php echo esc_html($store_country); ?> <span class="llg-footer-sep">•</span> <?php echo $is_en?'Developed by':'Izstrādāja'; ?> <a class="llg-developer-link" href="https://digitalpulse.click/" target="_blank" rel="noopener noreferrer">DigitalPulse.click</a></span></div></div>
     </footer>
     <?php if($wa_number): ?><a class="llg-whatsapp-fab" href="https://wa.me/<?php echo esc_attr($wa_number); ?>" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3C9 3 3.4 8.4 3.4 15.1c0 2.4.7 4.7 2.1 6.7L4 29l7.5-1.9c1.4.7 3 .9 4.5.9 7 0 12.6-5.4 12.6-12.1S23 3 16 3Zm0 22.8c-1.4 0-2.8-.3-4-.9l-.9-.4-4.4 1.1 1.2-4.1-.6-.9c-1.1-1.7-1.7-3.7-1.7-5.7 0-5.5 4.7-10 10.5-10s10.5 4.5 10.5 10-4.8 10.9-10.6 10.9Zm5.8-7.4c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.8.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-2.1-1-3.5-1.9-4.9-4.3-.4-.7.4-.7 1.1-2.2.1-.2 0-.5-.1-.7-.1-.2-.8-1.8-1.1-2.5-.3-.6-.6-.5-.8-.5h-.7c-.3 0-.7.1-1 .5-.3.3-1.3 1.2-1.3 3 0 1.8 1.3 3.5 1.5 3.8.2.2 2.6 3.9 6.3 5.4 2.3 1 3.2 1.1 4.4.9 1.4-.2 1.9-.9 2.2-1.8.3-.9.3-1.6.2-1.8-.1-.2-.4-.3-.7-.4Z"/></svg></a><?php endif; ?>
     <button class="llg-scroll-top" type="button" aria-label="<?php echo esc_attr($is_en?'Back to top':'Atpakaļ uz augšu'); ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>

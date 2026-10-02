@@ -621,15 +621,24 @@ add_action('admin_post_wpbbshop_v400_feeds', function() {
 /** Home page v4 *******************************************************/
 function wpbbshop_v400_home() {
     $is_en = wpbbshop_v400_current_language() !== 'lv';
+    $is_uk = function_exists('wpbbshop_v414_is_uk_store') && wpbbshop_v414_is_uk_store();
+    $store_address = function_exists('wpbbshop_v414_store_address') ? wpbbshop_v414_store_address() : 'Bauskas 63 - 1a/k1, Riga, LV-1004';
+    $store_city = function_exists('wpbbshop_v414_store_city') ? wpbbshop_v414_store_city() : 'Riga';
+    $delivery_label = function_exists('wpbbshop_v414_delivery_label') ? wpbbshop_v414_delivery_label($is_en) : ($is_en ? 'Delivery across Latvia' : 'Piegāde visā Latvijā');
+    $pickup_label = function_exists('wpbbshop_v414_pickup_label') ? wpbbshop_v414_pickup_label($is_en) : ($is_en ? 'Pickup in Riga' : 'Saņemšana Rīgā');
     $shop = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/');
     $terms = function_exists('wpbbshop_megastore_department_terms_312') ? wpbbshop_megastore_department_terms_312() : array();
     $hero_image = get_stylesheet_directory_uri() . '/assets/img/hero-mower.jpg';
     $data = array(
         'is_en'=>$is_en,
+        'is_uk'=>$is_uk,
         'shop'=>$shop,
         'terms'=>$terms,
         'hero_image'=>$hero_image,
-        'address'=>'Bauskas 63 - 1a/k1, Riga, LV-1004',
+        'address'=>$store_address,
+        'store_city'=>$store_city,
+        'delivery_label'=>$delivery_label,
+        'pickup_label'=>$pickup_label,
         'featured_html'=>function_exists('wpbbshop_megastore_products_section_312') ? wpbbshop_megastore_products_section_312('featured', $is_en?'Popular products':'Populārākās preces', 12, $is_en?'Top picks':'Ieteikumi') : '',
         'sale_html'=>function_exists('wpbbshop_megastore_products_section_312') ? wpbbshop_megastore_products_section_312('sale', $is_en?'Offers & savings':'Akcijas un ietaupījumi', 8, $is_en?'Offers':'Akcijas') : '',
         'recent_html'=>function_exists('wpbbshop_megastore_products_section_312') ? wpbbshop_megastore_products_section_312('recent', $is_en?'New arrivals':'Jaunākās preces', 8, $is_en?'New':'Jaunumi') : '',
@@ -638,7 +647,11 @@ function wpbbshop_v400_home() {
     if (function_exists('wp_bb_blade')) {
         try {
             $rendered = wp_bb_blade('home-garden.home', $data, false);
-            if (is_string($rendered) && trim($rendered) !== '') { return $rendered; }
+            if (is_string($rendered) && trim($rendered) !== '') {
+                // The shortcode block is formatted after rendering; keep layout
+                // whitespace from becoming wpautop paragraphs and grid-cell breaks.
+                return str_replace(array("\r", "\n"), '', $rendered);
+            }
         } catch (Throwable $e) {}
     }
 
@@ -651,9 +664,9 @@ function wpbbshop_v400_home() {
           <h1><?php echo esc_html($is_en ? 'Big-project range. Fast everyday shopping.' : 'Plašs sortiments lieliem projektiem. Ātra ikdienas iepirkšanās.'); ?></h1>
           <p><?php echo esc_html($is_en ? 'Department-first navigation, quick SKU search and a WooCommerce architecture prepared for 40k+ products.' : 'Nodaļu navigācija, ātra SKU meklēšana un WooCommerce arhitektūra, kas sagatavota 40k+ precēm.'); ?></p>
           <div class="wpbb-v400-hero-actions"><a class="wpbb-v400-btn is-primary" href="<?php echo esc_url($shop); ?>"><?php echo esc_html($is_en?'Shop catalogue':'Skatīt katalogu'); ?></a><a class="wpbb-v400-btn is-ghost" href="#departments"><?php echo esc_html($is_en?'Browse departments':'Skatīt nodaļas'); ?></a></div>
-          <div class="wpbb-v400-trust"><span>40k+ <?php echo esc_html($is_en?'catalogue ready':'kataloga gatavība'); ?></span><span><?php echo esc_html($is_en?'Delivery across Latvia':'Piegāde visā Latvijā'); ?></span><span>Riga</span></div>
+          <div class="wpbb-v400-trust"><span>40k+ <?php echo esc_html($is_en?'catalogue ready':'kataloga gatavība'); ?></span><span><?php echo esc_html($delivery_label); ?></span><span><?php echo esc_html($store_city); ?></span></div>
         </div>
-        <div class="wpbb-v400-hero-media"><img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($is_en?'Garden machinery and home improvement':'Dārza tehnika un mājas labiekārtošana'); ?>" fetchpriority="high" decoding="async"><div class="wpbb-v400-hero-card"><strong><?php echo esc_html($is_en?'Store pickup':'Saņemšana veikalā'); ?></strong><span><?php echo esc_html('Bauskas 63 - 1a/k1, Riga, LV-1004'); ?></span></div></div>
+        <div class="wpbb-v400-hero-media"><img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($is_en?'Garden machinery and home improvement':'Dārza tehnika un mājas labiekārtošana'); ?>" fetchpriority="high" decoding="async"><div class="wpbb-v400-hero-card"><strong><?php echo esc_html($is_en?'Store pickup':'Saņemšana veikalā'); ?></strong><span><?php echo esc_html($store_address); ?></span></div></div>
       </section>
 
       <section id="departments" class="wpbb-v400-shell wpbb-v400-departments">
@@ -679,11 +692,11 @@ function wpbbshop_v400_home() {
         <div><strong><?php echo esc_html($is_en?'Fast search':'Ātra meklēšana'); ?></strong><span><?php echo esc_html($is_en?'Name, brand, SKU and barcode.':'Nosaukums, zīmols, SKU un svītrkods.'); ?></span></div>
         <div><strong><?php echo esc_html($is_en?'Real stock':'Reāls atlikums'); ?></strong><span><?php echo esc_html($is_en?'WooCommerce stock and HPOS-ready commerce.':'WooCommerce noliktava un HPOS gatava komercija.'); ?></span></div>
         <div><strong><?php echo esc_html($is_en?'Comparison feeds':'Cenu salīdzināšana'); ?></strong><span><?php echo esc_html(function_exists('wpbbshop_v408_active_service_names') ? implode(' • ', wpbbshop_v408_active_service_names()) : 'KurPirkt.lv • Salidzini.lv • Ceno.lv'); ?></span></div>
-        <div><strong><?php echo esc_html($is_en?'Pickup in Riga':'Saņemšana Rīgā'); ?></strong><span>Bauskas 63 - 1a/k1, Riga, LV-1004</span></div>
+        <div><strong><?php echo esc_html($pickup_label); ?></strong><span><?php echo esc_html($store_address); ?></span></div>
       </section>
     </main>
     <?php
-    return ob_get_clean();
+    return str_replace(array("\r", "\n"), '', ob_get_clean());
 }
 remove_shortcode('wpbbshop_home');
 add_shortcode('wpbbshop_home', 'wpbbshop_v400_home');

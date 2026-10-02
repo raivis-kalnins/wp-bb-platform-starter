@@ -13,6 +13,53 @@ if (!defined('WPBBSHOP_V414_VERSION')) {
     define('WPBBSHOP_V414_VERSION', '4.0.14');
 }
 
+
+/** Market-aware store identity used by the final storefront layer. */
+function wpbbshop_v414_is_uk_store() {
+    if (function_exists('wpbbshop_v408_resolved_market')) {
+        return wpbbshop_v408_resolved_market() === 'gb';
+    }
+    if (function_exists('wc_get_base_location')) {
+        $location = wc_get_base_location();
+        if (is_array($location) && !empty($location['country'])) {
+            return strtoupper((string) $location['country']) === 'GB';
+        }
+    }
+    $raw = (string) get_option('woocommerce_default_country', 'LV');
+    return strtoupper((string) strtok($raw, ':')) === 'GB';
+}
+
+function wpbbshop_v414_store_address() {
+    return wpbbshop_v414_is_uk_store()
+        ? '40 Brook Street, Northampton, NN1 2PE'
+        : 'Bauskas 63 - 1a/k1, Riga, LV-1004';
+}
+
+function wpbbshop_v414_store_city() {
+    return wpbbshop_v414_is_uk_store() ? 'Northampton' : 'Riga';
+}
+
+function wpbbshop_v414_store_country($english = true) {
+    if (wpbbshop_v414_is_uk_store()) {
+        return 'United Kingdom';
+    }
+    return $english ? 'Latvia' : 'Latvija';
+}
+
+function wpbbshop_v414_delivery_label($english = true) {
+    if (wpbbshop_v414_is_uk_store()) {
+        return $english ? 'Delivery across the UK' : 'Piegāde visā Apvienotajā Karalistē';
+    }
+    return $english ? 'Delivery across Latvia' : 'Piegāde visā Latvijā';
+}
+
+function wpbbshop_v414_pickup_label($english = true) {
+    if (wpbbshop_v414_is_uk_store()) {
+        return $english ? 'Pickup in Northampton' : 'Saņemšana Northampton';
+    }
+    return $english ? 'Pickup in Riga' : 'Saņemšana Rīgā';
+}
+
 add_action('wp_enqueue_scripts', function () {
     $css_file = get_stylesheet_directory() . '/assets/css/v414-final-ui.css';
     $js_file  = get_stylesheet_directory() . '/assets/js/v414-final-ui.js';
@@ -31,6 +78,30 @@ add_action('wp_enqueue_scripts', function () {
             'wpbbshop-v414-final-ui',
             get_stylesheet_directory_uri() . '/assets/js/v414-final-ui.js',
             array(),
+            (string) filemtime($js_file),
+            true
+        );
+    }
+}, PHP_INT_MAX);
+
+/* R5: unique cache-busting homepage department grid ownership layer. */
+add_action('wp_enqueue_scripts', function () {
+    $css_file = get_stylesheet_directory() . '/assets/css/v414-r5-home-grid.css';
+    $js_file  = get_stylesheet_directory() . '/assets/js/v414-r5-home-grid.js';
+
+    if (is_readable($css_file)) {
+        wp_enqueue_style(
+            'wpbbshop-v414-r5-home-grid',
+            get_stylesheet_directory_uri() . '/assets/css/v414-r5-home-grid.css',
+            array('wpbbshop-v414-final-ui'),
+            (string) filemtime($css_file)
+        );
+    }
+    if (is_readable($js_file)) {
+        wp_enqueue_script(
+            'wpbbshop-v414-r5-home-grid',
+            get_stylesheet_directory_uri() . '/assets/js/v414-r5-home-grid.js',
+            array('wpbbshop-v414-final-ui'),
             (string) filemtime($js_file),
             true
         );

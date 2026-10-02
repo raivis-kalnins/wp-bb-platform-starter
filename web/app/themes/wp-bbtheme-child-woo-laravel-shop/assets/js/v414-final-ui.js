@@ -3,8 +3,7 @@
 
   function departmentColumns() {
     var width = window.innerWidth || document.documentElement.clientWidth || 1280;
-    if (width > 1100) return 4;
-    if (width > 760) return 3;
+    if (width > 820) return 4;
     if (width > 480) return 2;
     return 1;
   }

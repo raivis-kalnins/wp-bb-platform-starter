@@ -149,6 +149,14 @@ After activating/updating the theme, clear page/cache/CDN caches and verify:
 Theme version: **4.0.14**  
 Build: **full fixed child-theme package**
 
+
+## R5 homepage category grid
+
+- Desktop homepage departments are forced to exactly four equal-width columns.
+- All 20 categories fill a compact 4 x 5 grid with no unused right-side column.
+- Category cards are shorter and denser while keeping names and product counts readable.
+- A separate cache-busting theme asset layer prevents older v4.0.14 CSS/JS from restoring the 3-column layout.
+
 ## 4.0.14 final-3 screenshot repairs
 
 - Uses `/terms-conditions/` as the canonical English Terms & Conditions page because that is the URL used by the storefront footer; the older `/terms-and-conditions/` URL redirects to it.
@@ -166,3 +174,9 @@ Build: **full fixed child-theme package**
 - Tightens alignment between hero, departments, project cards and product sections.
 - Fixes the Woo Support compare search button after selection by overriding its conflicting inline `!important` background state from the theme JavaScript layer.
 - Keeps the compare icon visible: green on white when empty, white on green when one or more products are selected.
+
+## 4.0.14 full-fixed R4
+
+- Homepage departments are four equal, full-width columns on desktop with larger readable cards.
+- UK market storefront identity is market-aware: `40 Brook Street, Northampton, NN1 2PE` is shown when the resolved WooCommerce market is GB.
+- UK header/footer/home labels use Northampton / United Kingdom rather than Riga / Latvia where those labels describe the active storefront.

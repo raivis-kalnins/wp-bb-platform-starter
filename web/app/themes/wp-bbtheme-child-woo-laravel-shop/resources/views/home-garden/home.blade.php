@@ -10,8 +10,8 @@
       </div>
       <div class="wpbb-v400-trust">
         <span>40k+ {{ $is_en ? 'catalogue ready' : 'kataloga gatavība' }}</span>
-        <span>{{ $is_en ? 'Delivery across Latvia' : 'Piegāde visā Latvijā' }}</span>
-        <span>Riga</span>
+        <span>{{ $delivery_label }}</span>
+        <span>{{ $store_city }}</span>
       </div>
     </div>
     <div class="wpbb-v400-hero-media">
@@ -50,6 +50,6 @@
     <div><strong>{{ $is_en ? 'Fast search' : 'Ātra meklēšana' }}</strong><span>{{ $is_en ? 'Name, brand, SKU and barcode.' : 'Nosaukums, zīmols, SKU un svītrkods.' }}</span></div>
     <div><strong>{{ $is_en ? 'Real stock' : 'Reāls atlikums' }}</strong><span>{{ $is_en ? 'WooCommerce stock and HPOS-ready commerce.' : 'WooCommerce noliktava un HPOS gatava komercija.' }}</span></div>
     <div><strong>{{ $is_en ? 'Comparison feeds' : 'Cenu salīdzināšana' }}</strong><span>KurPirkt.lv • Salidzini.lv • Ceno.lv</span></div>
-    <div><strong>{{ $is_en ? 'Pickup in Riga' : 'Saņemšana Rīgā' }}</strong><span>{{ $address }}</span></div>
+    <div><strong>{{ $pickup_label }}</strong><span>{{ $address }}</span></div>
   </section>
 </main>

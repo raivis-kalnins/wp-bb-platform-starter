@@ -3,6 +3,9 @@
 defined('ABSPATH') || exit;
 get_header();
 $is_en = function_exists('wpbbshop_v313_is_en') && wpbbshop_v313_is_en();
+$is_uk = function_exists('wpbbshop_v414_is_uk_store') && wpbbshop_v414_is_uk_store();
+$delivery_region = $is_uk ? 'Parcel lockers and courier across the UK' : 'Parcel lockers and courier across Latvia';
+$pickup_label = function_exists('wpbbshop_v414_pickup_label') ? wpbbshop_v414_pickup_label($is_en) : ($is_en ? 'Pickup in Riga' : 'Saņemšana Rīgā');
 while (have_posts()) : the_post();
     global $product;
     if (!$product || !is_a($product,'WC_Product')) { $product = wc_get_product(get_the_ID()); }
@@ -26,7 +29,7 @@ while (have_posts()) : the_post();
       <?php if ($product->get_short_description()) : ?><div class="llg-single-short"><?php echo wp_kses_post(wpautop($product->get_short_description())); ?></div><?php endif; ?>
       <div class="llg-single-buybox"><?php woocommerce_template_single_add_to_cart(); ?></div>
       <div class="llg-single-meta-row"><?php if ($cats) : ?><div><strong><?php echo esc_html($is_en?'Category':'Kategorija'); ?>:</strong> <?php echo wp_kses_post($cats); ?></div><?php endif; ?><?php if (function_exists('wpbbshop_product_quick_actions')) { echo wpbbshop_product_quick_actions($pid); } ?></div>
-      <div class="llg-single-trust-grid"><div><span><?php echo function_exists('wpbbshop_green_icon')?wpbbshop_green_icon('truck'):''; ?></span><strong><?php echo esc_html($is_en?'Fast delivery':'Ātra piegāde'); ?></strong><small><?php echo esc_html($is_en?'Parcel lockers and courier across Latvia':'Pakomāti un kurjers visā Latvijā'); ?></small></div><div><span><?php echo function_exists('wpbbshop_green_icon')?wpbbshop_green_icon('location'):''; ?></span><strong><?php echo esc_html($is_en?'Pickup in Riga':'Saņemšana Rīgā'); ?></strong><small><?php echo esc_html($is_en?'Free by arrangement':'Bezmaksas pēc vienošanās'); ?></small></div><div><span><?php echo function_exists('wpbbshop_green_icon')?wpbbshop_green_icon('shield'):''; ?></span><strong><?php echo esc_html($is_en?'Secure purchase':'Drošs pirkums'); ?></strong><small><?php echo esc_html($is_en?'Warranty and clear terms':'Garantija un skaidri noteikumi'); ?></small></div></div>
+      <div class="llg-single-trust-grid"><div><span><?php echo function_exists('wpbbshop_green_icon')?wpbbshop_green_icon('truck'):''; ?></span><strong><?php echo esc_html($is_en?'Fast delivery':'Ātra piegāde'); ?></strong><small><?php echo esc_html($is_en ? $delivery_region : 'Pakomāti un kurjers visā Latvijā'); ?></small></div><div><span><?php echo function_exists('wpbbshop_green_icon')?wpbbshop_green_icon('location'):''; ?></span><strong><?php echo esc_html($pickup_label); ?></strong><small><?php echo esc_html($is_en?'Free by arrangement':'Bezmaksas pēc vienošanās'); ?></small></div><div><span><?php echo function_exists('wpbbshop_green_icon')?wpbbshop_green_icon('shield'):''; ?></span><strong><?php echo esc_html($is_en?'Secure purchase':'Drošs pirkums'); ?></strong><small><?php echo esc_html($is_en?'Warranty and clear terms':'Garantija un skaidri noteikumi'); ?></small></div></div>
     </section>
   </article>
   <section class="llg-single-tabs"><?php woocommerce_output_product_data_tabs(); ?></section>
