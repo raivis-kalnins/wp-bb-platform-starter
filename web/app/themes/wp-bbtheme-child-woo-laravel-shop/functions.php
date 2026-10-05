@@ -1827,3 +1827,9 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v418-git-master-restore
 
 /* 4.0.19 final shipping width, LV Polylang pair repair, readable departments and LV hero. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v419-final-repairs.php';
+
+/* 4.0.20 final Woo shipping width + Polylang storefront/menu language repair. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v420-final.php';
+
+/* 4.0.21 checkout shipping, balanced load-more batches and Contact Google map. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v421-checkout-loadmore-map.php';

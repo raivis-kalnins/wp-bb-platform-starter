@@ -1,0 +1,121 @@
+/* WP BB Home & Garden v4.0.21 — checkout, catalogue batching and contact map. */
+
+/* CHECKOUT: JS merges the shipping heading + methods into one real colspan cell. */
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.wpbbshop-v421-shipping-row{
+  display:table-row!important;
+  width:auto!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.wpbbshop-v421-shipping-row>td[colspan="2"]{
+  display:table-cell!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:100%!important;
+  padding:12px 0!important;
+  text-align:left!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.wpbbshop-v421-shipping-row>td[colspan="2"]:before{
+  display:none!important;
+  content:none!important;
+}
+html body.woocommerce-checkout .wpbbshop-v421-shipping-heading,
+html body.woocommerce-checkout .wpbbshop-shipping-title{
+  display:block!important;
+  width:100%!important;
+  margin:0 0 10px!important;
+  color:#687983!important;
+  font-size:13px!important;
+  font-weight:750!important;
+  text-align:left!important;
+}
+html body.woocommerce-checkout .wpbbshop-v421-shipping-row .wpbbshop-shipping-full,
+html body.woocommerce-checkout .wpbbshop-v421-shipping-row #shipping_method,
+html body.woocommerce-checkout .wpbbshop-v421-shipping-row .woocommerce-shipping-methods{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-checkout .wpbbshop-v421-shipping-row #shipping_method>li,
+html body.woocommerce-checkout .wpbbshop-v421-shipping-row .woocommerce-shipping-methods>li{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+/* CONTACT: full-width map card follows the existing contact/form content. */
+html body.wpbbshop-theme .wpbbshop-v421-contact-map{
+  display:grid!important;
+  grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr)!important;
+  gap:0!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:390px!important;
+  margin:24px 0 0!important;
+  overflow:hidden!important;
+  border:1px solid #dce7e1!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  box-shadow:0 10px 30px rgba(18,51,44,.05)!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:34px!important;
+  background:linear-gradient(135deg,#f7fbf8,#edf7ef)!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-copy>span{
+  color:#178f55!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.12em!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-copy h2{
+  margin:8px 0 12px!important;
+  color:#12334a!important;
+  font-size:clamp(26px,2.2vw,36px)!important;
+  line-height:1.08!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-copy p{
+  margin:0 0 18px!important;
+  color:#5e7066!important;
+  font-size:15px!important;
+  line-height:1.55!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-copy a{
+  display:inline-flex!important;
+  align-self:flex-start!important;
+  min-height:42px!important;
+  align-items:center!important;
+  padding:0 15px!important;
+  border-radius:8px!important;
+  background:#178f55!important;
+  color:#fff!important;
+  font-size:13px!important;
+  font-weight:850!important;
+  text-decoration:none!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-frame{
+  min-width:0!important;
+  min-height:390px!important;
+}
+html body.wpbbshop-theme .wpbbshop-v421-contact-map-frame iframe{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:390px!important;
+  border:0!important;
+}
+
+@media(max-width:820px){
+  html body.wpbbshop-theme .wpbbshop-v421-contact-map{grid-template-columns:1fr!important}
+  html body.wpbbshop-theme .wpbbshop-v421-contact-map-copy{padding:24px!important}
+  html body.wpbbshop-theme .wpbbshop-v421-contact-map-frame,html body.wpbbshop-theme .wpbbshop-v421-contact-map-frame iframe{min-height:330px!important}
+}

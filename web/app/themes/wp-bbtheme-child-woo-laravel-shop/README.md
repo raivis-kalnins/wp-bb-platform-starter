@@ -229,3 +229,21 @@ Build: **full fixed child-theme package**
 - Prevents `wpautop` line breaks from becoming department-grid nodes.
 - Stops the v4.0.17 flex runtime layer from overriding the Git grid after page load.
 - Adds a WooCommerce cart shipping template override using one full-width `colspan` cell, so cart and checkout delivery choices fill the complete summary sidebar.
+
+## 4.0.20 final checkout and bilingual menu repair
+
+- Restores true table semantics in cart/checkout totals so the existing `colspan="2"` shipping cell spans the complete order-summary width instead of inheriting only the first checkout column.
+- Keeps every Royal Mail / Evri / DPD / Click & collect carrier card at 100% of the delivery block width.
+- Stops the v4.0.19 language-repair routine that incorrectly treated the latest database as if its managed page language assignments were corrupt.
+- Reasserts the canonical LV/EN Contact, Delivery & payment, Returns & warranty and Terms page pairs through Polylang.
+- Repairs the demo bootstrap menu-language mapping: English now uses the EN Main/Footer/Customer menus and Latvian uses the LV menu set.
+- Canonicalises custom policy/contact menu URLs to the active language, including `/lv/...` for Latvian while English remains the hidden-default root language.
+- Preserves the approved four-column homepage department grid and 17px/13px category typography.
+
+## 4.0.21 checkout, catalogue and Contact repairs
+
+- Checkout shipping is normalised after every WooCommerce checkout refresh into one real two-column-spanning cell, so Click & collect, Royal Mail, Evri and DPD use the complete order-summary width.
+- Smart-filter and native archive batches use 20 products: this is divisible by both the four-column and wide five-column desktop grids. A 25-product demo category now loads 20 initially and 5 on the final Load more click instead of 24 + 1.
+- English and Latvian Contact pages append a responsive Google Map using the active storefront address, including 40 Brook Street, Northampton, NN1 2PE for the UK market.
+- Existing v4.0.20 language/menu/database repairs and the approved four-column homepage department grid remain unchanged.
+

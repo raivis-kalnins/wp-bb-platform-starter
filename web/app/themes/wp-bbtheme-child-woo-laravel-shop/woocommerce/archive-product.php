@@ -24,10 +24,10 @@ get_header();
     <?php $wpbbshop_smart_filter = function_exists('wp_theme_woo_support_filter_markup') && function_exists('wp_theme_woo_support_filter_results_markup'); ?>
     <?php if ($wpbbshop_smart_filter) : ?>
       <section class="wpbbshop-v412-smart-filter" aria-label="<?php echo esc_attr(wpbbshop_v409_t('Product filters and comparison','Preču filtri un salīdzināšana')); ?>">
-        <?php echo wp_theme_woo_support_filter_markup(array('posts_per_page'=>24)); ?>
+        <?php echo wp_theme_woo_support_filter_markup(array('posts_per_page'=>20)); ?>
       </section>
       <section class="wpbbshop-archive-products-col wpbbshop-v412-plugin-results">
-        <?php echo wp_theme_woo_support_filter_results_markup(array('posts_per_page'=>24)); ?>
+        <?php echo wp_theme_woo_support_filter_results_markup(array('posts_per_page'=>20)); ?>
       </section>
     <?php else : ?>
       <?php echo function_exists('wpbbshop_v409_filter_panel') ? wpbbshop_v409_filter_panel() : ''; ?>

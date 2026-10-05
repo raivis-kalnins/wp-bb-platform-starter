@@ -158,8 +158,8 @@ function wpbbshop_v409_render_card($product) {
 }
 
 function wpbbshop_v409_build_query_args($request, $page = 1) {
-    $per_page = absint(wpbbshop_get_theme_option('archive_per_page','24'));
-    if ($per_page < 12) $per_page = 24;
+    $per_page = absint(wpbbshop_get_theme_option('archive_per_page','20'));
+    if ($per_page < 20) $per_page = 20;
     if ($per_page > 48) $per_page = 48;
     $page = max(1, absint($page));
     $meta_query = class_exists('WC') ? WC()->query->get_meta_query() : array();
