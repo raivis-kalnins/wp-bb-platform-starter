@@ -1812,3 +1812,18 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v413-ui-polish.php';
 
 /* 4.0.14 final department grid + smart-filter range/compare control polish. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v414-final-ui.php';
+
+/* 4.0.15 UK commerce, language consistency and full-width information pages. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v415-uk-commerce-language.php';
+
+/* 4.0.16 final cart/checkout width, performance and four-column home grid repair. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v416-final-fixes.php';
+
+/* 4.0.17 regression hardening: restore compact 4-column home departments and full-width Woo shipping. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v417-regression-hardening.php';
+
+/* 4.0.18 restore exact Git-master R5 home grid + structural full-width Woo shipping. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v418-git-master-restore.php';
+
+/* 4.0.19 final shipping width, LV Polylang pair repair, readable departments and LV hero. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v419-final-repairs.php';

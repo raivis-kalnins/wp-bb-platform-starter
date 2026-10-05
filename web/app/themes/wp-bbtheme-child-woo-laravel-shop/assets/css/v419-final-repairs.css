@@ -1,0 +1,241 @@
+/* WP BB Home & Garden v4.0.19 — final storefront repairs. */
+
+/* -------------------------------------------------------------------------
+ * HOME DEPARTMENTS: preserve Git R5 four-column grid, increase readability.
+ * ---------------------------------------------------------------------- */
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept strong{
+  font-size:17px!important;
+  font-weight:500!important;
+  line-height:1.1!important;
+  letter-spacing:-.01em!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept small{
+  font-size:13px!important;
+  line-height:1.05!important;
+  margin-top:2px!important;
+}
+
+/* -------------------------------------------------------------------------
+ * CART: remove table-column sizing from the summary body. Every normal row
+ * remains a two-column label/value row; delivery becomes one true full-width
+ * block, so there is no reserved empty column beside the carrier cards.
+ * ---------------------------------------------------------------------- */
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  table-layout:auto!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody>tr{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:start!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody>tr>th,
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody>tr>td{
+  display:block!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody>tr>td{
+  text-align:right!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody>tr.woocommerce-shipping-totals.shipping,
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table>tbody>tr.wpbbshop-shipping-full-row{
+  display:block!important;
+  width:100%!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping>td,
+html body.woocommerce-cart .llg-cart-summary-card tr.wpbbshop-shipping-full-row>td{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  text-align:left!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+/* -------------------------------------------------------------------------
+ * CHECKOUT: detach the totals footer from table column widths. Product rows
+ * keep their table layout; subtotal/delivery/total rows use a compact grid,
+ * while the delivery row spans the complete order-summary width.
+ * ---------------------------------------------------------------------- */
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot>tr{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:start!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot>tr>th,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot>tr>td{
+  display:block!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot>tr>td{
+  text-align:right!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot>tr.woocommerce-shipping-totals.shipping,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table>tfoot>tr.wpbbshop-shipping-full-row{
+  display:block!important;
+  width:100%!important;
+}
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping>td,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.wpbbshop-shipping-full-row>td{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  text-align:left!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+/* Carrier cards and supporting shipping copy use the whole resulting block. */
+html body.woocommerce-cart .wpbbshop-shipping-full,
+html body.woocommerce-checkout .wpbbshop-shipping-full,
+html body.woocommerce-cart #shipping_method,
+html body.woocommerce-checkout #shipping_method,
+html body.woocommerce-cart .woocommerce-shipping-methods,
+html body.woocommerce-checkout .woocommerce-shipping-methods,
+html body.woocommerce-cart .woocommerce-shipping-destination,
+html body.woocommerce-checkout .woocommerce-shipping-destination,
+html body.woocommerce-cart .woocommerce-shipping-calculator,
+html body.woocommerce-checkout .woocommerce-shipping-calculator{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+}
+html body.woocommerce-cart #shipping_method,
+html body.woocommerce-checkout #shipping_method,
+html body.woocommerce-cart .woocommerce-shipping-methods,
+html body.woocommerce-checkout .woocommerce-shipping-methods{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:8px!important;
+  margin:0!important;
+  padding:0!important;
+  list-style:none!important;
+}
+html body.woocommerce-cart #shipping_method>li,
+html body.woocommerce-checkout #shipping_method>li,
+html body.woocommerce-cart .woocommerce-shipping-methods>li,
+html body.woocommerce-checkout .woocommerce-shipping-methods>li{
+  display:grid!important;
+  grid-template-columns:20px minmax(0,1fr)!important;
+  align-items:start!important;
+  gap:9px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:11px 12px!important;
+  border:1px solid #dce7e0!important;
+  border-radius:9px!important;
+  background:#fbfdfb!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-cart #shipping_method>li>label,
+html body.woocommerce-checkout #shipping_method>li>label,
+html body.woocommerce-cart .woocommerce-shipping-methods>li>label,
+html body.woocommerce-checkout .woocommerce-shipping-methods>li>label{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-align:left!important;
+  line-height:1.35!important;
+}
+
+/* -------------------------------------------------------------------------
+ * LATVIAN HOME HERO: the longer LV copy must determine its own safe space.
+ * Keep the two hero panels aligned while preventing headline/action/trust
+ * overlap at desktop widths.
+ * ---------------------------------------------------------------------- */
+@media (min-width:821px){
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero{
+    align-items:stretch!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-copy,
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-media{
+    height:460px!important;
+    min-height:460px!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-copy{
+    padding:28px clamp(28px,2.5vw,42px)!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-eyebrow{
+    margin-bottom:12px!important;
+    padding:6px 10px!important;
+    font-size:10px!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero h1{
+    max-width:620px!important;
+    margin:0 0 11px!important;
+    font-size:clamp(36px,2.75vw,48px)!important;
+    line-height:1.02!important;
+    letter-spacing:-.035em!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-copy>p{
+    max-width:610px!important;
+    font-size:14px!important;
+    line-height:1.42!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-actions{
+    margin-top:13px!important;
+    gap:7px!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-actions .wpbb-v400-btn{
+    min-height:38px!important;
+    padding:0 13px!important;
+    font-size:12px!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-trust{
+    margin-top:10px!important;
+    gap:6px!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-trust span{
+    padding:6px 8px!important;
+    font-size:10px!important;
+  }
+  html body.wpbbshop-theme.wpbbshop-lang-lv .wpbb-v400-hero-media>img{
+    min-height:460px!important;
+  }
+}
+
+@media (max-width:820px){
+  html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept strong{font-size:16px!important}
+  html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept small{font-size:12px!important}
+}

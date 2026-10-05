@@ -1,0 +1,293 @@
+/* WP BB Home & Garden v4.0.17 — regression hardening.
+ * Restores the compact 4-column department layout, forces shipping methods to
+ * fill the complete cart/checkout summary width, and removes inherited spacer
+ * geometry from WooCommerce/account/info surfaces.
+ */
+
+/* -------------------------------------------------------------------------
+ * HOME: 20 departments, exactly four compact columns on desktop.
+ * Flex is used deliberately so old grid-column/nth-child placement rules cannot
+ * create the empty vertical slots seen after later Woo/UK fixes.
+ * ---------------------------------------------------------------------- */
+html body.wpbbshop-theme .wpbb-v400-departments{
+  width:min(1480px,calc(100% - 48px))!important;
+  max-width:1480px!important;
+  min-height:0!important;
+  height:auto!important;
+  margin:0 auto!important;
+  padding:16px 0 0!important;
+  content-visibility:visible!important;
+  contain:none!important;
+  contain-intrinsic-size:auto!important;
+  box-sizing:border-box!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-section-head{
+  margin:0 0 8px!important;
+  padding:0!important;
+  gap:12px!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-section-head h2{
+  margin:1px 0 0!important;
+  font-size:clamp(24px,1.75vw,32px)!important;
+  line-height:1.07!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid{
+  display:flex!important;
+  flex-flow:row wrap!important;
+  align-items:stretch!important;
+  align-content:flex-start!important;
+  justify-content:flex-start!important;
+  gap:6px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  grid-template-columns:none!important;
+  grid-template-rows:none!important;
+  grid-auto-rows:auto!important;
+  box-sizing:border-box!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid>.wpbb-v400-dept{
+  display:grid!important;
+  grid-template-columns:30px minmax(0,1fr)!important;
+  grid-template-rows:auto auto!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+  flex:0 0 calc((100% - 18px)/4)!important;
+  width:calc((100% - 18px)/4)!important;
+  max-width:calc((100% - 18px)/4)!important;
+  min-width:0!important;
+  min-height:58px!important;
+  height:58px!important;
+  margin:0!important;
+  padding:7px 10px!important;
+  gap:1px 8px!important;
+  align-content:center!important;
+  align-items:center!important;
+  justify-self:auto!important;
+  align-self:auto!important;
+  position:relative!important;
+  inset:auto!important;
+  float:none!important;
+  clear:none!important;
+  order:0!important;
+  transform:none!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-icon{
+  grid-column:1!important;
+  grid-row:1/3!important;
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  border-radius:8px!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-icon svg{width:17px!important;height:17px!important}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept strong{
+  grid-column:2!important;
+  grid-row:1!important;
+  min-width:0!important;
+  margin:0!important;
+  font-size:12.5px!important;
+  font-weight:800!important;
+  line-height:1.12!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept small{
+  grid-column:2!important;
+  grid-row:2!important;
+  min-width:0!important;
+  margin:1px 0 0!important;
+  font-size:9px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+html body.wpbbshop-theme .wpbb-v400-projects{
+  margin-top:10px!important;
+  margin-bottom:0!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  gap:8px!important;
+  min-height:0!important;
+  height:auto!important;
+  content-visibility:visible!important;
+  contain:none!important;
+}
+html body.wpbbshop-theme .wpbb-v400-products{
+  min-height:0!important;
+  height:auto!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+  padding-top:22px!important;
+  padding-bottom:0!important;
+  content-visibility:visible!important;
+  contain:none!important;
+  contain-intrinsic-size:auto!important;
+}
+
+/* -------------------------------------------------------------------------
+ * CART / CHECKOUT: shipping methods take the whole summary width.
+ * ---------------------------------------------------------------------- */
+html body.woocommerce-cart .llg-cart-summary-card table.shop_table,
+html body.woocommerce-checkout .llg-order-card .woocommerce-checkout-review-order-table,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table{
+  width:100%!important;
+  max-width:none!important;
+  table-layout:auto!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping,
+html body.woocommerce-cart .llg-cart-summary-card tr.shipping,
+html body.woocommerce-checkout .llg-order-card tr.woocommerce-shipping-totals.shipping,
+html body.woocommerce-checkout .llg-order-card tr.shipping,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.shipping{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping>td,
+html body.woocommerce-cart .llg-cart-summary-card tr.shipping>th,
+html body.woocommerce-cart .llg-cart-summary-card tr.shipping>td,
+html body.woocommerce-checkout .llg-order-card tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-checkout .llg-order-card tr.woocommerce-shipping-totals.shipping>td,
+html body.woocommerce-checkout .llg-order-card tr.shipping>th,
+html body.woocommerce-checkout .llg-order-card tr.shipping>td,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping>td{
+  display:block!important;
+  grid-column:1!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-checkout .llg-order-card tr.woocommerce-shipping-totals.shipping>th,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping>th{
+  padding:13px 0 7px!important;
+  border-bottom:0!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card tr.woocommerce-shipping-totals.shipping>td,
+html body.woocommerce-checkout .llg-order-card tr.woocommerce-shipping-totals.shipping>td,
+html body.woocommerce-checkout .woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals.shipping>td{
+  padding:0 0 13px!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card #shipping_method,
+html body.woocommerce-cart .llg-cart-summary-card .woocommerce-shipping-methods,
+html body.woocommerce-checkout .llg-order-card #shipping_method,
+html body.woocommerce-checkout .llg-order-card .woocommerce-shipping-methods,
+html body.woocommerce-checkout #shipping_method,
+html body.woocommerce-checkout .woocommerce-shipping-methods{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:8px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  list-style:none!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card #shipping_method>li,
+html body.woocommerce-cart .llg-cart-summary-card .woocommerce-shipping-methods>li,
+html body.woocommerce-checkout .llg-order-card #shipping_method>li,
+html body.woocommerce-checkout .llg-order-card .woocommerce-shipping-methods>li,
+html body.woocommerce-checkout #shipping_method>li,
+html body.woocommerce-checkout .woocommerce-shipping-methods>li{
+  display:grid!important;
+  grid-template-columns:20px minmax(0,1fr)!important;
+  align-items:start!important;
+  gap:8px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:10px 11px!important;
+  box-sizing:border-box!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card #shipping_method>li>label,
+html body.woocommerce-cart .llg-cart-summary-card .woocommerce-shipping-methods>li>label,
+html body.woocommerce-checkout .llg-order-card #shipping_method>li>label,
+html body.woocommerce-checkout .llg-order-card .woocommerce-shipping-methods>li>label,
+html body.woocommerce-checkout #shipping_method>li>label,
+html body.woocommerce-checkout .woocommerce-shipping-methods>li>label{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-align:left!important;
+}
+html body.woocommerce-cart .llg-cart-summary-card .woocommerce-shipping-destination,
+html body.woocommerce-cart .llg-cart-summary-card .woocommerce-shipping-calculator,
+html body.woocommerce-checkout .llg-order-card .woocommerce-shipping-destination,
+html body.woocommerce-checkout .llg-order-card .woocommerce-shipping-calculator{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  text-align:left!important;
+}
+
+/* Checkout/cart top spacing: remove empty Woo wrappers rather than reserving bands. */
+html body.woocommerce-checkout .woocommerce-notices-wrapper:empty,
+html body.woocommerce-checkout .woocommerce-form-login-toggle:empty,
+html body.woocommerce-checkout .woocommerce-form-coupon-toggle:empty,
+html body.woocommerce-cart .woocommerce-notices-wrapper:empty{
+  display:none!important;
+  height:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+}
+html body.woocommerce-checkout .llg-commerce-shell,
+html body.woocommerce-cart .llg-commerce-shell{padding-top:28px!important}
+
+/* Keep information pages wide and account navigation compact. */
+html body.wpbbshop-theme.wpbb-v416-wide-info .wpbbshop-page-shell,
+html body.wpbbshop-theme.wpbb-v416-wide-info main.wpbbshop-page-shell{
+  width:min(1480px,calc(100% - 48px))!important;
+  max-width:1480px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+html body.woocommerce-account .woocommerce-MyAccount-navigation ul,
+html body.woocommerce-account .llg-account-nav ul{display:grid!important;gap:4px!important;margin:0!important;padding:0!important}
+html body.woocommerce-account .woocommerce-MyAccount-navigation li,
+html body.woocommerce-account .llg-account-nav li{margin:0!important;padding:0!important;min-height:0!important;height:auto!important}
+html body.woocommerce-account .woocommerce-MyAccount-navigation a,
+html body.woocommerce-account .llg-account-nav a{display:flex!important;align-items:center!important;min-height:40px!important;height:40px!important;margin:0!important}
+
+@media(max-width:900px){
+  html body.wpbbshop-theme .wpbb-v400-departments{width:calc(100% - 28px)!important}
+  html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid>.wpbb-v400-dept{
+    flex-basis:calc((100% - 6px)/2)!important;
+    width:calc((100% - 6px)/2)!important;
+    max-width:calc((100% - 6px)/2)!important;
+  }
+}
+@media(max-width:520px){
+  html body.wpbbshop-theme .wpbb-v400-departments{width:calc(100% - 20px)!important}
+  html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid{gap:5px!important}
+  html body.wpbbshop-theme .wpbb-v400-departments .wpbb-v400-dept-grid>.wpbb-v400-dept{
+    flex-basis:100%!important;width:100%!important;max-width:100%!important
+  }
+}

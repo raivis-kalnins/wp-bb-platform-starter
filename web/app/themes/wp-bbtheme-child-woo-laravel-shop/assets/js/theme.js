@@ -678,7 +678,7 @@
     return ['wpbbshop_omniva','wpbbshop_unisend_parcel','wpbbshop_latvijas_pasts','wpbbshop_parcel'].indexOf(shippingBase(method))!==-1;
   }
   function isCourier(method){
-    return ['wpbbshop_unisend_courier','wpbbshop_oversize_courier','wpbbshop_courier'].indexOf(shippingBase(method))!==-1;
+    return ['wpbbshop_unisend_courier','wpbbshop_oversize_courier','wpbbshop_courier','wpbbshop_royal_mail','wpbbshop_evri','wpbbshop_dpd'].indexOf(shippingBase(method))!==-1;
   }
   function fillLockers(method){
     var provider=document.getElementById('wpbbshop_locker_provider');
@@ -725,6 +725,10 @@
 (function($){
   'use strict';
   function forceLatviaCalculator(){
+    /* The legacy storefront was Latvia-only. Do not rewrite the shipping
+       calculator when the active market is the UK; doing so can trigger
+       repeated WooCommerce cart recalculations and slow page updates. */
+    if(document.body && document.body.classList.contains('wpbb-v415-market-uk')) return;
     var country=document.getElementById('calc_shipping_country');
     if(!country) return;
     var changed=String(country.value||'').toUpperCase()!=='LV';

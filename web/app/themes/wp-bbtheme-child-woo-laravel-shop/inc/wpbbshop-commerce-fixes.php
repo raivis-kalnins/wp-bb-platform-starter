@@ -744,6 +744,11 @@ function wpbbshop_omniva_locker_locations() {
 }
 
 function wpbbshop_locker_suggestions() {
+    // UK storefront does not use Latvia parcel lockers. Returning early avoids
+    // unnecessary locker API/cache work during cart and checkout rendering.
+    if (function_exists('wpbbshop_v415_is_uk_market') && wpbbshop_v415_is_uk_market()) {
+        return array();
+    }
     $options = function_exists('wpbbshop_get_theme_options') ? wpbbshop_get_theme_options() : array();
     $defaults = array(
         'unisend'=>wpbbshop_lines_to_locker_list(isset($options['locker_locations_unisend']) ? $options['locker_locations_unisend'] : ''),
@@ -755,24 +760,40 @@ function wpbbshop_locker_suggestions() {
 
 
 add_action('woocommerce_after_checkout_billing_form', function($checkout) {
-    echo '<section class="wpbbshop-delivery-fields"><h3>Piegādes informācija</h3>';
+    $is_en = function_exists('wpbbshop_v415_is_english') ? wpbbshop_v415_is_english() : (substr((string) get_locale(), 0, 2) === 'en');
+    $is_uk = function_exists('wpbbshop_v415_is_uk_market') ? wpbbshop_v415_is_uk_market() : false;
+
+    $delivery_title = $is_en ? 'Delivery information' : 'Piegādes informācija';
+    echo '<section class="wpbbshop-delivery-fields"><h3>' . esc_html($delivery_title) . '</h3>';
+
     echo '<div class="wpbbshop-parcel-fields">';
     echo '<input type="hidden" id="wpbbshop_locker_provider" name="wpbbshop_locker_provider" value="' . esc_attr($checkout->get_value('wpbbshop_locker_provider')) . '">';
     woocommerce_form_field('wpbbshop_locker_location', array(
         'type'=>'text',
-        'label'=>'Pakomāts / adrese',
+        'label'=>$is_en ? 'Parcel locker / address' : 'Pakomāts / adrese',
         'required'=>false,
         'class'=>array('form-row-wide'),
         'custom_attributes'=>array('list'=>'wpbbshop-locker-options','autocomplete'=>'off'),
-        'placeholder'=>'Sāc rakstīt vai izvēlies no saraksta'
+        'placeholder'=>$is_en ? 'Start typing or choose from the list' : 'Sāc rakstīt vai izvēlies no saraksta'
     ), $checkout->get_value('wpbbshop_locker_location'));
-    echo '<datalist id="wpbbshop-locker-options"></datalist><p class="wpbbshop-field-help">Pakomāta piegāde: 3,90 €. Izvēlies konkrēto pakomātu; ja saraksts nav ielādēts, ieraksti precīzu pakomāta nosaukumu un adresi.</p></div>';
+    echo '<datalist id="wpbbshop-locker-options"></datalist><p class="wpbbshop-field-help">' . esc_html($is_en ? 'Choose the exact parcel locker or collection point for this delivery method.' : 'Pakomāta piegāde: 3,90 €. Izvēlies konkrēto pakomātu; ja saraksts nav ielādēts, ieraksti precīzu pakomāta nosaukumu un adresi.') . '</p></div>';
 
     echo '<div class="wpbbshop-courier-fields">';
-    woocommerce_form_field('wpbbshop_delivery_address', array('type'=>'text','label'=>'Piegādes adrese','required'=>false,'class'=>array('form-row-wide'),'placeholder'=>'Iela, mājas numurs, dzīvoklis'), $checkout->get_value('wpbbshop_delivery_address'));
-    woocommerce_form_field('wpbbshop_delivery_city', array('type'=>'text','label'=>'Pilsēta / apdzīvota vieta','required'=>false,'class'=>array('form-row-first')), $checkout->get_value('wpbbshop_delivery_city'));
-    woocommerce_form_field('wpbbshop_delivery_postcode', array('type'=>'text','label'=>'Pasta indekss','required'=>false,'class'=>array('form-row-last'),'placeholder'=>'LV-5001'), $checkout->get_value('wpbbshop_delivery_postcode'));
-    echo '<p class="wpbbshop-field-help wpbbshop-courier-help">UNISEND kurjers līdz 30 kg: 10,00 €. Lielgabarīta precēm WP BB Home & Garden piegādes cena tiek saskaņota atsevišķi.</p></div>';
+    woocommerce_form_field('wpbbshop_delivery_address', array(
+        'type'=>'text','label'=>$is_en ? 'Delivery address' : 'Piegādes adrese','required'=>false,'class'=>array('form-row-wide'),
+        'placeholder'=>$is_en ? 'House number and street' : 'Iela, mājas numurs, dzīvoklis'
+    ), $checkout->get_value('wpbbshop_delivery_address'));
+    woocommerce_form_field('wpbbshop_delivery_city', array(
+        'type'=>'text','label'=>$is_en ? 'Town / city' : 'Pilsēta / apdzīvota vieta','required'=>false,'class'=>array('form-row-first')
+    ), $checkout->get_value('wpbbshop_delivery_city'));
+    woocommerce_form_field('wpbbshop_delivery_postcode', array(
+        'type'=>'text','label'=>$is_en ? 'Postcode' : 'Pasta indekss','required'=>false,'class'=>array('form-row-last'),
+        'placeholder'=>$is_uk ? 'NN1 2PE' : 'LV-5001'
+    ), $checkout->get_value('wpbbshop_delivery_postcode'));
+    $help = ($is_uk && $is_en)
+        ? 'Enter the UK delivery address. The selected carrier and delivery price are shown in the order summary.'
+        : 'UNISEND kurjers līdz 30 kg: 10,00 €. Lielgabarīta precēm WP BB Home & Garden piegādes cena tiek saskaņota atsevišķi.';
+    echo '<p class="wpbbshop-field-help wpbbshop-courier-help">' . esc_html($help) . '</p></div>';
     echo '</section>';
 });
 

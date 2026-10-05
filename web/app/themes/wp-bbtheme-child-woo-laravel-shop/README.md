@@ -1,8 +1,18 @@
-# WP BBTheme Child Woo Home & Garden Shop — v4.0.14 Full Fixed Theme
+
+## v4.0.19 final repairs
+
+- Cart and checkout delivery methods now structurally span the full order-summary width; no empty table column remains beside Royal Mail, Evri, DPD or Click & collect.
+- Homepage department title text is larger at 17px / 500 weight; product counts are 13px on desktop.
+- Repairs Polylang language/translation relationships for the Latvian and English delivery, returns and terms page pairs.
+- Old root-level Latvian policy URLs redirect to their canonical `/lv/` pages instead of falling into the English default language.
+- Latvian homepage hero gets additional safe height and adjusted typography so the longer headline, buttons and trust chips do not overlap.
+- Retains the Git-master R5 four-column homepage department grid and all v4.0.18 fixes.
+
+# WP BBTheme Child Woo Home & Garden Shop — v4.0.16 Full Fixed Theme
 
 `wp-bbtheme-child-woo-laravel-shop` is the Home & Garden / DIY WooCommerce child theme used by the WP BB Platform. This ZIP is the **complete child theme**, not a patch and not a separate storefront-fixes plugin.
 
-The v4.0.14 repairs are loaded directly by the child theme from `inc/wpbbshop-v414-final-ui.php`, `assets/css/v414-final-ui.css` and `assets/js/v414-final-ui.js`.
+The current repairs are loaded directly by the child theme. v4.0.16 adds `inc/wpbbshop-v416-final-fixes.php`, `assets/css/v416-final-fixes.css` and `assets/js/v416-final-fixes.js` on top of the earlier integrated storefront layers.
 
 ## What this theme provides
 
@@ -34,7 +44,7 @@ All main homepage blocks use the same `wpbb-v400-shell` width, so the department
 
 ### Department grid
 
-- Dense 5-column desktop layout.
+- Exact 4-column desktop layout with compact, readable cards.
 - No inherited staggered/spanning positions.
 - Compact fixed-height category cards.
 - Responsive 4-column and 2-column layouts at smaller widths.
@@ -87,9 +97,9 @@ Activate **WP BBTheme Child Woo Home & Garden Shop** after the parent theme is a
 
 ### Important
 
-No separate **WP BB v4.0.14 Storefront Fixes** plugin is required. The fixes are part of this child theme.
+No separate storefront-fixes plugin is required. All repairs through v4.0.16 are part of this child theme.
 
-The existing WP BB Platform/WooCommerce integrations used by the project are unchanged. In the standard platform build, `wp-theme-woo-support` supplies the shared smart-filter engine while this child theme owns the Home & Garden presentation and final v4.0.14 styling.
+The existing WP BB Platform/WooCommerce integrations used by the project are unchanged. In the standard platform build, `wp-theme-woo-support` supplies the shared smart-filter engine while this child theme owns the Home & Garden presentation and final child-theme styling.
 
 ## Main theme files
 
@@ -180,3 +190,42 @@ Build: **full fixed child-theme package**
 - Homepage departments are four equal, full-width columns on desktop with larger readable cards.
 - UK market storefront identity is market-aware: `40 Brook Street, Northampton, NN1 2PE` is shown when the resolved WooCommerce market is GB.
 - UK header/footer/home labels use Northampton / United Kingdom rather than Riga / Latvia where those labels describe the active storefront.
+
+
+## 4.0.16 cart / checkout / home-grid final fixes
+
+- Cart and checkout shipping choices now expand across the complete order-summary width instead of leaving an empty right-hand column.
+- Replaces the v4.0.15 broad checkout MutationObserver with WooCommerce update-event hooks, preventing repeated DOM rewrites and reducing cart/checkout loading overhead.
+- UK checkout skips Latvia parcel-locker data/API work and renders the delivery information labels in English at source.
+- Reasserts the homepage department list as an exact four-column desktop grid with compact, readable cards and no missing fourth-column gap.
+- Information/policy pages use the full storefront content shell.
+- Keeps the existing UK address, Royal Mail / Evri / DPD / Click & collect methods, English Contact routing, My Account language fixes and comparison/filter repairs.
+- No extra fix plugin is required; all repairs are part of the child theme.
+
+## 4.0.15 UK commerce and language fixes
+
+- Adds a United Kingdom WooCommerce shipping zone when the UK market is active.
+- Adds built-in Click & collect Northampton, Royal Mail Tracked 48, Evri Standard and DPD Local shipping methods with editable WooCommerce instance costs.
+- Stops the legacy Latvia-only country/session enforcement when the UK market is active.
+- Makes cart and checkout shipping methods occupy the full order-summary width.
+- Uses English checkout/account/payment labels on the English storefront.
+- Fixes English Contact navigation so it resolves to `/contact/` instead of Latvian `/lv/kontakti/`.
+- Expands managed information pages to the full storefront grid width.
+- Makes the UK Delivery & payment page market-aware and uses the Northampton address.
+- Compacts My Account navigation and removes inherited blank gaps between menu items.
+
+
+## v4.0.17 regression hardening
+
+- Restores the compact four-column homepage department layout without empty slots.
+- Restores full-width UK delivery choices in cart and checkout summaries.
+- Prevents the legacy Latvia shipping-calculator JavaScript from rewriting UK sessions.
+- Removes later duplicate DOM-repair scripts that could slow cart/checkout updates.
+- Keeps v4.0.14-v4.0.16 policy-page, UK address, menu, account-language, compare and 404 fixes intact.
+- Tidies the Home & Garden admin success notice dismiss control.
+
+### 4.0.18
+- Restores the exact Git `master/web/app/themes/...` R5 four-column homepage department grid.
+- Prevents `wpautop` line breaks from becoming department-grid nodes.
+- Stops the v4.0.17 flex runtime layer from overriding the Git grid after page load.
+- Adds a WooCommerce cart shipping template override using one full-width `colspan` cell, so cart and checkout delivery choices fill the complete summary sidebar.

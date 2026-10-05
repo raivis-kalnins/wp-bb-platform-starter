@@ -94,7 +94,7 @@ add_action('wp_enqueue_scripts', function () {
             'wpbbshop-v414-r5-home-grid',
             get_stylesheet_directory_uri() . '/assets/css/v414-r5-home-grid.css',
             array('wpbbshop-v414-final-ui'),
-            (string) filemtime($css_file)
+            '4.0.14-r5'
         );
     }
     if (is_readable($js_file)) {
@@ -102,7 +102,7 @@ add_action('wp_enqueue_scripts', function () {
             'wpbbshop-v414-r5-home-grid',
             get_stylesheet_directory_uri() . '/assets/js/v414-r5-home-grid.js',
             array('wpbbshop-v414-final-ui'),
-            (string) filemtime($js_file),
+            '4.0.14-r5',
             true
         );
     }

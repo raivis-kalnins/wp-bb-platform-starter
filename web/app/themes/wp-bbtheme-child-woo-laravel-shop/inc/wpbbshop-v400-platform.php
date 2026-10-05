@@ -647,11 +647,7 @@ function wpbbshop_v400_home() {
     if (function_exists('wp_bb_blade')) {
         try {
             $rendered = wp_bb_blade('home-garden.home', $data, false);
-            if (is_string($rendered) && trim($rendered) !== '') {
-                // The shortcode block is formatted after rendering; keep layout
-                // whitespace from becoming wpautop paragraphs and grid-cell breaks.
-                return str_replace(array("\r", "\n"), '', $rendered);
-            }
+            if (is_string($rendered) && trim($rendered) !== '') { return str_replace(array("\r", "\n"), '', $rendered); }
         } catch (Throwable $e) {}
     }
 

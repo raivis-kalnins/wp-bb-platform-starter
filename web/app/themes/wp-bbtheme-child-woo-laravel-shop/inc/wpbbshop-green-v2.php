@@ -108,7 +108,7 @@ function wpbbshop_green_header_html() {
     $primary_fallback = $is_en ? array(
         'Home'=>$home,'Offers'=>add_query_arg('onsale','1',$shop),'New'=>add_query_arg('orderby','date',$shop),'Tools'=>home_url('/product-category/instrumenti/'),
         'Garden'=>home_url('/product-category/darza-tehnika/'),'Workshop'=>home_url('/product-category/servisa-aprikojums/'),'Spare parts'=>home_url('/product-category/rezerves-dalas/'),
-        'Contact'=>wpbbshop_page_url('kontakti')
+        'Contact'=>wpbbshop_page_url('contact')
     ) : array(
         'Sākums'=>$home,'Akcijas'=>add_query_arg('onsale','1',$shop),'Jaunumi'=>add_query_arg('orderby','date',$shop),'Instrumenti'=>home_url('/product-category/instrumenti/'),
         'Dārzam'=>home_url('/product-category/darza-tehnika/'),'Darbnīcai'=>home_url('/product-category/servisa-aprikojums/'),'Rezerves daļas'=>home_url('/product-category/rezerves-dalas/'),
@@ -129,7 +129,7 @@ function wpbbshop_green_header_html() {
                     <div class="llg-topbar-right">
                         <a href="<?php echo esc_url($is_en ? wpbbshop_page_url('about-us') : wpbbshop_page_url('par-mums')); ?>"><?php echo $is_en ? 'About us' : 'Par mums'; ?></a>
                         <a href="<?php echo esc_url($is_en ? wpbbshop_page_url('delivery-payment') : wpbbshop_page_url('piegade-un-apmaksa')); ?>"><?php echo $is_en ? 'Delivery & payment' : 'Piegāde un apmaksa'; ?></a>
-                        <a href="<?php echo esc_url(wpbbshop_page_url('kontakti')); ?>"><?php echo $is_en ? 'Contact' : 'Kontakti'; ?></a>
+                        <a href="<?php echo esc_url(wpbbshop_page_url($is_en ? 'contact' : 'kontakti')); ?>"><?php echo $is_en ? 'Contact' : 'Kontakti'; ?></a>
                         <?php if ($facebook) : ?><a aria-label="Facebook" href="<?php echo esc_url($facebook); ?>" target="_blank" rel="noopener noreferrer"><?php echo wpbbshop_green_icon('facebook'); ?></a><?php endif; ?>
                         <?php if ($instagram && $instagram !== '#') : ?><a aria-label="Instagram" href="<?php echo esc_url($instagram); ?>" target="_blank" rel="noopener noreferrer"><?php echo wpbbshop_green_icon('instagram'); ?></a><?php endif; ?>
                         <?php echo wpbbshop_green_language_switcher_234(); ?>
@@ -187,7 +187,7 @@ function wpbbshop_green_header_html() {
                 <div class="llg-mobile-utility">
                     <a href="<?php echo esc_url($is_en?wpbbshop_page_url('about-us'):wpbbshop_page_url('par-mums')); ?>"><?php echo $is_en?'About us':'Par mums'; ?></a>
                     <a href="<?php echo esc_url($is_en?wpbbshop_page_url('delivery-payment'):wpbbshop_page_url('piegade-un-apmaksa')); ?>"><?php echo $is_en?'Delivery & payment':'Piegāde un apmaksa'; ?></a>
-                    <a href="<?php echo esc_url(wpbbshop_page_url('kontakti')); ?>"><?php echo $is_en?'Contact':'Kontakti'; ?></a>
+                    <a href="<?php echo esc_url(wpbbshop_page_url($is_en ? 'contact' : 'kontakti')); ?>"><?php echo $is_en?'Contact':'Kontakti'; ?></a>
                 </div>
             </div>
         </div>
@@ -437,7 +437,7 @@ function wpbbshop_green_footer_html() {
       'Atgriešana un garantija'=>wpbbshop_page_url('atgriesana-un-garantija'),'Pirkšanas noteikumi'=>wpbbshop_page_url('pirksanas-noteikumi')
     );
     $service_fallback=$is_en ? array(
-      'Contact'=>wpbbshop_page_url('kontakti'),'My account'=>(function_exists('wc_get_page_permalink')?wc_get_page_permalink('myaccount'):home_url('/my-account/')),
+      'Contact'=>wpbbshop_page_url('contact'),'My account'=>(function_exists('wc_get_page_permalink')?wc_get_page_permalink('myaccount'):home_url('/my-account/')),
       'Cart'=>(function_exists('wc_get_cart_url')?wc_get_cart_url():home_url('/cart/')),'Track order'=>wpbbshop_page_url('track-your-order')
     ) : array(
       'Kontakti'=>wpbbshop_page_url('kontakti'),'Mans konts'=>(function_exists('wc_get_page_permalink')?wc_get_page_permalink('myaccount'):home_url('/my-account/')),
