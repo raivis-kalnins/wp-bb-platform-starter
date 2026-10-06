@@ -446,13 +446,13 @@ function wpbbshop_v400_admin_page() {
       <div class="wpbb-v400-panel">
       <?php if ($tab === 'demo') :
           $count = wpbbshop_v400_count_demo_products(); ?>
-        <h2><?php echo esc_html($lv ? '500 preču Home & Garden demo' : '500-product Home & Garden demo'); ?></h2>
-        <p><?php echo esc_html($lv ? 'Atjauno vienu un to pašu HG-DEMO katalogu bez dublikātiem. Demo preces izmanto vieglus attālinātus nodaļu attēlus ar tēmas WebP rezerves variantu, tāpēc Media Library imports un Imagick nav vajadzīgi.' : 'Refresh the same HG-DEMO catalogue without duplicates. Demo products use lightweight remote department images with bundled WebP fallback, so Media Library imports and Imagick are not required.'); ?></p>
+        <h2><?php echo esc_html($lv ? '500 preču Home & Garden demo' : '500+ product Home & Garden demo'); ?></h2>
+        <p><?php echo esc_html($lv ? 'Atjauno vienu un to pašu HG-DEMO katalogu bez dublikātiem. Demo preces izmanto vieglus attālinātus nodaļu attēlus ar tēmas WebP rezerves variantu, tāpēc Media Library imports un Imagick nav vajadzīgi.' : 'Refresh the same HG-DEMO catalogue without duplicates. v4.0.22 also adds bilingual product guides plus heating, cultivator and mini-tractor showcase products with variation-level availability. Demo products use lightweight theme imagery, so Media Library imports and Imagick are not required.'); ?></p>
         <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($count); ?></strong><span><?php echo esc_html($lv ? 'demo preces šobrīd' : 'demo products currently'); ?></span></div>
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
           <input type="hidden" name="action" value="wpbbshop_v400_seed">
           <?php wp_nonce_field('wpbbshop_v400_seed'); ?>
-          <?php submit_button($lv ? 'Izveidot / atjaunot 500 demo preces' : 'Create / refresh 500 demo products', 'primary', 'submit', false); ?>
+          <?php submit_button($lv ? 'Izveidot / atjaunot 500 demo preces' : 'Create / refresh demo catalogue', 'primary', 'submit', false); ?>
         </form>
         <form class="wpbb-v400-danger-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('<?php echo esc_js($lv ? 'Dzēst tikai tēmas demo preces?' : 'Delete only theme demo products?'); ?>');">
           <input type="hidden" name="action" value="wpbbshop_v400_remove_demo">

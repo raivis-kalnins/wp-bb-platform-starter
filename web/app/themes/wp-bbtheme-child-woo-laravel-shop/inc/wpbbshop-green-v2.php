@@ -343,10 +343,11 @@ function wpbbshop_green_product_card($product) {
         </div>
         <div class="llg-card-body">
             <div class="llg-card-kicker"><span class="<?php echo $stock?'is-instock':'is-outstock'; ?>"><?php echo $stock?($is_en?'In stock':'Ir noliktavā'):($is_en?'Out of stock':'Nav noliktavā'); ?></span><?php if($sku): ?><small>SKU: <?php echo esc_html($sku); ?></small><?php endif; ?></div>
+            <?php if($product->is_type('variable') && function_exists('wpbbshop_v422_variable_summary_html')) { echo wpbbshop_v422_variable_summary_html($product); } ?>
             <h3><a href="<?php echo esc_url($link); ?>"><?php echo esc_html($name); ?></a></h3>
             <?php if($rating>0): ?><div class="llg-card-rating"><span>★★★★★</span><small><?php echo esc_html(number_format($rating,1)); ?></small></div><?php else: ?><div class="llg-card-rating llg-card-rating-empty"><span>★★★★★</span></div><?php endif; ?>
             <div class="llg-card-bottom"><div class="llg-card-price"><?php echo wp_kses_post($product->get_price_html()); ?></div>
-            <?php if($product->is_purchasable()&&$stock): ?><a href="<?php echo esc_url($product->add_to_cart_url()); ?>" data-quantity="1" data-product_id="<?php echo esc_attr($id); ?>" class="button add_to_cart_button ajax_add_to_cart llg-card-cart <?php echo esc_attr($product->get_type()); ?>"><?php echo $is_en?'Add to cart':'Pievienot grozam'; ?></a><?php else: ?><a class="button llg-card-cart llg-card-details" href="<?php echo esc_url($link); ?>"><?php echo $is_en?'View product':'Skatīt preci'; ?></a><?php endif; ?></div>
+            <?php if($product->is_type('variable')): ?><a class="button llg-card-cart llg-card-details" href="<?php echo esc_url($link); ?>"><?php echo $is_en?'Choose options':'Izvēlēties variantu'; ?></a><?php elseif($product->is_purchasable()&&$stock): ?><a href="<?php echo esc_url($product->add_to_cart_url()); ?>" data-quantity="1" data-product_id="<?php echo esc_attr($id); ?>" class="button add_to_cart_button ajax_add_to_cart llg-card-cart <?php echo esc_attr($product->get_type()); ?>"><?php echo $is_en?'Add to cart':'Pievienot grozam'; ?></a><?php else: ?><a class="button llg-card-cart llg-card-details" href="<?php echo esc_url($link); ?>"><?php echo $is_en?'View product':'Skatīt preci'; ?></a><?php endif; ?></div>
         </div>
     </article>
     <?php return ob_get_clean();

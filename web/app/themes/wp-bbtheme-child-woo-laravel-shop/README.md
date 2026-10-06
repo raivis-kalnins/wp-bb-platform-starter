@@ -247,3 +247,35 @@ Build: **full fixed child-theme package**
 - English and Latvian Contact pages append a responsive Google Map using the active storefront address, including 40 Brook Street, Northampton, NN1 2PE for the UK market.
 - Existing v4.0.20 language/menu/database repairs and the approved four-column homepage department grid remain unchanged.
 
+
+## 4.0.22 — bilingual product guides, richer demos and variation availability
+
+- Adds six bilingual English/Latvian **Product Guide** demo posts covering heating systems, radiator variants, cultivators/mini tractors, variation stock, underfloor heating and garden-machinery maintenance.
+- Adds a compact horizontal **Product Guides** slider near the bottom of the v4 homepage, immediately before the final service/CTA strip. The slider switches content with the active EN/LV storefront language.
+- Adds extra Home & Garden demo products for heating and garden machinery, including panel radiators, electric underfloor heating, a 1050-style cultivator, compact mini tractor, towel radiator, condensing boiler, circulation pump and ride-on mower.
+- Adds variable demo products with deliberately different per-variation stock states so in-stock, low-stock and unavailable options can all be tested.
+- Variable product pages now show an **Options & availability** matrix with every variation's attributes, SKU, price and stock state, plus a button that selects that variation in the normal WooCommerce form.
+- Product cards show the number of variations and how many are currently available; variable products use **Choose options / Izvēlēties variantu** rather than pretending they can be added directly without a selection.
+- On local/development sites the additional demo content self-seeds once for administrators. A manual **Appearance → Demo Blog & Variations** screen can refresh it safely without duplicates.
+- The normal **Create / refresh demo catalogue** action re-enables the showcase after demo removal; the normal demo removal action also removes the v4.0.22 showcase content.
+
+## v4.0.23 realistic demos and editorial guides
+
+- Replaces generic/reused demo artwork with product-relevant heating, radiator, underfloor-heating, cultivator, ride-on mower, tractor, boiler and heat-pump imagery.
+- Expands the demo catalogue with more variable heating and garden-machinery products and per-variation price/SKU/stock states.
+- Moves the complete variation availability matrix out of the WooCommerce purchase form so it no longer overlaps quantity/add-to-cart controls.
+- Adds richer bilingual Product Guide demo posts and a photo-led homepage guide slider.
+- Rebuilds single blog posts with a large featured image, editorial header, author information, reading time, sticky help/author panel, previous/next posts and related guides.
+- Demo content can be refreshed from **Appearance → Demo Blog & Variations** without creating duplicates.
+
+
+## 4.0.24 Blog, gallery and quote UX
+
+- Adds **Blog / Blogs** to the storefront primary navigation and presents WordPress Posts as **Blog** in wp-admin.
+- Creates bilingual managed Blog landing pages with a photo-led article grid.
+- Adds a native Media Library **WP BB Article Gallery** selector to every blog post.
+- Article galleries use a responsive slider with thumbnails, previous/next controls, keyboard navigation and a full-screen image modal/lightbox.
+- Demo guides use corrected, relevant machinery/heating imagery rather than generic tool placeholders; a manually selected Featured Image or Gallery always takes priority.
+- The floating **My Quote** control now opens a WooCommerce-style quote mini-drawer first instead of immediately navigating away.
+- Quote drawer content is read from the existing `wp-theme-woo-support` quote session and refreshes automatically after Add to Quote.
+- Request-a-Quote forms, item cards and submit/update buttons receive the same Home & Garden green/navy visual system as cart and checkout.

@@ -1833,3 +1833,12 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v420-final.php';
 
 /* 4.0.21 checkout shipping, balanced load-more batches and Contact Google map. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v421-checkout-loadmore-map.php';
+
+/* 4.0.22 bilingual demo blog slider, showcase products and variation-level availability. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v422-demo-blog-variations.php';
+
+/* 4.0.23 realistic demo imagery, richer variations and editorial product-guide posts. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v423-blog-showcase-polish.php';
+
+/* 4.0.24 Blog navigation/admin gallery, quote mini-drawer and editorial lightbox. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v424-blog-quote-gallery.php';
