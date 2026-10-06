@@ -279,3 +279,15 @@ Build: **full fixed child-theme package**
 - The floating **My Quote** control now opens a WooCommerce-style quote mini-drawer first instead of immediately navigating away.
 - Quote drawer content is read from the existing `wp-theme-woo-support` quote session and refreshes automatically after Add to Quote.
 - Request-a-Quote forms, item cards and submit/update buttons receive the same Home & Garden green/navy visual system as cart and checkout.
+
+## 4.0.25 local showcase images, cart language and quote cleanup
+
+- English mini-cart drawer now shows **Cart** rather than the hard-coded Latvian **Grozs** label; close labels follow the active language as well.
+- Empty-cart **Browse products / Skatīt preces** buttons get proper left/right padding and a minimum readable width.
+- Adds a fully bundled local showcase image set for the new heating, garden-machinery and variable demo products, avoiding the repeated/ugly remote demo imagery.
+- Demo Product Guide posts now use different editorial images per topic on the homepage slider, Blog archive, previous/next cards and article galleries.
+- Demo posts receive real Media Library Featured Images on the next admin request, so wp-admin also shows proper featured thumbnails.
+- Existing demo guide galleries are refreshed with three local images per article while still allowing editors to replace the gallery from the normal Media Library selector.
+- Older HG-DEMO catalogue items without a custom product image get a cleaner local category-appropriate showcase image instead of falling back to mismatched placeholders.
+- Deleted/unpublished products are automatically pruned from the quote session so the floating quote count cannot stay stuck on a product that no longer exists.
+- Adds **Clear quote** controls to the quote page and quote mini-drawer for explicitly emptying the full quote list.

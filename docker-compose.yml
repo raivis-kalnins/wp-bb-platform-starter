@@ -36,6 +36,7 @@ services:
     env_file: .env
     volumes:
       - .:/var/www/html
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
     ports:
       - "8080:80"
 

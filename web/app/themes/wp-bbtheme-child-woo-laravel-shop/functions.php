@@ -306,10 +306,13 @@ function wpbbshop_mini_cart_html() {
     if (!class_exists('WooCommerce')) {
         return '';
     }
+    $is_en = function_exists('wpbbshop_v312_is_en') ? wpbbshop_v312_is_en() : (function_exists('wpbbshop_v305_is_english') ? wpbbshop_v305_is_english() : true);
+    $cart_label = $is_en ? 'Cart' : 'Grozs';
+    $close_label = $is_en ? 'Close' : 'Aizvērt';
     ob_start(); ?>
     <div class="wpbbshop-cart-drawer-overlay" hidden></div>
-    <aside class="wpbbshop-mini-cart-panel wpbbshop-cart-drawer" id="wpbbshop-mini-cart-panel" hidden aria-label="Grozs">
-        <div class="wpbbshop-mini-cart-head"><strong>Grozs</strong><button type="button" class="wpbbshop-mini-cart-close" aria-label="Aizvērt">×</button></div>
+    <aside class="wpbbshop-mini-cart-panel wpbbshop-cart-drawer" id="wpbbshop-mini-cart-panel" hidden aria-label="<?php echo esc_attr($cart_label); ?>">
+        <div class="wpbbshop-mini-cart-head"><strong><?php echo esc_html($cart_label); ?></strong><button type="button" class="wpbbshop-mini-cart-close" aria-label="<?php echo esc_attr($close_label); ?>">×</button></div>
         <div class="wpbbshop-mini-cart-content widget_shopping_cart_content">
             <?php woocommerce_mini_cart(); ?>
         </div>
@@ -345,7 +348,7 @@ function wpbbshop_header_html() {
                 <a class="wpbbshop-action" href="<?php echo esc_url($account); ?>"><span class="wpbbshop-action-icon"><?php echo wpbbshop_header_icon_svg('account'); ?></span><span>Konts</span></a>
                 <a class="wpbbshop-action" href="<?php echo esc_url($wishlist_url); ?>"><span class="wpbbshop-action-icon"><?php echo wpbbshop_header_icon_svg('wishlist'); ?></span><span>Vēlmju</span><em class="wpbbshop-list-count wpbbshop-wishlist-count"><?php echo (int)$wishlist_count; ?></em></a>
                 <a class="wpbbshop-action" href="<?php echo esc_url($compare_url); ?>"><span class="wpbbshop-action-icon"><?php echo wpbbshop_header_icon_svg('compare'); ?></span><span>Salīdzināt</span><em class="wpbbshop-list-count wpbbshop-compare-count"><?php echo (int)$compare_count; ?></em></a>
-                <button class="wpbbshop-action wpbbshop-cart-link wpbbshop-mini-cart-toggle" type="button" aria-expanded="false" aria-controls="wpbbshop-mini-cart-panel"><span class="wpbbshop-action-icon"><?php echo wpbbshop_header_icon_svg('cart'); ?></span><span>Grozs</span><em class="wpbbshop-cart-count"><?php echo (int)$cart_count; ?></em><strong class="wpbbshop-cart-total"><?php echo wp_kses_post($cart_total); ?></strong></button>
+                <button class="wpbbshop-action wpbbshop-cart-link wpbbshop-mini-cart-toggle" type="button" aria-expanded="false" aria-controls="wpbbshop-mini-cart-panel"><span class="wpbbshop-action-icon"><?php echo wpbbshop_header_icon_svg('cart'); ?></span><span><?php echo esc_html((function_exists('wpbbshop_v312_is_en') && wpbbshop_v312_is_en()) ? 'Cart' : 'Grozs'); ?></span><em class="wpbbshop-cart-count"><?php echo (int)$cart_count; ?></em><strong class="wpbbshop-cart-total"><?php echo wp_kses_post($cart_total); ?></strong></button>
             </div>
             <?php echo wpbbshop_mini_cart_html(); ?>
         </div>
@@ -1842,3 +1845,6 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v423-blog-showcase-poli
 
 /* 4.0.24 Blog navigation/admin gallery, quote mini-drawer and editorial lightbox. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v424-blog-quote-gallery.php';
+
+/* 4.0.25 local showcase imagery, English mini-cart polish and stale quote cleanup. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v425-content-cart-quote.php';

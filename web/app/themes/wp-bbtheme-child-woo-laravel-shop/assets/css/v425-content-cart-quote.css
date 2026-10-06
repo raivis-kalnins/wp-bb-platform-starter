@@ -1,0 +1,90 @@
+/* WP BB Home & Garden v4.0.25 — local imagery, mini-cart and quote cleanup. */
+
+/* English/Latvian mini-cart buttons: keep readable horizontal breathing room. */
+html body.wpbbshop-theme .llg-mini-cart-empty .button{
+  width:auto!important;
+  min-width:154px!important;
+  min-height:44px!important;
+  padding:0 24px!important;
+  justify-content:center!important;
+  white-space:nowrap!important;
+  box-sizing:border-box!important;
+}
+html body.wpbbshop-theme .wpbbshop-mini-cart-head strong{line-height:1.1!important}
+
+/* Cleaner bundled showcase images on product cards and product detail. */
+html body.wpbbshop-theme img.wpbb-v425-demo-image{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:10px!important;
+}
+html body.wpbbshop-theme .wpbb-v425-single-demo{
+  background:linear-gradient(145deg,#f9fcfa,#eef6f0)!important;
+}
+html body.wpbbshop-theme .wpbb-v425-single-demo img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  border-radius:12px!important;
+  box-shadow:0 12px 28px rgba(18,51,44,.08)!important;
+}
+
+/* Homepage guides: local editorial images, consistent crop and card rhythm. */
+html body.wpbbshop-theme .wpbb-v422-guide-visual{
+  background:#eaf2ed!important;
+  overflow:hidden!important;
+}
+html body.wpbbshop-theme .wpbb-v422-guide-visual img{
+  object-fit:cover!important;
+  object-position:center!important;
+  filter:saturate(.98) contrast(1.02)!important;
+}
+html body.wpbbshop-theme .wpbb-v422-guide:nth-child(2n) .wpbb-v422-guide-visual img{object-position:54% center!important}
+html body.wpbbshop-theme .wpbb-v422-guide:nth-child(3n) .wpbb-v422-guide-visual img{object-position:46% center!important}
+
+/* Quote clear controls. */
+html body.wpbbshop-theme .wpbb-v425-quote-tools{
+  display:flex!important;
+  justify-content:flex-end!important;
+  margin:-10px 0 14px!important;
+}
+html body.wpbbshop-theme .wpbb-v425-quote-clear,
+html body.wpbbshop-theme .wpbb-v424-quote-clear{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:40px!important;
+  padding:0 16px!important;
+  border:1px solid #d9e4dd!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  color:#8c3333!important;
+  font:inherit!important;
+  font-size:12px!important;
+  font-weight:850!important;
+  cursor:pointer!important;
+  box-shadow:none!important;
+}
+html body.wpbbshop-theme .wpbb-v425-quote-clear:hover,
+html body.wpbbshop-theme .wpbb-v424-quote-clear:hover{background:#fff5f5!important;border-color:#ecc8c8!important}
+html body.wpbbshop-theme .wpbb-v425-quote-clear:disabled,
+html body.wpbbshop-theme .wpbb-v424-quote-clear:disabled{opacity:.55!important;cursor:wait!important}
+html body.wpbbshop-theme .wpbb-v424-quote-drawer-foot{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+}
+html body.wpbbshop-theme .wpbb-v424-quote-drawer-foot .wpbb-v424-quote-primary{grid-column:1/-1!important}
+html body.wpbbshop-theme .wpbb-v424-quote-drawer-foot .wpbb-v424-quote-secondary,
+html body.wpbbshop-theme .wpbb-v424-quote-drawer-foot .wpbb-v424-quote-clear{width:100%!important;margin:0!important}
+
+@media(max-width:520px){
+  html body.wpbbshop-theme .wpbb-v424-quote-drawer-foot{grid-template-columns:1fr!important}
+  html body.wpbbshop-theme .wpbb-v424-quote-drawer-foot .wpbb-v424-quote-primary{grid-column:1!important}
+  html body.wpbbshop-theme .wpbb-v425-quote-tools{justify-content:stretch!important}
+  html body.wpbbshop-theme .wpbb-v425-quote-clear{width:100%!important}
+}

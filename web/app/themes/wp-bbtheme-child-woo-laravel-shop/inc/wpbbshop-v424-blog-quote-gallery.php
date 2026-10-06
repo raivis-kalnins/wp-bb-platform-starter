@@ -137,6 +137,10 @@ add_action('admin_menu', function() {
 function wpbbshop_v424_featured_image_url($post_id, $size = 'large') {
     $post_id = absint($post_id);
     if (!$post_id) { return ''; }
+    if (function_exists('wpbbshop_v425_guide_image_url')) {
+        $v425 = wpbbshop_v425_guide_image_url($post_id);
+        if ($v425) { return $v425; }
+    }
     if (has_post_thumbnail($post_id)) {
         $url = get_the_post_thumbnail_url($post_id, $size);
         if ($url) { return $url; }

@@ -5,7 +5,7 @@ while (have_posts()) : the_post();
     $post_id = get_the_ID();
     $lv = function_exists('wpbbshop_v423_lang') ? wpbbshop_v423_lang() === 'lv' : (stripos((string)get_locale(), 'lv') === 0);
     $is_guide = function_exists('wpbbshop_v423_is_guide_post') && wpbbshop_v423_is_guide_post($post_id);
-    $image = function_exists('wpbbshop_v423_guide_image_url') ? wpbbshop_v423_guide_image_url($post_id) : get_the_post_thumbnail_url($post_id, 'full');
+    $image = function_exists('wpbbshop_v425_guide_image_url') ? wpbbshop_v425_guide_image_url($post_id) : (function_exists('wpbbshop_v423_guide_image_url') ? wpbbshop_v423_guide_image_url($post_id) : get_the_post_thumbnail_url($post_id, 'full'));
     if (!$image && has_post_thumbnail($post_id)) { $image = get_the_post_thumbnail_url($post_id, 'full'); }
     $author_id = (int) get_post_field('post_author', $post_id);
     $author_name = get_the_author_meta('display_name', $author_id) ?: get_bloginfo('name');
@@ -35,8 +35,10 @@ while (have_posts()) : the_post();
       </header>
 
       <?php
-      $v424_gallery = function_exists('wpbbshop_v424_post_gallery_items') ? wpbbshop_v424_post_gallery_items($post_id) : array();
-      if ($v424_gallery && function_exists('wpbbshop_v424_post_gallery_html')) {
+      $v424_gallery = function_exists('wpbbshop_v425_post_gallery_items') ? wpbbshop_v425_post_gallery_items($post_id) : (function_exists('wpbbshop_v424_post_gallery_items') ? wpbbshop_v424_post_gallery_items($post_id) : array());
+      if ($v424_gallery && function_exists('wpbbshop_v425_post_gallery_html')) {
+          echo wpbbshop_v425_post_gallery_html($post_id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+      } elseif ($v424_gallery && function_exists('wpbbshop_v424_post_gallery_html')) {
           echo wpbbshop_v424_post_gallery_html($post_id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
       } elseif ($image) { ?>
       <figure class="wpbb-v423-article-hero">
@@ -72,10 +74,10 @@ while (have_posts()) : the_post();
 
     <?php if ($prev || $next) : ?>
     <nav class="wpbb-v423-post-nav" aria-label="<?php echo esc_attr($lv ? 'Rakstu navigācija' : 'Post navigation'); ?>">
-      <?php if ($prev) : $prev_img=function_exists('wpbbshop_v423_guide_image_url')?wpbbshop_v423_guide_image_url($prev->ID):get_the_post_thumbnail_url($prev->ID,'medium'); ?>
+      <?php if ($prev) : $prev_img=function_exists('wpbbshop_v425_guide_image_url')?wpbbshop_v425_guide_image_url($prev->ID):(function_exists('wpbbshop_v423_guide_image_url')?wpbbshop_v423_guide_image_url($prev->ID):get_the_post_thumbnail_url($prev->ID,'medium')); ?>
       <a class="is-prev" href="<?php echo esc_url(get_permalink($prev)); ?>"><?php if($prev_img): ?><img src="<?php echo esc_url($prev_img); ?>" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><?php endif; ?><span><small>← <?php echo esc_html($lv ? 'Iepriekšējais raksts' : 'Previous article'); ?></small><strong><?php echo esc_html(get_the_title($prev)); ?></strong></span></a>
       <?php else : ?><span></span><?php endif; ?>
-      <?php if ($next) : $next_img=function_exists('wpbbshop_v423_guide_image_url')?wpbbshop_v423_guide_image_url($next->ID):get_the_post_thumbnail_url($next->ID,'medium'); ?>
+      <?php if ($next) : $next_img=function_exists('wpbbshop_v425_guide_image_url')?wpbbshop_v425_guide_image_url($next->ID):(function_exists('wpbbshop_v423_guide_image_url')?wpbbshop_v423_guide_image_url($next->ID):get_the_post_thumbnail_url($next->ID,'medium')); ?>
       <a class="is-next" href="<?php echo esc_url(get_permalink($next)); ?>"><span><small><?php echo esc_html($lv ? 'Nākamais raksts' : 'Next article'); ?> →</small><strong><?php echo esc_html(get_the_title($next)); ?></strong></span><?php if($next_img): ?><img src="<?php echo esc_url($next_img); ?>" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><?php endif; ?></a>
       <?php endif; ?>
     </nav>
@@ -85,7 +87,7 @@ while (have_posts()) : the_post();
     <section class="wpbb-v423-related-posts">
       <header><span><?php echo esc_html($lv ? 'VAIRĀK CEĻVEŽU' : 'MORE GUIDES'); ?></span><h2><?php echo esc_html($lv ? 'Turpini lasīt' : 'Keep reading'); ?></h2></header>
       <div class="wpbb-v423-related-grid">
-        <?php foreach ($related as $item) : $rel_img=wpbbshop_v423_guide_image_url($item->ID); ?>
+        <?php foreach ($related as $item) : $rel_img=function_exists('wpbbshop_v425_guide_image_url')?wpbbshop_v425_guide_image_url($item->ID):wpbbshop_v423_guide_image_url($item->ID); ?>
         <article><a href="<?php echo esc_url(get_permalink($item)); ?>"><?php if($rel_img): ?><img src="<?php echo esc_url($rel_img); ?>" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><?php endif; ?><span><?php echo esc_html($lv ? 'Preču ceļvedis' : 'Product guide'); ?></span><h3><?php echo esc_html(get_the_title($item)); ?></h3><p><?php echo esc_html(wp_trim_words(get_the_excerpt($item), 18)); ?></p><b><?php echo esc_html($lv ? 'Lasīt rakstu →' : 'Read article →'); ?></b></a></article>
         <?php endforeach; ?>
       </div>

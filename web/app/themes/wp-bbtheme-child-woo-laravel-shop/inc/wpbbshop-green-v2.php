@@ -266,10 +266,19 @@ function wpbbshop_green_product_image_html($product) {
 
     $primary_html = '';
     $secondary_html = '';
+    $v425_owned = false;
+
+    // v4.0.25 gives all WP BB demo catalogue products a cleaner local showcase
+    // image before the older demo/Media Library fallbacks run.
+    $v425_url = function_exists('wpbbshop_v425_demo_product_asset') ? wpbbshop_v425_demo_product_asset($product) : '';
+    if ($v425_url) {
+        $primary_html = '<img class="llg-product-image-primary wpbb-v425-demo-image" src="' . esc_url($v425_url) . '" alt="' . esc_attr(wpbbshop_green_demo_name_309($product)) . '" loading="lazy" decoding="async">';
+        $v425_owned = true;
+    }
 
     // Demo products use bundled theme assets directly. This keeps Refresh fast and
     // completely avoids WordPress/Imagick thumbnail generation on shared hosting.
-    if ($item && !empty($item['image'])) {
+    if ($primary_html === '' && $item && !empty($item['image'])) {
         $primary_file = basename($item['image']);
         $primary_path = trailingslashit(get_stylesheet_directory()) . 'assets/demo-products/' . $primary_file;
         if (file_exists($primary_path)) {
@@ -303,7 +312,7 @@ function wpbbshop_green_product_image_html($product) {
             }
         }
     }
-    if ($secondary_html === '') {
+    if ($secondary_html === '' && !$v425_owned) {
         foreach ($gallery_ids as $gallery_id) {
             if ($gallery_id && $gallery_id !== $image_id) {
                 $secondary_html = wp_get_attachment_image($gallery_id, 'woocommerce_thumbnail', false, array(
