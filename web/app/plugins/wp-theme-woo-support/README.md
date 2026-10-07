@@ -1,4 +1,4 @@
-# WP Theme Woo Support 3.6.0
+# WP Theme Woo Support 3.7.0
 
 Reusable WooCommerce functionality for the WP BBTheme suite. Ecommerce behaviour is kept in this companion plugin so sector child themes can share robust catalogue, product, variation, cart/account and quote workflows without duplicating business logic.
 
@@ -65,3 +65,22 @@ Store profile defaults to 24 products per request. On catalogues above 10,000 pu
 - Adds campaign/source performance tables and a tracked campaign URL builder.
 - Adds automatic recommendations for revenue decline/growth, attribution coverage, AOV and refund rate.
 - Works inside `wp-theme-woo-support`; no FluentCRM dependency is required.
+
+## 3.7.0 Marketing Intelligence expansion
+
+The Marketing Intelligence screen now adds deeper CRM-style commerce insight while remaining fully inside `wp-theme-woo-support`:
+
+- Aggregate UTM/ad-click visit tracking with no stored visitor IP address.
+- Consent-aware tracking when the WordPress Consent API is available, plus basic bot filtering for campaign visits.
+- Campaign visit-to-order conversion, optional manual campaign spend, ROAS and CPA.
+- First-touch versus last-touch revenue attribution.
+- Source momentum versus the previous comparison period.
+- New versus returning order mix using WooCommerce Analytics lookup data when available.
+- Customer lifecycle cards for one-time, repeat, loyal, VIP, active, at-risk and lapsed customers.
+- Top customers for the selected period plus top lifetime customers.
+- Product momentum showing the largest revenue increases and declines.
+- Frequently-bought-together product affinity for bundle and cross-sell ideas.
+- Coupon performance and marketing-medium performance tables.
+- Expanded automatic recommendations covering retention, reactivation, campaign efficiency, product momentum and product affinity.
+- Campaign URL builder now supports source, medium, campaign, content and term.
+- Order processing is paged in batches instead of loading an unlimited order result in one query.
