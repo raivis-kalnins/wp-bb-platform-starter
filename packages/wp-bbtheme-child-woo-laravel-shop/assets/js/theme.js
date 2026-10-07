@@ -78,7 +78,8 @@
       action: 'wpbbshop_toggle_list',
       nonce: WpbbshopTheme.nonce,
       list: list,
-      product_id: productId
+      product_id: productId,
+      lang: document.documentElement.lang.toLowerCase().indexOf('lv') === 0 ? 'lv' : 'en'
     }).done(function(resp){
       if(resp && resp.success){
         var active = !!resp.data.active;
@@ -86,7 +87,7 @@
         $('.wpbbshop-wishlist-count').text(resp.data.wishlist_count || 0);
         $('.wpbbshop-compare-count').text(resp.data.compare_count || 0);
         $btn.attr('aria-pressed', active ? 'true' : 'false');
-        $btn.find('.wpbbshop-list-label').text(resp.data.label || (active ? 'Pievienots' : 'Pievienot'));
+        $btn.find('.wpbbshop-list-label').text(resp.data.label || (document.documentElement.lang.toLowerCase().indexOf('lv') === 0 ? (active ? 'Pievienots' : 'Pievienot') : (active ? 'Added' : 'Add')));
       } else {
         window.location.href = $btn.attr('href');
       }
@@ -108,8 +109,8 @@
     var $box = $form.find('.wpbbshop-search-results');
     var items = data && data.items ? data.items : [];
     var allUrl = data && data.allUrl ? data.allUrl : ($form.attr('action') + '?s=' + encodeURIComponent(query) + '&post_type=product');
-    var allLabel = data && data.allLabel ? data.allLabel : 'Skatīt visus rezultātus';
-    var emptyLabel = data && data.emptyLabel ? data.emptyLabel : 'Preces netika atrastas.';
+    var allLabel = data && data.allLabel ? data.allLabel : (document.documentElement.lang.toLowerCase().indexOf('lv') === 0 ? 'Skatīt visus rezultātus' : 'View all results');
+    var emptyLabel = data && data.emptyLabel ? data.emptyLabel : (document.documentElement.lang.toLowerCase().indexOf('lv') === 0 ? 'Preces netika atrastas.' : 'No products found.');
     var esc = function(v){ return $('<div>').text(v == null ? '' : String(v)).html(); };
     var html = '';
     if(items.length){

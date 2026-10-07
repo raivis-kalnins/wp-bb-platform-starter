@@ -7,10 +7,14 @@
 defined('ABSPATH') || exit;
 
 function wpbbshop_v312_is_en() {
-    if (function_exists('pll_current_language')) {
-        return pll_current_language('slug') === 'en';
+    if (function_exists('wpbbshop_v400_current_language')) {
+        return wpbbshop_v400_current_language() === 'en';
     }
-    return false;
+    if (function_exists('pll_current_language')) {
+        $lang = pll_current_language('slug');
+        if ($lang) { return $lang === 'en'; }
+    }
+    return substr((string) get_locale(), 0, 2) !== 'lv';
 }
 
 function wpbbshop_v312_t($lv, $en) {
