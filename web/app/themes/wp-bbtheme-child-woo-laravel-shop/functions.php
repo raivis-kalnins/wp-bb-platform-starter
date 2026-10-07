@@ -1848,3 +1848,6 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v424-blog-quote-gallery
 
 /* 4.0.25 local showcase imagery, English mini-cart polish and stale quote cleanup. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v425-content-cart-quote.php';
+
+/* 4.0.26 real photographic product/blog imagery with incremental local caching. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v426-realistic-media.php';

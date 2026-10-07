@@ -3,7 +3,7 @@
  * Plugin Name: WP Theme Woo Support
  * Plugin URI:  https://github.com/The-Fuel-Agency/wp-theme-woo-support
  * Description: Modular WooCommerce support for WP BBTheme stores: catalogue filters, swatches, complex variations, Cart + Quote requests, schema and demo tooling.
- * Version:     3.5.0
+ * Version:     3.6.0
  * Author:      The Fuel Agency
  * Text Domain: wp-theme-woo-support
  * Requires PHP: 8.0
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WP_THEME_WOO_SUPPORT_VERSION', '3.5.0' );
+define( 'WP_THEME_WOO_SUPPORT_VERSION', '3.6.0' );
 define( 'WP_THEME_WOO_SUPPORT_FILE', __FILE__ );
 define( 'WP_THEME_WOO_SUPPORT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WP_THEME_WOO_SUPPORT_URL', plugin_dir_url( __FILE__ ) );
@@ -66,6 +66,7 @@ function wp_theme_woo_support_features() {
 		'mini_cart'          => $store || $legacy,
 		'template_overrides' => $legacy,
 		'demo_import'        => $store || $legacy,
+		'marketing_intelligence' => $store || $legacy,
 		'b2b'                => false,
 	);
 
@@ -142,6 +143,7 @@ add_action( 'after_setup_theme', function() {
 		'quote_request'      => 'quote-request.php',
 		'product_ux'         => 'product-ux-fixes.php',
 		'b2b'                => 'b2b.php',
+		'marketing_intelligence' => 'marketing-intelligence.php',
 	);
 
 	foreach ( $modules as $feature => $file ) {

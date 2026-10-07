@@ -1,4 +1,4 @@
-# WP Theme Woo Support 3.4.0
+# WP Theme Woo Support 3.6.0
 
 Reusable WooCommerce functionality for the WP BBTheme suite. Ecommerce behaviour is kept in this companion plugin so sector child themes can share robust catalogue, product, variation, cart/account and quote workflows without duplicating business logic.
 
@@ -54,3 +54,14 @@ The smart product filter and comparison engine can now be embedded by custom chi
 - `wp_theme_woo_support_filter_product_item_html` filter for custom product-card rendering
 
 Store profile defaults to 24 products per request. On catalogues above 10,000 published products the expensive dynamic attribute-availability scan is skipped automatically; the cached filter options remain available. Parent-product SKU search uses WooCommerce's `wc_product_meta_lookup` table.
+
+
+## 3.6.0 Marketing Intelligence
+
+- Adds **WooCommerce → Marketing Intelligence**.
+- Tracks first/last-touch UTM parameters and stores attribution on WooCommerce orders.
+- Adds revenue, order, AOV, customer, refund and period-over-period KPI cards.
+- Adds Google Charts for revenue trends, orders, source mix and top-product revenue.
+- Adds campaign/source performance tables and a tracked campaign URL builder.
+- Adds automatic recommendations for revenue decline/growth, attribution coverage, AOV and refund rate.
+- Works inside `wp-theme-woo-support`; no FluentCRM dependency is required.

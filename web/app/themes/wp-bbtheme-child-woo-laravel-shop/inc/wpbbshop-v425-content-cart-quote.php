@@ -63,6 +63,10 @@ function wpbbshop_v425_blog_assets() {
 
 function wpbbshop_v425_demo_product_asset($product) {
     if (!$product || !is_a($product, 'WC_Product')) { return ''; }
+    if (function_exists('wpbbshop_v426_demo_product_asset')) {
+        $v426 = wpbbshop_v426_demo_product_asset($product);
+        if ($v426) { return $v426; }
+    }
     $id = $product->get_id();
     $parent_id = $product instanceof WC_Product_Variation ? $product->get_parent_id() : $id;
     $key = (string) get_post_meta($parent_id, '_wpbbshop_v422_demo_key', true);
@@ -258,6 +262,10 @@ add_action('wp_enqueue_scripts', function() {
 function wpbbshop_v425_guide_image_url($post_id) {
     $post_id = absint($post_id);
     if (!$post_id) { return ''; }
+    if (function_exists('wpbbshop_v426_guide_image_url')) {
+        $v426 = wpbbshop_v426_guide_image_url($post_id);
+        if ($v426) { return $v426; }
+    }
     if (has_post_thumbnail($post_id)) {
         $thumb = get_the_post_thumbnail_url($post_id, 'large');
         if ($thumb) { return $thumb; }
@@ -272,6 +280,10 @@ function wpbbshop_v425_guide_image_url($post_id) {
 function wpbbshop_v425_post_gallery_items($post_id) {
     $post_id = absint($post_id);
     if (!$post_id) { return array(); }
+    if (function_exists('wpbbshop_v426_post_gallery_items')) {
+        $v426 = wpbbshop_v426_post_gallery_items($post_id);
+        if ($v426) { return $v426; }
+    }
     $items = array();
     $ids = get_post_meta($post_id, '_wpbbshop_v424_gallery_ids', true);
     if (is_string($ids)) { $ids = array_filter(array_map('absint', preg_split('/[\s,]+/', $ids))); }

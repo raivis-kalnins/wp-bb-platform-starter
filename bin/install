@@ -90,6 +90,9 @@ docker compose exec -T \
   app composer install --no-interaction --prefer-dist
 
 echo "Preparing WordPress and Acorn writable directories..."
+docker compose exec -T app chown -R "${HOST_UID}:www-data" /var/www/html/web/wp
+docker compose exec -T app find /var/www/html/web/wp -type d -exec chmod 2775 '{}' +
+docker compose exec -T app find /var/www/html/web/wp -type f -exec chmod 664 '{}' +
 docker compose exec -T app chown "${HOST_UID}:www-data" /var/www/html/web/app
 docker compose exec -T app chmod 2775 /var/www/html/web/app
 docker compose exec -T app install -d -o www-data -g www-data -m 2775 \

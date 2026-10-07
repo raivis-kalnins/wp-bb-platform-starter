@@ -1,3 +1,13 @@
+## v4.0.26 realistic product and blog imagery
+
+- Replaces the v4.0.25 generated showcase artwork with distinct real photographs for every bundled showcase product.
+- Gives every bundled Product Guide its own editorial photograph instead of reusing the product-card art.
+- Uses a clean white retail-product media surface closer to large Home & Garden stores: neutral background, contained product photo, no fake green illustration panel/glow.
+- Keeps Product Guide cards photo-led with consistent crops and higher-quality editorial presentation.
+- Uses remote Wikimedia Commons source URLs immediately, then caches two images per wp-admin request into the local WordPress Media Library to avoid long blocking imports.
+- Keeps real WooCommerce product images untouched; the mapping only applies to bundled demo/showcase content.
+- Image source/licence information is documented in `IMAGE-CREDITS.md`.
+
 
 ## v4.0.19 final repairs
 

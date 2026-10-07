@@ -1,0 +1,80 @@
+/* WP BB Home & Garden v4.0.26 — photographic catalogue and editorial media. */
+
+/* Retail-style product media: white neutral packshot surface, no illustrated
+   mint card, glow or artificial ground shadow. */
+html body.wpbbshop-theme .llg-card-image,
+html body.wpbbshop-theme .llg-archive-page .llg-card-image{
+  background:#fff!important;
+  border:1px solid #e8eeea!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.7)!important;
+}
+html body.wpbbshop-theme .llg-card-image:after,
+html body.wpbbshop-theme .llg-card-media-glow{display:none!important}
+html body.wpbbshop-theme .llg-card-media-main,
+html body.wpbbshop-theme .llg-card-media-secondary{padding:6px!important}
+html body.wpbbshop-theme .llg-card-image img.wpbb-v425-demo-image,
+html body.wpbbshop-theme .llg-card-image img.wpbb-v426-realistic-product,
+html body.wpbbshop-theme img.wpbb-v426-realistic-product{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  filter:none!important;
+  box-shadow:none!important;
+  mix-blend-mode:normal!important;
+}
+html body.wpbbshop-theme .llg-product-card:hover .llg-card-media:not(.has-gallery) .llg-card-media-main{transform:scale(1.018)!important}
+
+/* Product detail keeps a clean showroom-like frame around the real photo. */
+html body.single-product.wpbbshop-theme .wpbb-v425-single-demo,
+html body.single-product.wpbbshop-theme .wpbb-v423-single-demo{
+  background:#fff!important;
+  border:1px solid #e5ece7!important;
+  box-shadow:none!important;
+  padding:22px!important;
+}
+html body.single-product.wpbbshop-theme .wpbb-v425-single-demo img,
+html body.single-product.wpbbshop-theme .wpbb-v423-single-demo img{
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fff!important;
+  filter:none!important;
+  box-shadow:none!important;
+}
+
+/* Editorial cards use full-bleed photography with restrained retailer-style
+   contrast rather than generated artwork. */
+html body.wpbbshop-theme .wpbb-v422-guide-visual{
+  background:#edf1ee!important;
+  border-bottom:1px solid #e3e9e5!important;
+}
+html body.wpbbshop-theme .wpbb-v422-guide-visual img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  filter:saturate(1.02) contrast(1.015)!important;
+}
+html body.wpbbshop-theme .wpbb-v422-guide-visual i{height:36%!important;background:linear-gradient(180deg,transparent,rgba(7,28,20,.22))!important}
+
+/* Blog hero/gallery photos keep their natural detail without the old artwork
+   treatment; thumbnails still crop consistently. */
+html body.wpbbshop-theme .wpbb-v424-gallery-stage,
+html body.wpbbshop-theme .wpbb-v423-article-hero{background:#f3f5f3!important}
+html body.wpbbshop-theme .wpbb-v424-gallery-slide img,
+html body.wpbbshop-theme .wpbb-v423-article-hero img{filter:none!important}
+html body.wpbbshop-theme .wpbb-v424-gallery-thumb img{object-fit:cover!important;filter:none!important}
+
+@media(max-width:560px){
+  html body.wpbbshop-theme .llg-card-media-main,
+  html body.wpbbshop-theme .llg-card-media-secondary{padding:3px!important}
+  html body.single-product.wpbbshop-theme .wpbb-v425-single-demo,
+  html body.single-product.wpbbshop-theme .wpbb-v423-single-demo{padding:12px!important}
+}
