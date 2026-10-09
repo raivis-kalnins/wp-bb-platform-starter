@@ -103,7 +103,15 @@ function wpbbshop_green_header_html() {
     $delivery_label = function_exists('wpbbshop_v414_delivery_label') ? wpbbshop_v414_delivery_label($is_en) : ($is_en ? 'Delivery across Latvia' : 'Piegāde visā Latvijā');
     $home = function_exists('wpbbshop_v407_language_home_url') ? wpbbshop_v407_language_home_url($is_en ? 'en' : 'lv') : ($is_en ? home_url('/') : home_url('/lv/'));
     $search_action = $home;
-    $top_categories = get_terms(array('taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>20,'orderby'=>'count','order'=>'DESC','slug'=>array('instrumenti','specinstrumenti','servisa-aprikojums','darza-tehnika','rezerves-dalas','saimniecibas-preces')));
+    $top_categories = get_terms(array('taxonomy'=>'product_cat','hide_empty'=>true,'parent'=>0,'number'=>0,'orderby'=>'name','order'=>'ASC'));
+    if (!is_wp_error($top_categories)) {
+        $top_categories = array_values(array_filter((array) $top_categories, function($term){
+            return !empty($term->slug) && !in_array($term->slug, array('uncategorized','accessories','apparel','bundles','home-living','office','tech'), true);
+        }));
+        if (function_exists('wpbbshop_category_display_order')) {
+            $top_categories = wpbbshop_category_display_order($top_categories);
+        }
+    }
     $keywords = $is_en ? array('trimmer head','chain saw','compressor','generator','hand tools') : array('trimmera galva','ķēdes zāģis','kompresors','ģenerators','darba rīki');
     $primary_fallback = $is_en ? array(
         'Home'=>$home,'Offers'=>add_query_arg('onsale','1',$shop),'New'=>add_query_arg('orderby','date',$shop),'Tools'=>home_url('/product-category/instrumenti/'),
@@ -897,25 +905,31 @@ function wpbbshop_green_demo_admin_page() {
 add_action('admin_post_wpbbshop_green_refresh_demo', function(){
     if (!current_user_can('manage_options')) { wp_die('Nav tiesību.'); }
     check_admin_referer('wpbbshop_green_refresh_demo');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance -> WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $result = wpbbshop_green_refresh_demo_catalog();
     if (is_wp_error($result)) {
         $message = $result->get_error_message();
     } else {
         $message = sprintf('Demo Refresh pabeigts drošajā režīmā: noņemtas %d novecojušas demo preces, izveidotas %d jaunas un atjaunoti produktu dati / tēmas galerijas.', $result['deleted_products'], $result['created']);
     }
-    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>$message), admin_url('themes.php'))); exit;
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>$message . ' Demo tools are locked again.'), admin_url('themes.php'))); exit;
 });
 
 add_action('admin_post_wpbbshop_green_seed_demo', function(){
     if (!current_user_can('manage_options')) { wp_die('Nav tiesību.'); }
     check_admin_referer('wpbbshop_green_seed_demo');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance -> WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $result = function_exists('wpbbshop_green_seed_demo_products_lightweight') ? wpbbshop_green_seed_demo_products_lightweight() : array('created'=>0,'updated'=>0);
     $message = is_wp_error($result) ? $result->get_error_message() : sprintf('Demo katalogs atjaunots: %d jaunas, %d atjaunotas preces.', $result['created'], $result['updated']);
-    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>$message), admin_url('themes.php'))); exit;
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>$message . ' Demo tools are locked again.'), admin_url('themes.php'))); exit;
 });
 add_action('admin_post_wpbbshop_green_remove_demo', function(){
     if (!current_user_can('manage_options')) { wp_die('Nav tiesību.'); }
     check_admin_referer('wpbbshop_green_remove_demo');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance -> WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $deleted = wpbbshop_green_remove_demo_catalog();
-    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>sprintf('Dzēstas %d demo preces.', $deleted)), admin_url('themes.php'))); exit;
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>sprintf('Dzēstas %d demo preces. Demo tools are locked again.', $deleted)), admin_url('themes.php'))); exit;
 });

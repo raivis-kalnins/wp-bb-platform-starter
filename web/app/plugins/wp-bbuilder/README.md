@@ -369,3 +369,9 @@ GPLv2 or later.
 ## 5.6.3
 
 - Icon Card alignment: choose Left, Center or Right. The selected alignment applies consistently to media/icon, title, body text and optional link in both editor and frontend.
+
+
+## 5.8.2 admin analytics placement
+
+- Website Statistics and Analytics Settings now live under **Settings** beside the normal BBuilder settings instead of creating a separate top-level WP BBuilder menu.
+- Analytics header buttons keep a clean white outline/white text focus and hover state on the green header rather than inheriting the WordPress blue focus treatment.

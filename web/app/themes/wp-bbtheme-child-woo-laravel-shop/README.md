@@ -1,4 +1,14 @@
-# WP BB Home & Garden Child Theme v4.0.28
+# WP BB Home & Garden Child Theme v4.0.32
+
+## 4.0.29 protected demo, unique guides and B2B homepage
+
+- Consolidates **Demo catalogue**, **Blog demo** and **New product demo** into one protected **Demo** workspace.
+- Demo tools are disabled by default and can only be temporarily enabled under **Appearance -> WP BB HOME & GARDEN Theme Settings -> Demo safety**. Every demo create/refresh/remove action automatically locks the tools again.
+- Adds a one-time cleanup for duplicate theme-owned Product Guide demo posts left by older refreshes; real/editor-created posts are not touched.
+- Forces the eight bundled Product Guide topics to use eight different local photographic images on the homepage and normal featured-image output.
+- Adds an optional homepage **B2B & Trade** section when the B2B module from WP Theme Woo Support is enabled. The section uses the plugin-owned account state, pricing rules and portal CTA.
+- Adds responsive admin styling for the consolidated demo workspace and the locked safety state.
+
 
 ## 4.0.28 photographic demo hardening
 
@@ -319,3 +329,28 @@ Build: **full fixed child-theme package**
 - Older HG-DEMO catalogue items without a custom product image get a cleaner local category-appropriate showcase image instead of falling back to mismatched placeholders.
 - Deleted/unpublished products are automatically pruned from the quote session so the floating quote count cannot stay stuck on a product that no longer exists.
 - Adds **Clear quote** controls to the quote page and quote mini-drawer for explicitly emptying the full quote list.
+
+
+
+## 4.0.32 blog gallery arrow alignment
+
+- Vertically centres the previous/next arrow glyphs inside the round blog gallery controls.
+- Applies to both the inline article gallery and the full-screen lightbox, including mobile sizes.
+
+
+## 4.0.31 B2B CTA, mini-cart, quote drawer and complete category search
+
+- Header search category selectors now list all live top-level WooCommerce categories rather than the old six legacy category slugs.
+- AJAX product search now sends and respects the selected category, including descendant categories.
+- Theme mini-cart uses the full drawer width with a flexible product-information column and stacked full-width View cart / Checkout actions.
+- Quote drawer actions, including Continue shopping, are forced to the full available width on every storefront page.
+- Adds an unscoped final geometry guard so these drawer fixes are not lost when WooCommerce or older theme CSS loads with different body selectors.
+
+## 4.0.30 commerce UI polish
+
+- Reworked single-product tabs into a cleaner white tab strip and panel.
+- Removed the redundant wishlist/compare quick-action icon beside product category metadata.
+- Made My Account login/register copy follow the active English/Latvian storefront language.
+- Allows the Woo Support B2B registration choice to appear inside the normal account registration card.
+- Hardened mini-cart and quote drawer/page widths and full-width action-button alignment.
+- Adds a compact B2B/trade status panel on single products when B2B is enabled.

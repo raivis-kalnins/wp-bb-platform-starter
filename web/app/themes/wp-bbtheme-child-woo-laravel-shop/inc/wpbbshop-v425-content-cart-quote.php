@@ -262,6 +262,10 @@ add_action('wp_enqueue_scripts', function() {
 function wpbbshop_v425_guide_image_url($post_id) {
     $post_id = absint($post_id);
     if (!$post_id) { return ''; }
+    if (function_exists('wpbbshop_v429_guide_image_url')) {
+        $v429 = wpbbshop_v429_guide_image_url($post_id);
+        if ($v429) { return $v429; }
+    }
     if (function_exists('wpbbshop_v428_guide_image_url')) {
         $v428 = wpbbshop_v428_guide_image_url($post_id);
         if ($v428) { return $v428; }

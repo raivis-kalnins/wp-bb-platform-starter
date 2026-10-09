@@ -292,6 +292,7 @@ function wpbbshop_v423_seed_all() {
 
 add_action('admin_init', function() {
     if (!current_user_can('manage_options')) { return; }
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { return; }
     if (function_exists('wpbbshop_v422_is_local_site') && !wpbbshop_v422_is_local_site()) { return; }
     if ((string)get_option('wpbbshop_v423_showcase_version','') === WPBBSHOP_V423_VERSION) { return; }
     wpbbshop_v423_seed_all();

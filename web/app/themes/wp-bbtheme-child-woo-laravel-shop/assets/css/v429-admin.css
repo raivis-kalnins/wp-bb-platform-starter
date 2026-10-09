@@ -1,0 +1,14 @@
+/* WP BB Home & Garden 4.0.29 - protected demo admin UI. */
+.wpbb-v429-demo-tab-disabled{color:#6d7772!important;background:#f3f5f3!important;border-color:#d7ddd9!important;cursor:not-allowed!important;opacity:.82}
+.wpbb-v429-demo-lock{display:flex;gap:22px;align-items:flex-start;max-width:900px;padding:28px;margin:10px 0;background:#fff;border:1px solid #dce5df;border-left:5px solid #16794f;border-radius:16px;box-shadow:0 8px 28px rgba(20,65,45,.05)}
+.wpbb-v429-demo-lock>.dashicons{width:38px;height:38px;font-size:38px;color:#16794f}
+.wpbb-v429-demo-lock h2{margin:0 0 8px;font-size:24px}.wpbb-v429-demo-lock p{max-width:720px;font-size:14px;line-height:1.6;color:#58655f}
+.wpbb-v429-demo-warning{margin:4px 0 18px;padding:12px 16px;background:#fff8e5;border:1px solid #efd48b;border-radius:10px;color:#694d04}
+.wpbb-v429-demo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.wpbb-v429-demo-card{display:flex;flex-direction:column;min-width:0;padding:22px;background:#fff;border:1px solid #dde6e0;border-radius:16px;box-shadow:0 7px 24px rgba(25,65,48,.05)}
+.wpbb-v429-demo-card h2{font-size:20px;line-height:1.25;margin:8px 0}.wpbb-v429-demo-card p{color:#5f6e67;line-height:1.55;min-height:48px}
+.wpbb-v429-demo-card__kicker{font-size:11px;font-weight:800;letter-spacing:.1em;color:#118652}
+.wpbb-v429-demo-card .wpbb-v400-metric{margin:8px 0 18px}.wpbb-v429-demo-card form{margin-top:auto}.wpbb-v429-demo-card form+form{margin-top:8px}
+#demo-safety{scroll-margin-top:54px}
+@media(max-width:1100px){.wpbb-v429-demo-grid{grid-template-columns:1fr}.wpbb-v429-demo-card p{min-height:0}}
+@media(max-width:700px){.wpbb-v429-demo-lock{padding:20px;gap:14px}.wpbb-v429-demo-lock>.dashicons{width:28px;height:28px;font-size:28px}}

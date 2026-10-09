@@ -136,7 +136,7 @@
     if(q.length < 2){ $form.find('.wpbbshop-search-results').attr('hidden', true).empty(); return; }
     timer = setTimeout(function(){
       if(typeof WpbbshopTheme === 'undefined') return;
-      $.get(WpbbshopTheme.ajaxUrl, { action:'wpbbshop_product_search', nonce:WpbbshopTheme.nonce, term:q })
+      $.get(WpbbshopTheme.ajaxUrl, { action:'wpbbshop_product_search', nonce:WpbbshopTheme.nonce, term:q, product_cat:($form.find('select[name="product_cat"]').val() || '') })
         .done(function(resp){ if(resp && resp.success){ renderResults($form, resp.data, q); } });
     }, 180);
   });

@@ -1,6 +1,6 @@
-# Demo image credits — v4.0.27
+# Demo image credits — v4.0.29
 
-The v4.0.27 Home & Garden demo uses real photographic media from Wikimedia Commons for theme-owned demo products and Product Guides. Real WooCommerce products continue to use their own Media Library images. The theme requests resized copies with Wikimedia Commons `Special:FilePath` and can incrementally cache them in WordPress Media Library on local/development sites.
+The v4.0.29 Home & Garden demo uses real photographic media from Wikimedia Commons for theme-owned demo products and Product Guides. Real WooCommerce products continue to use their own Media Library images. The theme requests resized copies with Wikimedia Commons `Special:FilePath` and can incrementally cache them in WordPress Media Library on local/development sites.
 
 ## 500-item catalogue department photographs
 
@@ -57,6 +57,8 @@ Each HG-DEMO department alternates between the two files below so homepage cards
 | underfloor-heating | Dornbirn-Ebnit-underfloor heating-system-02ASD.jpg |
 | garden-maintenance | Person using a lawn mower in a green garden.jpg |
 | heat-pump-guide | NIBE S2125 air source heat pump (rear) - Science Museum, London.jpg |
-| tractor-attachments | Garden machines, tractor.jpg |
+| tractor-attachments | TractorWithMountedRototiller.JPG |
+
+Product Guide source notes: `heating-plan` is CC0 (Southend-on-Sea Borough Council); `radiator-size` is CC BY-SA 4.0 (Tarasna0922); `cultivator-guide` is CC BY-SA 2.0 (Joe Hoover); `variant-stock` is CC BY-SA 4.0 (Kaviya Rajendran); `underfloor-heating` is CC BY-SA 4.0 (Asurnipal); `garden-maintenance` is CC BY 2.0 (Nenad Stojkovic / Shixart1985); `heat-pump-guide` is CC BY-SA 4.0 (The wub); and `tractor-attachments` is public domain (KVDP).
 
 Source pages follow the Wikimedia Commons form `https://commons.wikimedia.org/wiki/File:<filename>`. Check the individual file page for the exact author, licence and attribution requirements before reusing media outside this demo theme.

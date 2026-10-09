@@ -211,6 +211,8 @@ function wpbbshop_default_options() {
         'show_kurpirkt_badge' => '1',
         'show_salidzini_badge' => '1',
         'show_ceno_badge' => '1',
+        'demo_tools_enabled' => '0',
+        'show_b2b_home_section' => '1',
     );
 }
 
@@ -850,7 +852,7 @@ add_action('admin_init', function() {
 function wpbbshop_sanitize_theme_options($input) {
     $defaults = wpbbshop_default_options();
     $out = array();
-    $checkbox_keys = array('enable_wishlist','enable_compare','archive_sidebar','dark_header','show_topbar','sticky_header','show_category_panel','show_sale_badges','disable_product_review_form','enable_kurpirkt_feed','enable_salidzini_feed','enable_ceno_feed','comparison_feed_include_outofstock','show_kurpirkt_badge','show_salidzini_badge','show_ceno_badge');
+    $checkbox_keys = array('enable_wishlist','enable_compare','archive_sidebar','dark_header','show_topbar','sticky_header','show_category_panel','show_sale_badges','disable_product_review_form','enable_kurpirkt_feed','enable_salidzini_feed','enable_ceno_feed','comparison_feed_include_outofstock','show_kurpirkt_badge','show_salidzini_badge','show_ceno_badge','demo_tools_enabled','show_b2b_home_section');
     foreach ($defaults as $key => $default) {
         $value = in_array($key, $checkbox_keys, true) ? (isset($input[$key]) ? $input[$key] : '') : (isset($input[$key]) ? $input[$key] : $default);
         if (in_array($key, array('logo_id','hero_image_id'), true)) {
@@ -950,10 +952,16 @@ function wpbbshop_theme_settings_page() {
                 <?php wpbbshop_theme_settings_field('benefit_2', 'Benefit card 2', 'textarea', 'Format: Title|Subtitle'); ?>
                 <?php wpbbshop_theme_settings_field('benefit_3', 'Benefit card 3', 'textarea', 'Format: Title|Subtitle'); ?>
             </table>
+            <h2 id="demo-safety"><?php esc_html_e('Demo safety', 'wpbbshop'); ?></h2>
+            <p><?php esc_html_e('Demo tools are intentionally locked by default on an existing store. Enable them only when you want to create or refresh demo content. After any demo import or demo removal action, the tools lock themselves again automatically.', 'wpbbshop'); ?></p>
+            <table class="form-table" role="presentation">
+                <?php wpbbshop_theme_settings_field('demo_tools_enabled', 'Enable Home & Garden demo tools', 'checkbox', 'Temporary safety switch. The Demo tab will lock itself again after the next demo action.'); ?>
+            </table>
             <h2><?php esc_html_e('WooCommerce functionality', 'wpbbshop'); ?></h2>
             <table class="form-table" role="presentation">
                 <?php wpbbshop_theme_settings_field('enable_wishlist', 'Native wishlist', 'checkbox'); ?>
                 <?php wpbbshop_theme_settings_field('enable_compare', 'Native compare', 'checkbox'); ?>
+                <?php wpbbshop_theme_settings_field('show_b2b_home_section', 'B2B homepage section', 'checkbox', 'Shown only when the B2B module in WP Theme Woo Support is enabled.'); ?>
                 <?php wpbbshop_theme_settings_field('archive_sidebar', 'Shop/category filter sidebar', 'checkbox'); ?>
                 <?php wpbbshop_theme_settings_field('products_per_row', 'Products per row desktop', 'number'); ?>
                 <?php wpbbshop_theme_settings_field('single_related_limit', 'Related products limit', 'number'); ?>
@@ -1867,3 +1875,11 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v426-realistic-media.ph
 
 /* 4.0.28 reliable local photographic demo media and Product Guide image hardening. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v428-media-hardening.php';
+
+/* 4.0.29 safe demo workflow, unique Product Guide media and B2B homepage section. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v429-demo-safety-b2b.php';
+/* 4.0.30 single-product tabs, bilingual account/B2B registration and cart/quote geometry. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v430-commerce-polish.php';
+
+/* 4.0.31 drawer geometry and complete header category search. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v431-drawer-search-polish.php';

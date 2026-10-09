@@ -457,6 +457,7 @@ function wpbbshop_v422_showcase_missing() {
 
 add_action('admin_init', function() {
     if (!current_user_can('manage_options') || !wpbbshop_v422_is_local_site()) { return; }
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { return; }
     if ((string) get_option('wpbbshop_v422_showcase_disabled', '0') === '1') { return; }
     if (wpbbshop_v422_showcase_missing()) { wpbbshop_v422_seed_all(); }
 }, 90);
@@ -479,7 +480,7 @@ function wpbbshop_v422_admin_page() {
     // Legacy URL kept only for backwards compatibility. The submenu itself is
     // removed; anyone opening an old bookmark gets a single link to the new UI.
     ?>
-    <div class="wrap"><h1>Demo imports moved</h1><p>Catalogue, Blog and New Product demo imports are now together under <a href="<?php echo esc_url(admin_url('themes.php?page=wpbbshop-platform&tab=blogdemo')); ?>">Appearance &rarr; Home &amp; Garden</a>.</p></div>
+    <div class="wrap"><h1>Demo imports moved</h1><p>Catalogue, Blog and New Product demo imports are now together under <a href="<?php echo esc_url(admin_url('themes.php?page=wpbbshop-platform&tab=demo')); ?>">Appearance &rarr; Home &amp; Garden</a>.</p></div>
     <?php return; ?>
     <div class="wrap"><h1>WP BB Home & Garden — Demo Blog & Variations</h1>
       <p>Create or refresh bilingual product-guide posts plus heating, cultivator, ride-on mower and mini-tractor demo products with variation-level stock.</p>
@@ -493,20 +494,30 @@ function wpbbshop_v422_admin_page() {
 add_action('admin_post_wpbbshop_v422_seed_showcase', function() {
     if (!current_user_can('manage_options')) { wp_die('Permission denied.'); }
     check_admin_referer('wpbbshop_v422_seed_showcase');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance -> WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $result = function_exists('wpbbshop_v423_seed_all') ? wpbbshop_v423_seed_all() : wpbbshop_v422_seed_all();
     $message = sprintf('Demo showcase ready: %d posts created, %d updated; %d bilingual demo products refreshed.', (int)$result['posts']['created'], (int)$result['posts']['updated'], (int)$result['products']['created']);
-    wp_safe_redirect(add_query_arg('wpbb_notice', rawurlencode($message), admin_url('themes.php?page=wpbbshop-platform&tab=blogdemo'))); exit;
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(add_query_arg('wpbb_notice', rawurlencode($message . ' Demo tools are locked again.'), admin_url('themes.php?page=wpbbshop-platform&tab=demo'))); exit;
 });
 
 function wpbbshop_v422_guide_posts() {
     $lang = wpbbshop_v422_lang();
     $args = array(
-        'post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 12,
+        'post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => -1,
         'meta_key' => '_wpbbshop_v422_order', 'orderby' => array('meta_value_num'=>'ASC','date'=>'DESC'),
         'meta_query' => array(array('key'=>'_wpbbshop_v422_guide','value'=>'1'), array('key'=>'_wpbbshop_v422_lang','value'=>$lang)),
         'suppress_filters' => true,
     );
-    return get_posts($args);
+    $posts = get_posts($args);
+    $unique = array(); $seen = array();
+    foreach ((array) $posts as $post) {
+        $key = (string) get_post_meta($post->ID, '_wpbbshop_v422_guide_key', true);
+        if ($key === '' || isset($seen[$key])) { continue; }
+        $seen[$key] = true; $unique[] = $post;
+        if (count($unique) >= 12) { break; }
+    }
+    return $unique;
 }
 
 function wpbbshop_v422_guides_slider_html() {

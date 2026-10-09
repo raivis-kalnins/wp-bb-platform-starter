@@ -111,3 +111,24 @@ html body.wpbbshop-theme .wpbb-v424-lightbox-arrow.is-prev{left:20px!important}.
   html body.wpbbshop-theme .wpbb-v424-lightbox{padding:16px!important}
   html body.wpbbshop-theme .wpbb-v424-lightbox-arrow{width:42px!important;height:42px!important}
 }
+
+/* 4.0.32: keep blog/gallery navigation glyphs optically centred in their round buttons. */
+html body.wpbbshop-theme .wpbb-v424-gallery-arrow,
+html body.wpbbshop-theme .wpbb-v424-lightbox-arrow{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  text-align:center!important;
+  vertical-align:middle!important;
+}
+html body.wpbbshop-theme .wpbb-v424-gallery-arrow{
+  line-height:46px!important;
+}
+html body.wpbbshop-theme .wpbb-v424-lightbox-arrow{
+  line-height:50px!important;
+}
+@media(max-width:760px){
+  html body.wpbbshop-theme .wpbb-v424-gallery-arrow{line-height:40px!important}
+  html body.wpbbshop-theme .wpbb-v424-lightbox-arrow{line-height:42px!important}
+}

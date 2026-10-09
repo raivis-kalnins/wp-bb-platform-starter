@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP BBuilder
  * Description: Lightweight Bootstrap-oriented Gutenberg blocks optimized for Core Web Vitals and modular front-end loading.
- * Version: 5.8.0
+ * Version: 5.8.2
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Tested up to: 7.1
@@ -12,7 +12,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-define('WPBB_VERSION', '5.8.0');
+define('WPBB_VERSION', '5.8.2');
 define('WPBB_PLUGIN_FILE', __FILE__);
 define('WPBB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WPBB_PLUGIN_URL', plugin_dir_url(__FILE__));

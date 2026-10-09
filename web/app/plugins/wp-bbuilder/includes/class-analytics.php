@@ -24,6 +24,9 @@ final class WPBB_Analytics {
         add_action('admin_menu', [$this, 'admin_menu']);
         add_action('admin_enqueue_scripts', [$this, 'admin_assets']);
         add_action('wp_dashboard_setup', [$this, 'dashboard_widget']);
+        add_action('admin_bar_menu', [$this, 'admin_bar_menu'], 88);
+        add_action('admin_head', [$this, 'admin_bar_styles']);
+        add_action('wp_head', [$this, 'admin_bar_styles']);
         add_action('admin_init', [$this, 'maybe_install']);
         add_action('admin_init', [$this, 'maybe_register_blade_namespace']);
         add_action('admin_post_wpbb_analytics_save_settings', [$this, 'save_settings']);
@@ -218,17 +221,23 @@ final class WPBB_Analytics {
     }
 
     public function admin_menu() {
-        add_menu_page(
-            __('WP BBuilder Analytics', 'wp-bbuilder'),
-            __('WP BBuilder', 'wp-bbuilder'),
+        // Keep BBuilder administration together under WordPress Settings.
+        // Analytics used to create its own top-level menu, which split one
+        // plugin across two admin destinations and made the sidebar noisier.
+        add_options_page(
+            __('WP BBuilder Statistics', 'wp-bbuilder'),
+            __('BBuilder Statistics', 'wp-bbuilder'),
             'manage_options',
             'wpbb-analytics',
-            [$this, 'render_dashboard'],
-            'dashicons-chart-area',
-            58
+            [$this, 'render_dashboard']
         );
-        add_submenu_page('wpbb-analytics', __('Statistics', 'wp-bbuilder'), __('Statistics', 'wp-bbuilder'), 'manage_options', 'wpbb-analytics', [$this, 'render_dashboard']);
-        add_submenu_page('wpbb-analytics', __('Analytics settings', 'wp-bbuilder'), __('Analytics settings', 'wp-bbuilder'), 'manage_options', 'wpbb-analytics-settings', [$this, 'render_settings']);
+        add_options_page(
+            __('WP BBuilder Analytics Settings', 'wp-bbuilder'),
+            __('BBuilder Analytics', 'wp-bbuilder'),
+            'manage_options',
+            'wpbb-analytics-settings',
+            [$this, 'render_settings']
+        );
     }
 
     public function admin_assets($hook) {
@@ -319,7 +328,7 @@ final class WPBB_Analytics {
     public function render_dashboard() {
         if (!current_user_can('manage_options')) return;
         $data = $this->get_report($this->range_days());
-        $data['settings_url'] = admin_url('admin.php?page=wpbb-analytics-settings');
+        $data['settings_url'] = admin_url('options-general.php?page=wpbb-analytics-settings');
         $data['full_settings_url'] = admin_url('options-general.php?page=wpbb-settings');
         $data['nonce'] = wp_create_nonce('wpbb_analytics_admin');
         $this->render_view('analytics-dashboard', $data);
@@ -362,7 +371,7 @@ final class WPBB_Analytics {
         $retention = max(30, min(730, $retention));
         ?>
         <div class="wrap wpbb-analytics-wrap">
-            <div class="wpbb-analytics-head"><div><span class="wpbb-analytics-kicker">WP BB PLATFORM</span><h1><?php esc_html_e('Local analytics settings', 'wp-bbuilder'); ?></h1><p><?php esc_html_e('First-party statistics with no raw IP storage. Country data is used only when your host/CDN already supplies a country header.', 'wp-bbuilder'); ?></p></div><a class="button button-secondary" href="<?php echo esc_url(admin_url('admin.php?page=wpbb-analytics')); ?>"><?php esc_html_e('Open statistics', 'wp-bbuilder'); ?></a></div>
+            <div class="wpbb-analytics-head"><div><span class="wpbb-analytics-kicker">WP BB PLATFORM</span><h1><?php esc_html_e('Local analytics settings', 'wp-bbuilder'); ?></h1><p><?php esc_html_e('First-party statistics with no raw IP storage. Country data is used only when your host/CDN already supplies a country header.', 'wp-bbuilder'); ?></p></div><a class="button button-secondary" href="<?php echo esc_url(admin_url('options-general.php?page=wpbb-analytics')); ?>"><?php esc_html_e('Open statistics', 'wp-bbuilder'); ?></a></div>
             <?php if (!empty($_GET['updated'])): ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e('Analytics settings saved.', 'wp-bbuilder'); ?></p></div><?php endif; ?>
             <div class="wpbb-analytics-panel">
                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -393,7 +402,7 @@ final class WPBB_Analytics {
         $opts['local_analytics_respect_consent'] = !empty($_POST['local_analytics_respect_consent']) ? 1 : 0;
         $opts['local_analytics_retention_days'] = max(30, min(730, absint($_POST['local_analytics_retention_days'] ?? 180)));
         update_option('wpbb_settings', $opts, false);
-        wp_safe_redirect(add_query_arg(['page' => 'wpbb-analytics-settings', 'updated' => '1'], admin_url('admin.php')));
+        wp_safe_redirect(add_query_arg(['page' => 'wpbb-analytics-settings', 'updated' => '1'], admin_url('options-general.php')));
         exit;
     }
 
@@ -433,7 +442,7 @@ final class WPBB_Analytics {
                 'is_demo' => 1,
             ]);
         }
-        wp_safe_redirect(admin_url('admin.php?page=wpbb-analytics&range=90&demo=1'));
+        wp_safe_redirect(admin_url('options-general.php?page=wpbb-analytics&range=90&demo=1'));
         exit;
     }
 
@@ -442,7 +451,7 @@ final class WPBB_Analytics {
         check_admin_referer('wpbb_analytics_clear_demo');
         global $wpdb;
         $wpdb->delete(self::table_name(), ['is_demo' => 1], ['%d']);
-        wp_safe_redirect(admin_url('admin.php?page=wpbb-analytics-settings&demo_removed=1'));
+        wp_safe_redirect(admin_url('options-general.php?page=wpbb-analytics-settings&demo_removed=1'));
         exit;
     }
 
@@ -452,7 +461,7 @@ final class WPBB_Analytics {
         global $wpdb;
         $table = self::table_name();
         $wpdb->query("TRUNCATE TABLE {$table}"); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        wp_safe_redirect(admin_url('admin.php?page=wpbb-analytics-settings&cleared=1'));
+        wp_safe_redirect(admin_url('options-general.php?page=wpbb-analytics-settings&cleared=1'));
         exit;
     }
 
@@ -461,6 +470,75 @@ final class WPBB_Analytics {
         $days = max(30, min(730, (int) wpbb_get_option('local_analytics_retention_days', 180)));
         $cutoff = gmdate('Y-m-d H:i:s', time() - ($days * DAY_IN_SECONDS));
         $wpdb->query($wpdb->prepare("DELETE FROM " . self::table_name() . " WHERE occurred_at < %s", $cutoff));
+    }
+
+    public function admin_bar_menu($wp_admin_bar) {
+        if (!is_admin_bar_showing() || !current_user_can('manage_options')) return;
+
+        $cache_key = 'wpbb_analytics_adminbar_v2';
+        $r = get_transient($cache_key);
+        if (!is_array($r)) {
+            $report = $this->get_report(7);
+            $r = [
+                'views' => (int) ($report['views'] ?? 0),
+                'visitors' => (int) ($report['visitors'] ?? 0),
+                'sessions' => (int) ($report['sessions'] ?? 0),
+                'top' => !empty($report['top_pages'][0]) ? (string) ($report['top_pages'][0]['title'] ?: $report['top_pages'][0]['path']) : '',
+            ];
+            set_transient($cache_key, $r, MINUTE_IN_SECONDS);
+        }
+
+        $title = '<span class="wpbb-ab-analytics-icon dashicons dashicons-chart-area" aria-hidden="true"></span><span class="wpbb-ab-analytics-label">' . esc_html__('Website statistics', 'wp-bbuilder') . '</span><span class="wpbb-ab-analytics-count">' . esc_html(number_format_i18n($r['views'])) . '</span>';
+        $wp_admin_bar->add_node([
+            'id' => 'wpbb-website-statistics',
+            'title' => $title,
+            'href' => admin_url('options-general.php?page=wpbb-analytics'),
+            'meta' => ['class' => 'wpbb-website-statistics'],
+        ]);
+        $wp_admin_bar->add_node([
+            'id' => 'wpbb-website-statistics-summary',
+            'parent' => 'wpbb-website-statistics',
+            'title' => '<span class="wpbb-ab-summary-title">' . esc_html__('Last 7 days', 'wp-bbuilder') . '</span><span class="wpbb-ab-summary-grid"><span><b>' . esc_html(number_format_i18n($r['views'])) . '</b>' . esc_html__('Views', 'wp-bbuilder') . '</span><span><b>' . esc_html(number_format_i18n($r['visitors'])) . '</b>' . esc_html__('Visitors', 'wp-bbuilder') . '</span><span><b>' . esc_html(number_format_i18n($r['sessions'])) . '</b>' . esc_html__('Sessions', 'wp-bbuilder') . '</span></span>',
+            'href' => admin_url('options-general.php?page=wpbb-analytics'),
+            'meta' => ['class' => 'wpbb-analytics-summary-node'],
+        ]);
+        if (!empty($r['top'])) {
+            $wp_admin_bar->add_node([
+                'id' => 'wpbb-website-statistics-top',
+                'parent' => 'wpbb-website-statistics',
+                'title' => esc_html__('Top page:', 'wp-bbuilder') . ' <strong>' . esc_html(wp_html_excerpt($r['top'], 38, '…')) . '</strong>',
+                'href' => admin_url('options-general.php?page=wpbb-analytics'),
+            ]);
+        }
+        $wp_admin_bar->add_node([
+            'id' => 'wpbb-website-statistics-open',
+            'parent' => 'wpbb-website-statistics',
+            'title' => esc_html__('Open full statistics →', 'wp-bbuilder'),
+            'href' => admin_url('options-general.php?page=wpbb-analytics'),
+        ]);
+        $wp_admin_bar->add_node([
+            'id' => 'wpbb-website-statistics-settings',
+            'parent' => 'wpbb-website-statistics',
+            'title' => esc_html__('Analytics settings', 'wp-bbuilder'),
+            'href' => admin_url('options-general.php?page=wpbb-analytics-settings'),
+        ]);
+    }
+
+    public function admin_bar_styles() {
+        if (!is_admin_bar_showing() || !current_user_can('manage_options')) return;
+        ?>
+        <style id="wpbb-analytics-adminbar-style">
+        #wpadminbar #wp-admin-bar-wpbb-website-statistics>.ab-item{display:flex;align-items:center;gap:5px}
+        #wpadminbar .wpbb-ab-analytics-icon{font:normal 18px/1 dashicons!important;width:18px;height:18px;margin:0!important;padding:0!important;top:auto!important}
+        #wpadminbar .wpbb-ab-analytics-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.14);font-size:10px;font-weight:700;line-height:18px}
+        #wpadminbar #wp-admin-bar-wpbb-website-statistics .ab-sub-wrapper{min-width:310px}
+        #wpadminbar #wp-admin-bar-wpbb-website-statistics-summary>.ab-item{height:auto!important;white-space:normal!important;padding-top:10px!important;padding-bottom:10px!important}
+        #wpadminbar .wpbb-ab-summary-title{display:block;color:#a7aaad;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+        #wpadminbar .wpbb-ab-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+        #wpadminbar .wpbb-ab-summary-grid>span{display:flex;flex-direction:column;min-width:0;padding:7px 8px;border-radius:6px;background:rgba(255,255,255,.06);font-size:10px;color:#c3c4c7}
+        #wpadminbar .wpbb-ab-summary-grid b{display:block;color:#fff;font-size:15px;line-height:1.2;margin-bottom:2px}
+        </style>
+        <?php
     }
 
     public function dashboard_widget() {
@@ -476,6 +554,6 @@ final class WPBB_Analytics {
         }
         echo '</div>';
         if (!empty($r['top_pages'][0])) echo '<p><strong>' . esc_html__('Top page:', 'wp-bbuilder') . '</strong> ' . esc_html($r['top_pages'][0]['title'] ?: $r['top_pages'][0]['path']) . '</p>';
-        echo '<p><a class="button button-primary" href="' . esc_url(admin_url('admin.php?page=wpbb-analytics')) . '">' . esc_html__('Open analytics', 'wp-bbuilder') . '</a></p>';
+        echo '<p><a class="button button-primary" href="' . esc_url(admin_url('options-general.php?page=wpbb-analytics')) . '">' . esc_html__('Open analytics', 'wp-bbuilder') . '</a></p>';
     }
 }

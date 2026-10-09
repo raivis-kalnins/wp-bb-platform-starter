@@ -1,0 +1,5 @@
+/* WP BB Home & Garden 4.0.29 - B2B homepage integration. */
+.wpbb-v429-b2b-home{margin-top:clamp(28px,4vw,54px);margin-bottom:clamp(26px,4vw,50px)}
+.wpbb-v429-b2b-home .iws-b2b-home-promo{margin:0}
+.wpbb-v429-guide-photo{width:100%;height:auto;object-fit:cover}
+@media(max-width:720px){.wpbb-v429-b2b-home{margin-top:26px;margin-bottom:28px}}

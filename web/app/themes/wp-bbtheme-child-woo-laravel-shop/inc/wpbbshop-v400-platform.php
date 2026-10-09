@@ -443,14 +443,14 @@ function wpbbshop_v400_blade_templates() {
 function wpbbshop_v400_admin_page() {
     if (!current_user_can('manage_options')) { return; }
     $tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'demo';
-    if (!in_array($tab, array('demo','blogdemo','newdemo','languages','feeds','templates','performance'), true)) { $tab = 'demo'; }
+    if (in_array($tab, array('blogdemo','newdemo'), true)) { $tab = 'demo'; }
+    if (!in_array($tab, array('demo','languages','feeds','templates','performance'), true)) { $tab = 'demo'; }
     $lang = wpbbshop_v400_current_language();
     $lv = $lang === 'lv';
     $notice = isset($_GET['wpbb_notice']) ? sanitize_text_field(wp_unslash($_GET['wpbb_notice'])) : '';
+    $demo_enabled = function_exists('wpbbshop_v429_demo_tools_enabled') ? wpbbshop_v429_demo_tools_enabled() : true;
     $tabs = array(
-        'demo'=>$lv ? 'Demo katalogs' : 'Demo catalogue',
-        'blogdemo'=>$lv ? 'Demo blogs' : 'Blog demo',
-        'newdemo'=>$lv ? 'Jauno preču demo' : 'New product demo',
+        'demo'=>$lv ? 'Demo' : 'Demo',
         'languages'=>$lv ? 'Valodas' : 'Languages',
         'feeds'=>'XML feeds',
         'templates'=>'Laravel / Svelte',
@@ -459,51 +459,56 @@ function wpbbshop_v400_admin_page() {
     ?>
     <div class="wrap wpbb-v400-admin">
       <div class="wpbb-v400-admin-hero">
-        <div><span class="wpbb-v400-kicker">WP BB PLATFORM</span><h1>Home &amp; Garden</h1><p><?php echo esc_html($lv ? 'Viena vieta demo katalogam, demo blogam, jauno preču demo, valodām, XML plūsmām, Laravel/Blade un kataloga veiktspējai.' : 'One place for catalogue, blog and new-product demo imports, languages, XML feeds, Laravel/Blade and catalogue performance.'); ?></p></div>
+        <div><span class="wpbb-v400-kicker">WP BB PLATFORM</span><h1>Home &amp; Garden</h1><p><?php echo esc_html($lv ? 'Droša viena demo cilne, valodas, XML plūsmas, Laravel/Blade un kataloga veiktspēja.' : 'One protected demo workspace, languages, XML feeds, Laravel/Blade and catalogue performance.'); ?></p></div>
         <div class="wpbb-v400-admin-brand"><span>WP</span><strong>BB</strong></div>
       </div>
       <?php if ($notice) : ?><div class="notice notice-success is-dismissible"><p><?php echo esc_html($notice); ?></p></div><?php endif; ?>
       <nav class="nav-tab-wrapper">
-        <?php foreach ($tabs as $slug=>$label) : ?><a class="nav-tab <?php echo $tab===$slug?'nav-tab-active':''; ?>" href="<?php echo esc_url(wpbbshop_v400_admin_url($slug)); ?>"><?php echo esc_html($label); ?></a><?php endforeach; ?>
+        <?php foreach ($tabs as $slug=>$label) : ?>
+          <?php if ($slug === 'demo' && !$demo_enabled) : ?>
+            <span class="nav-tab wpbb-v429-demo-tab-disabled" title="<?php echo esc_attr($lv ? 'Iespējo demo rīkus tēmas iestatījumos' : 'Enable demo tools in Theme Settings'); ?>">🔒 <?php echo esc_html($label); ?></span>
+          <?php else : ?>
+            <a class="nav-tab <?php echo $tab===$slug?'nav-tab-active':''; ?>" href="<?php echo esc_url(wpbbshop_v400_admin_url($slug)); ?>"><?php echo esc_html($label); ?></a>
+          <?php endif; ?>
+        <?php endforeach; ?>
       </nav>
       <div class="wpbb-v400-panel">
       <?php if ($tab === 'demo') :
-          $count = wpbbshop_v400_count_demo_products(); ?>
-        <h2><?php echo esc_html($lv ? '500 preču Home & Garden demo' : '500+ product Home & Garden demo'); ?></h2>
-        <p><?php echo esc_html($lv ? 'Atjauno vienu un to pašu 500 HG-DEMO katalogu bez dublikātiem. Katra nodaļa izmanto reālas produktu fotogrāfijas; bloga un jauno preču demo imports ir atsevišķās cilnēs blakus.' : 'Refresh the same 500-item HG-DEMO catalogue without duplicates. Every department now uses real product photography; Blog demo and New product demo are managed in the tabs beside this one.'); ?></p>
-        <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($count); ?></strong><span><?php echo esc_html($lv ? 'demo preces šobrīd' : 'demo products currently'); ?></span></div>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-          <input type="hidden" name="action" value="wpbbshop_v400_seed">
-          <?php wp_nonce_field('wpbbshop_v400_seed'); ?>
-          <?php submit_button($lv ? 'Izveidot / atjaunot 500 demo preces' : 'Create / refresh demo catalogue', 'primary', 'submit', false); ?>
-        </form>
-        <form class="wpbb-v400-danger-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('<?php echo esc_js($lv ? 'Dzēst tikai tēmas demo preces?' : 'Delete only theme demo products?'); ?>');">
-          <input type="hidden" name="action" value="wpbbshop_v400_remove_demo">
-          <?php wp_nonce_field('wpbbshop_v400_remove_demo'); ?>
-          <?php submit_button($lv ? 'Dzēst demo katalogu' : 'Remove demo catalogue', 'secondary', 'submit', false); ?>
-        </form>
-      <?php elseif ($tab === 'blogdemo') :
-          $guide_count = wpbbshop_v400_count_demo_guides(); ?>
-        <h2><?php echo esc_html($lv ? 'Demo blogs / preču ceļveži' : 'Demo blog / product guides'); ?></h2>
-        <p><?php echo esc_html($lv ? 'Izveido vai atjauno tikai tēmas demo rakstus. Attēli ir moderni, reāli foto un katram ceļvedim atšķirīgi.' : 'Create or refresh only the theme-owned demo guide posts. The guide cards now use modern real photography with a different image for each topic.'); ?></p>
-        <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($guide_count); ?></strong><span><?php echo esc_html($lv ? 'demo raksti šobrīd' : 'demo guide posts currently'); ?></span></div>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-          <input type="hidden" name="action" value="wpbbshop_v427_seed_blog">
-          <?php wp_nonce_field('wpbbshop_v427_seed_blog'); ?>
-          <?php submit_button($lv ? 'Izveidot / atjaunot demo blogu' : 'Create / refresh demo blog', 'primary', 'submit', false); ?>
-        </form>
-        <p class="description"><?php echo esc_html($lv ? 'Darbību drīkst atkārtot — esošie demo raksti tiek atjaunoti, nevis dublēti.' : 'Safe to run again: existing demo posts are updated instead of duplicated.'); ?></p>
-      <?php elseif ($tab === 'newdemo') :
+          $count = wpbbshop_v400_count_demo_products();
+          $guide_count = wpbbshop_v400_count_demo_guides();
           $new_demo_count = wpbbshop_v400_count_new_demo_products(); ?>
-        <h2><?php echo esc_html($lv ? 'Jauno preču demo' : 'New product demo'); ?></h2>
-        <p><?php echo esc_html($lv ? 'Izveido vai atjauno detalizētās apkures un dārza demo preces ar variācijām, atlikumiem un reālu foto galeriju.' : 'Create or refresh the richer heating and garden demo products with variations, stock and real photographic galleries.'); ?></p>
-        <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($new_demo_count); ?></strong><span><?php echo esc_html($lv ? 'jauno demo preču šobrīd' : 'new demo products currently'); ?></span></div>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-          <input type="hidden" name="action" value="wpbbshop_v427_seed_new_products">
-          <?php wp_nonce_field('wpbbshop_v427_seed_new_products'); ?>
-          <?php submit_button($lv ? 'Izveidot / atjaunot jauno preču demo' : 'Create / refresh new product demo', 'primary', 'submit', false); ?>
-        </form>
-        <p class="description"><?php echo esc_html($lv ? 'Darbību drīkst atkārtot — tēmas demo SKU tiek atjaunoti bez dublikātiem.' : 'Safe to run again: the theme-owned demo SKUs are refreshed without duplicates.'); ?></p>
+        <?php if (!$demo_enabled) : ?>
+          <div class="wpbb-v429-demo-lock">
+            <span class="dashicons dashicons-lock"></span>
+            <div><h2><?php echo esc_html($lv ? 'Demo rīki ir bloķēti' : 'Demo tools are locked'); ?></h2><p><?php echo esc_html($lv ? 'Tas aizsargā esošās veikala preces un rakstus no nejaušas demo atjaunošanas. Lai palaistu demo importu, īslaicīgi aktivizē demo rīkus atsevišķajā tēmas iestatījumu lapā.' : 'This protects existing store products and posts from an accidental demo refresh. To run a demo import, temporarily enable Demo tools on the separate Theme Settings page.'); ?></p><a class="button button-primary" href="<?php echo esc_url(admin_url('themes.php?page=wpbbshop-theme-settings#demo-safety')); ?>"><?php echo esc_html($lv ? 'Atvērt tēmas iestatījumus' : 'Open Theme Settings'); ?></a></div>
+          </div>
+        <?php else : ?>
+          <div class="wpbb-v429-demo-warning"><strong><?php echo esc_html($lv ? 'Demo režīms ir īslaicīgi aktivizēts.' : 'Demo mode is temporarily enabled.'); ?></strong> <?php echo esc_html($lv ? 'Pēc jebkuras darbības tas automātiski tiks bloķēts vēlreiz.' : 'After any demo action it will automatically lock again.'); ?></div>
+          <div class="wpbb-v429-demo-grid">
+            <section class="wpbb-v429-demo-card">
+              <span class="wpbb-v429-demo-card__kicker"><?php echo esc_html($lv ? 'KATALOGS' : 'CATALOGUE'); ?></span>
+              <h2><?php echo esc_html($lv ? '500+ Home & Garden demo preces' : '500+ Home & Garden demo products'); ?></h2>
+              <p><?php echo esc_html($lv ? 'Izveido vai atjauno tikai HG-DEMO katalogu bez dublikātiem.' : 'Create or refresh only the HG-DEMO catalogue without duplicates.'); ?></p>
+              <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($count); ?></strong><span><?php echo esc_html($lv ? 'demo preces' : 'demo products'); ?></span></div>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="wpbbshop_v400_seed"><?php wp_nonce_field('wpbbshop_v400_seed'); ?><?php submit_button($lv ? 'Izveidot / atjaunot katalogu' : 'Create / refresh catalogue', 'primary', 'submit', false); ?></form>
+              <form class="wpbb-v400-danger-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('<?php echo esc_js($lv ? 'Dzēst tikai tēmas demo katalogu?' : 'Delete only theme demo catalogue products?'); ?>');"><input type="hidden" name="action" value="wpbbshop_v400_remove_demo"><?php wp_nonce_field('wpbbshop_v400_remove_demo'); ?><?php submit_button($lv ? 'Dzēst demo katalogu' : 'Remove demo catalogue', 'secondary', 'submit', false); ?></form>
+            </section>
+            <section class="wpbb-v429-demo-card">
+              <span class="wpbb-v429-demo-card__kicker"><?php echo esc_html($lv ? 'BLOGS' : 'BLOG'); ?></span>
+              <h2><?php echo esc_html($lv ? 'Preču ceļvežu demo' : 'Product guide demo'); ?></h2>
+              <p><?php echo esc_html($lv ? 'Atjauno tēmas demo rakstus ar unikālām, tēmai atbilstošām fotogrāfijām.' : 'Refresh theme-owned guide posts with unique, topic-specific photography.'); ?></p>
+              <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($guide_count); ?></strong><span><?php echo esc_html($lv ? 'demo raksti' : 'demo guides'); ?></span></div>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="wpbbshop_v427_seed_blog"><?php wp_nonce_field('wpbbshop_v427_seed_blog'); ?><?php submit_button($lv ? 'Izveidot / atjaunot demo blogu' : 'Create / refresh demo blog', 'primary', 'submit', false); ?></form>
+            </section>
+            <section class="wpbb-v429-demo-card">
+              <span class="wpbb-v429-demo-card__kicker"><?php echo esc_html($lv ? 'JAUNĀS PRECES' : 'NEW PRODUCTS'); ?></span>
+              <h2><?php echo esc_html($lv ? 'Detalizēto preču demo' : 'Rich new-product demo'); ?></h2>
+              <p><?php echo esc_html($lv ? 'Variācijas, atlikumi un reālas foto galerijas apkures un dārza precēm.' : 'Variations, stock and real photographic galleries for heating and garden products.'); ?></p>
+              <div class="wpbb-v400-metric"><strong><?php echo number_format_i18n($new_demo_count); ?></strong><span><?php echo esc_html($lv ? 'jauno demo preču' : 'new demo products'); ?></span></div>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="wpbbshop_v427_seed_new_products"><?php wp_nonce_field('wpbbshop_v427_seed_new_products'); ?><?php submit_button($lv ? 'Izveidot / atjaunot jauno preču demo' : 'Create / refresh new product demo', 'primary', 'submit', false); ?></form>
+            </section>
+          </div>
+        <?php endif; ?>
       <?php elseif ($tab === 'languages') : ?>
         <h2><?php echo esc_html($lv ? 'Angļu un latviešu valoda' : 'English and Latvian'); ?></h2>
         <p><?php echo esc_html($lv ? 'Noklusējuma valodu vari pārslēgt jebkurā laikā. Tēmas publiskā saskarne izmanto aktīvo Polylang valodu.' : 'You can switch the default language at any time. The public theme UI follows the active Polylang language.'); ?></p>
@@ -627,11 +632,13 @@ add_action('admin_enqueue_scripts', function() {
 add_action('admin_post_wpbbshop_v400_seed', function() {
     if (!current_user_can('manage_options')) { wp_die('Permission denied.'); }
     check_admin_referer('wpbbshop_v400_seed');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance → WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $result = function_exists('wpbbshop_megastore_seed_500_312') ? wpbbshop_megastore_seed_500_312() : new WP_Error('missing','Demo engine missing.');
     wpbbshop_v400_backfill_demo_images();
     $message = is_wp_error($result)
         ? $result->get_error_message()
         : sprintf('Demo catalogue ready: %d created, %d updated.', absint($result['created']), absint($result['updated']));
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
     wp_safe_redirect(wpbbshop_v400_admin_url('demo', array('wpbb_notice'=>$message)));
     exit;
 });
@@ -639,27 +646,33 @@ add_action('admin_post_wpbbshop_v400_seed', function() {
 add_action('admin_post_wpbbshop_v400_remove_demo', function() {
     if (!current_user_can('manage_options')) { wp_die('Permission denied.'); }
     check_admin_referer('wpbbshop_v400_remove_demo');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance → WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $deleted = function_exists('wpbbshop_green_remove_demo_catalog') ? wpbbshop_green_remove_demo_catalog() : 0;
-    wp_safe_redirect(wpbbshop_v400_admin_url('demo', array('wpbb_notice'=>sprintf('Removed %d demo products.', absint($deleted)))));
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(wpbbshop_v400_admin_url('demo', array('wpbb_notice'=>sprintf('Removed %d demo products. Demo tools are locked again.', absint($deleted)))));
     exit;
 });
 
 add_action('admin_post_wpbbshop_v427_seed_blog', function() {
     if (!current_user_can('manage_options')) { wp_die('Permission denied.'); }
     check_admin_referer('wpbbshop_v427_seed_blog');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance → WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $result = function_exists('wpbbshop_v423_seed_posts') ? wpbbshop_v423_seed_posts() : (function_exists('wpbbshop_v422_seed_posts') ? wpbbshop_v422_seed_posts() : array('created'=>0,'updated'=>0));
     $message = sprintf('Demo blog ready: %d created, %d updated.', absint(isset($result['created']) ? $result['created'] : 0), absint(isset($result['updated']) ? $result['updated'] : 0));
-    wp_safe_redirect(wpbbshop_v400_admin_url('blogdemo', array('wpbb_notice'=>$message)));
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(wpbbshop_v400_admin_url('demo', array('wpbb_notice'=>$message . ' Demo tools are locked again.')));
     exit;
 });
 
 add_action('admin_post_wpbbshop_v427_seed_new_products', function() {
     if (!current_user_can('manage_options')) { wp_die('Permission denied.'); }
     check_admin_referer('wpbbshop_v427_seed_new_products');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance → WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     $result = function_exists('wpbbshop_v423_seed_products') ? wpbbshop_v423_seed_products() : (function_exists('wpbbshop_v422_seed_products') ? wpbbshop_v422_seed_products() : array('created'=>0,'updated'=>0));
     $total = absint(isset($result['created']) ? $result['created'] : 0) + absint(isset($result['updated']) ? $result['updated'] : 0);
     $message = sprintf('New product demo ready: %d products refreshed.', $total);
-    wp_safe_redirect(wpbbshop_v400_admin_url('newdemo', array('wpbb_notice'=>$message)));
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(wpbbshop_v400_admin_url('demo', array('wpbb_notice'=>$message . ' Demo tools are locked again.')));
     exit;
 });
 

@@ -162,12 +162,28 @@ add_action('init', function(){
 function wpbbshop_megastore_ajax_search_312() {
     check_ajax_referer('wpbbshop_ajax', 'nonce');
     $term = isset($_GET['term']) ? trim(sanitize_text_field(wp_unslash($_GET['term']))) : '';
+    $product_cat = isset($_GET['product_cat']) ? sanitize_title(wp_unslash($_GET['product_cat'])) : '';
     $out = array();
-    if ($term === '' || !class_exists('WooCommerce')) { wp_send_json_success($out); }
+    if ($term === '' || !class_exists('WooCommerce')) { wp_send_json_success(array('items'=>$out)); }
+
+    $allowed_term_ids = array();
+    if ($product_cat !== '') {
+        $cat_term = get_term_by('slug', $product_cat, 'product_cat');
+        if ($cat_term && !is_wp_error($cat_term)) {
+            $allowed_term_ids[] = (int) $cat_term->term_id;
+            $children = get_term_children((int) $cat_term->term_id, 'product_cat');
+            if (!is_wp_error($children)) {
+                $allowed_term_ids = array_values(array_unique(array_merge($allowed_term_ids, array_map('intval', (array) $children))));
+            }
+        }
+    }
+
     global $wpdb;
     $like = '%' . $wpdb->esc_like($term) . '%';
     $lookup = $wpdb->wc_product_meta_lookup;
-    $ids = $wpdb->get_col($wpdb->prepare(
+    // Pull a larger candidate set when a category filter is active; relation checks below are cached by WordPress.
+    $candidate_limit = $allowed_term_ids ? 60 : 12;
+    $sql = $wpdb->prepare(
         "SELECT DISTINCT p.ID
          FROM {$wpdb->posts} p
          LEFT JOIN {$lookup} l ON l.product_id = p.ID
@@ -175,23 +191,51 @@ function wpbbshop_megastore_ajax_search_312() {
          WHERE p.post_type = 'product' AND p.post_status = 'publish'
            AND (p.post_title LIKE %s OR l.sku LIKE %s OR pm.meta_value LIKE %s)
          ORDER BY CASE WHEN l.sku = %s THEN 0 WHEN p.post_title LIKE %s THEN 1 ELSE 2 END, p.post_title ASC
-         LIMIT 10",
-        $like, $like, $like, $term, $term . '%'
-    ));
+         LIMIT %d",
+        $like, $like, $like, $term, $term . '%', $candidate_limit
+    );
+    $ids = $wpdb->get_col($sql);
+
     foreach ((array)$ids as $id) {
-        $product = wc_get_product((int)$id);
+        $id = (int) $id;
+        if ($allowed_term_ids && !has_term($allowed_term_ids, 'product_cat', $id)) { continue; }
+        $product = wc_get_product($id);
         if (!$product) { continue; }
-        $image = function_exists('wpbbshop_green_product_image_html') ? wpbbshop_green_product_image_html($product) : $product->get_image('woocommerce_thumbnail');
+        $image_url = wp_get_attachment_image_url($product->get_image_id(), 'woocommerce_thumbnail');
+        $terms = get_the_terms($id, 'product_cat');
+        $category = (!is_wp_error($terms) && !empty($terms)) ? $terms[0]->name : '';
+        $stock = $product->is_in_stock() ? __('In stock', 'wpbbshop') : __('Out of stock', 'wpbbshop');
+        $regular = '';
+        if ($product->is_on_sale() && $product->get_regular_price() !== '') {
+            $regular = wp_strip_all_tags(wc_price((float) $product->get_regular_price()));
+        }
         $out[] = array(
-            'id'=>(int)$id,
-            'name'=>$product->get_name(),
-            'url'=>get_permalink($id),
-            'price'=>wp_strip_all_tags($product->get_price_html()),
-            'sku'=>$product->get_sku(),
-            'image'=>$image,
+            'id'           => $id,
+            'title'        => $product->get_name(),
+            'name'         => $product->get_name(),
+            'url'          => get_permalink($id),
+            'price'        => wp_strip_all_tags($product->get_price_html()),
+            'regularPrice' => $regular,
+            'sku'          => $product->get_sku(),
+            'image'        => $image_url ? esc_url_raw($image_url) : '',
+            'category'     => $category,
+            'stock'        => $stock,
         );
+        if (count($out) >= 10) { break; }
     }
-    wp_send_json_success($out);
+
+    $all_url = add_query_arg(array_filter(array(
+        's'           => $term,
+        'post_type'   => 'product',
+        'product_cat' => $product_cat,
+    )), home_url('/'));
+    $is_en = function_exists('wpbbshop_v312_is_en') ? wpbbshop_v312_is_en() : true;
+    wp_send_json_success(array(
+        'items'      => $out,
+        'allUrl'     => $all_url,
+        'allLabel'   => $is_en ? 'View all results' : 'Skatīt visus rezultātus',
+        'emptyLabel' => $is_en ? 'No products found.' : 'Preces netika atrastas.',
+    ));
 }
 add_action('init', function(){
     remove_action('wp_ajax_wpbbshop_product_search', 'wpbbshop_ajax_product_search');
@@ -295,7 +339,9 @@ add_action('admin_menu', function(){
 add_action('admin_post_wpbbshop_garden_seed_312', function(){
     if (!current_user_can('manage_options')) { wp_die('Permission denied'); }
     check_admin_referer('wpbbshop_garden_seed_312');
+    if (function_exists('wpbbshop_v429_demo_tools_enabled') && !wpbbshop_v429_demo_tools_enabled()) { wp_die(esc_html__('Demo tools are locked. Enable them in Appearance -> WP BB HOME & GARDEN Theme Settings.', 'wpbbshop')); }
     wpbbshop_megastore_seed_500_312();
-    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>'Demo catalogue refreshed.'), admin_url('themes.php')));
+    if (function_exists('wpbbshop_v429_lock_demo_tools')) { wpbbshop_v429_lock_demo_tools(); }
+    wp_safe_redirect(add_query_arg(array('page'=>'wpbbshop-platform','tab'=>'demo','wpbb_notice'=>'Demo catalogue refreshed. Demo tools are locked again.'), admin_url('themes.php')));
     exit;
 });

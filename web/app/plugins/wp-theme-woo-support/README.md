@@ -1,4 +1,4 @@
-# WP Theme Woo Support 3.8.0
+# WP Theme Woo Support 3.8.3
 
 Reusable WooCommerce functionality for the WP BBTheme suite. Ecommerce behaviour is kept in this companion plugin so sector child themes can share robust catalogue, product, variation, cart/account and quote workflows without duplicating business logic.
 
@@ -93,3 +93,33 @@ The Marketing Intelligence screen now adds deeper CRM-style commerce insight whi
 - Local CRM Intelligence adds customer segmentation, repeat-rate/AOV metrics, predicted reorder dates, cohort/revenue charts, action recommendations and CSV segment export without depending on FluentCRM.
 - Product Sync provides native JSON/XML/CSV/Woo REST import profiles, SKU/external-ID upserts, image sideloading, stock/price-only fast mode, scheduled WP-Cron jobs, secure external cron URLs and CSV/JSON/XML product export.
 - A live DummyJSON draft-import profile can be created from the Product Sync screen for safe testing; the public test endpoint is intended only for development/demo data.
+
+
+## 3.8.1 B2B homepage component
+
+- Adds reusable `iws_b2b_home_promo_html()` and `[iws_b2b_home_promo]` output for storefront homepages.
+- The CTA follows the current account state (apply, pending, or open B2B dashboard) and reuses the live B2B pricing/order settings.
+- The Home & Garden child theme can now add the B2B section without duplicating account logic.
+
+
+
+## 3.8.3 B2B homepage CTA state
+
+- The primary B2B homepage action now has an explicit lime background and dark text in normal, link and visited states.
+- Hover/focus switches to a white button with dark green text, preventing theme/global link colors from producing an apparently blank white button.
+
+## 3.8.2 account and layout polish
+
+- Adds an optional B2B/trade checkbox and business fields to normal WooCommerce My Account registration.
+- B2B sign-ups are assigned pending/approved trade roles using the existing approval settings.
+- Improves mini-cart and quote button/product-width resilience inside custom themes.
+- Fixes CRM Intelligence cards inheriting WordPress admin's narrow `.card` max-width.
+- Adds a reusable single-product B2B/trade status panel for custom shop templates.
+
+## 3.8.5 Latvian B2B homepage translation
+
+- Completes Latvian translation for the homepage B2B / Trade promotion.
+- Translates the trade-account CTA, Browse products button, discount text, order-rule text and all three benefit labels.
+- Uses the active Polylang language (with locale fallback), so English remains English and Latvian renders fully in Latvian.
+- Also localises the compact single-product B2B kicker.
+

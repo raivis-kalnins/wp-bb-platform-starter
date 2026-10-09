@@ -144,7 +144,7 @@ function wpbbshop_v426_blog_sources() {
         ),
         'variation-stock' => array(
             'file' => 'A Kaleidoscope of Kitchen and Home Storage.jpg',
-            'license' => 'See Wikimedia Commons file page',
+            'license' => 'CC BY-SA 4.0',
             'credit' => 'Kaviya Rajendran / Wikimedia Commons',
         ),
         'underfloor-heating' => array(
@@ -154,8 +154,8 @@ function wpbbshop_v426_blog_sources() {
         ),
         'garden-maintenance' => array(
             'file' => 'Person using a lawn mower in a green garden.jpg',
-            'license' => 'See Wikimedia Commons file page',
-            'credit' => 'Shixart1985 / Wikimedia Commons',
+            'license' => 'CC BY 2.0',
+            'credit' => 'Nenad Stojkovic (Shixart1985) / Wikimedia Commons',
         ),
         'heat-pump-guide' => array(
             'file' => 'NIBE S2125 air source heat pump (rear) - Science Museum, London.jpg',
@@ -163,9 +163,9 @@ function wpbbshop_v426_blog_sources() {
             'credit' => 'The wub / Wikimedia Commons',
         ),
         'tractor-attachments' => array(
-            'file' => 'Garden machines, tractor.jpg',
-            'license' => 'CC BY-SA 4.0',
-            'credit' => 'Emmanuel Ssekaggo / Wikimedia Commons',
+            'file' => 'TractorWithMountedRototiller.JPG',
+            'license' => 'Public domain',
+            'credit' => 'KVDP / Wikimedia Commons',
         ),
     );
 }
