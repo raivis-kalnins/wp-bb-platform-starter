@@ -20,6 +20,7 @@ do_action('woocommerce_before_mini_cart');
                 <div class="llg-mini-cart-copy">
                     <a class="llg-mini-cart-title" href="<?php echo esc_url($product_permalink ?: '#'); ?>"><?php echo wp_kses_post($product_name); ?></a>
                     <?php if ($_product->get_sku()) : ?><span class="llg-mini-cart-sku">SKU: <?php echo esc_html($_product->get_sku()); ?></span><?php endif; ?>
+                    <?php $item_details = wc_get_formatted_cart_item_data($cart_item); if ($item_details) : ?><div class="llg-mini-cart-variation"><?php echo wp_kses_post($item_details); ?></div><?php endif; ?>
                     <div class="llg-mini-cart-price">
                         <span><?php echo esc_html((int)$cart_item['quantity']); ?> ×</span>
                         <?php if (!empty($price['regular'])) : ?><del><?php echo wp_kses_post($price['regular']); ?></del><?php endif; ?>
@@ -34,10 +35,10 @@ do_action('woocommerce_before_mini_cart');
     <div class="llg-mini-cart-summary">
         <p class="woocommerce-mini-cart__total total"><span><?php echo esc_html($is_en ? 'Subtotal' : 'Starpsumma'); ?></span><strong><?php echo wp_kses_post(WC()->cart->get_cart_subtotal()); ?></strong></p>
         <?php do_action('woocommerce_widget_shopping_cart_before_buttons'); ?>
-        <p class="woocommerce-mini-cart__buttons buttons llg-mini-cart-buttons">
+        <div class="woocommerce-mini-cart__buttons buttons llg-mini-cart-buttons">
             <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="button wc-forward llg-mini-cart-view"><?php echo esc_html($is_en ? 'View cart' : 'Apskatīt grozu'); ?></a>
             <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="button checkout wc-forward llg-mini-cart-checkout"><?php echo esc_html($is_en ? 'Checkout' : 'Veikt pasūtījumu'); ?></a>
-        </p>
+        </div>
         <?php do_action('woocommerce_widget_shopping_cart_after_buttons'); ?>
     </div>
 <?php else : ?>

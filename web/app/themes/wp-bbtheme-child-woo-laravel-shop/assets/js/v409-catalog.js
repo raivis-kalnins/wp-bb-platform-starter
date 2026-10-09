@@ -7,7 +7,7 @@
     if(!$form.length || !$grid.length || typeof WPBBShopCatalog409==='undefined') return;
   }
   function payload(page){
-    var data={action:'wpbbshop_v409_catalog',nonce:WPBBShopCatalog409.nonce,page:page||1};
+    var data={action:'wpbbshop_v409_catalog',lang:WPBBShopCatalog409.lang,nonce:WPBBShopCatalog409.nonce,page:page||1};
     $.each($form.serializeArray(),function(_,item){ data[item.name]=item.value; });
     $form.find('input[type=checkbox]').each(function(){ data[this.name]=this.checked ? '1' : ''; });
     return data;

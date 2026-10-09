@@ -1,5 +1,9 @@
 # WP BB Home & Garden Child Theme v4.0.32
 
+## Coordinated October 2026 update: 4.0.34
+
+See [CHANGELOG-4.0.34.md](CHANGELOG-4.0.34.md) for current behaviour and setup requirements. Older sections below describe the previous releases, not additional setup steps.
+
 ## 4.0.29 protected demo, unique guides and B2B homepage
 
 - Consolidates **Demo catalogue**, **Blog demo** and **New product demo** into one protected **Demo** workspace.

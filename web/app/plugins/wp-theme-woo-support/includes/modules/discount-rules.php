@@ -35,8 +35,10 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 			add_filter( 'woocommerce_cart_item_price', array( __CLASS__, 'cart_item_price_html' ), 20, 3 );
 			add_filter( 'woocommerce_cart_item_subtotal', array( __CLASS__, 'cart_item_subtotal_html' ), 20, 3 );
 			add_filter( 'woocommerce_checkout_cart_item_quantity', array( __CLASS__, 'checkout_item_discount_html' ), 20, 3 );
-			add_filter( 'woocommerce_product_get_price', array( __CLASS__, 'runtime_product_price' ), 20, 2 );
-			add_filter( 'woocommerce_product_variation_get_price', array( __CLASS__, 'runtime_product_price' ), 20, 2 );
+			add_filter( 'woocommerce_product_get_price', array( __CLASS__, 'runtime_product_price' ), 30, 2 );
+			add_filter( 'woocommerce_product_variation_get_price', array( __CLASS__, 'runtime_product_price' ), 30, 2 );
+			add_filter('woocommerce_variation_prices_price', array(__CLASS__, 'runtime_product_price'), 30, 2);
+			add_filter('woocommerce_get_variation_prices_hash', array(__CLASS__, 'variation_hash'), 35, 3);
 			add_action( 'woocommerce_checkout_create_order_line_item', array( __CLASS__, 'store_order_item_discount_meta' ), 20, 4 );
 		}
 
@@ -120,9 +122,10 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 					'apply_to'     => in_array( $raw_rule['apply_to'] ?? 'all', array( 'all', 'products', 'categories' ), true ) ? $raw_rule['apply_to'] : 'all',
 					'product_ids'  => self::clean_ids( $raw_rule['product_ids'] ?? array() ),
 					'category_ids' => self::clean_ids( $raw_rule['category_ids'] ?? array() ),
-					'customer_type'=> in_array( $raw_rule['customer_type'] ?? 'all', array( 'all', 'users', 'levels' ), true ) ? $raw_rule['customer_type'] : 'all',
+					'customer_type'=> in_array( $raw_rule['customer_type'] ?? 'all', array( 'all', 'users', 'levels', 'roles', 'guests', 'retail', 'wholesale' ), true ) ? $raw_rule['customer_type'] : 'all',
 					'user_ids'     => self::clean_ids( $raw_rule['user_ids'] ?? array() ),
 					'user_levels'  => self::clean_levels( $raw_rule['user_levels'] ?? array() ),
+                    'user_roles' => implode(',', array_intersect(array_keys(wp_roles()->roles), array_map('sanitize_key', (array)($raw_rule['user_roles'] ?? [])))),
 					'min_qty'      => absint( $raw_rule['min_qty'] ?? 0 ),
 					'max_qty'      => absint( $raw_rule['max_qty'] ?? 0 ),
 					'min_subtotal' => wc_format_decimal( $raw_rule['min_subtotal'] ?? 0 ),
@@ -196,7 +199,7 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 		}
 
 		private static function blank_rule() {
-			return array( 'id' => uniqid( 'rule_', false ), 'enabled' => 'yes', 'title' => '', 'priority' => 10, 'target' => 'product', 'discount' => 'percentage', 'value' => '', 'apply_to' => 'all', 'product_ids' => '', 'category_ids' => '', 'customer_type' => 'all', 'user_ids' => '', 'user_levels' => '', 'min_qty' => '', 'max_qty' => '', 'min_subtotal' => '', 'from_date' => '', 'to_date' => '', 'exclude_sale' => 'no', 'show_badge' => 'yes' );
+			return array( 'id' => uniqid( 'rule_', false ), 'enabled' => 'yes', 'title' => '', 'priority' => 10, 'target' => 'product', 'discount' => 'percentage', 'value' => '', 'apply_to' => 'all', 'product_ids' => '', 'category_ids' => '', 'customer_type' => 'all', 'user_ids' => '', 'user_levels' => '', 'user_roles' => '', 'min_qty' => '', 'max_qty' => '', 'min_subtotal' => '', 'from_date' => '', 'to_date' => '', 'exclude_sale' => 'no', 'show_badge' => 'yes' );
 		}
 
 		private static function render_rule_row( $index, $rule, $settings ) {
@@ -212,7 +215,7 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 			<tr><th scope="row"><?php esc_html_e( 'Products', 'iws' ); ?></th><td><div class="iws-rule-row-split"><label><?php esc_html_e( 'Target', 'iws' ); ?> <select name="<?php echo $name; ?>[target]"><option value="product" <?php selected( $rule['target'], 'product' ); ?>><?php esc_html_e( 'Product price', 'iws' ); ?></option><option value="cart" <?php selected( $rule['target'], 'cart' ); ?>><?php esc_html_e( 'Cart subtotal', 'iws' ); ?></option></select></label><label><?php esc_html_e( 'Apply to', 'iws' ); ?> <select name="<?php echo $name; ?>[apply_to]"><option value="all" <?php selected( $rule['apply_to'], 'all' ); ?>><?php esc_html_e( 'All products', 'iws' ); ?></option><option value="products" <?php selected( $rule['apply_to'], 'products' ); ?>><?php esc_html_e( 'Selected products', 'iws' ); ?></option><option value="categories" <?php selected( $rule['apply_to'], 'categories' ); ?>><?php esc_html_e( 'Selected categories', 'iws' ); ?></option></select></label></div></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Select products', 'iws' ); ?></th><td><?php self::product_select( $name . '[product_ids]', $rule['product_ids'] ); ?><span class="iws-help"><?php esc_html_e( 'Start typing product name or SKU. This replaces manual product ID typing.', 'iws' ); ?></span></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Categories', 'iws' ); ?></th><td><?php self::category_select( $name . '[category_ids]', $rule['category_ids'] ); ?></td></tr>
-			<tr><th scope="row"><?php esc_html_e( 'Customers', 'iws' ); ?></th><td><div class="iws-rule-row-split"><label><?php esc_html_e( 'Customer scope', 'iws' ); ?> <select name="<?php echo $name; ?>[customer_type]"><option value="all" <?php selected( $rule['customer_type'], 'all' ); ?>><?php esc_html_e( 'Everyone / global', 'iws' ); ?></option><option value="users" <?php selected( $rule['customer_type'], 'users' ); ?>><?php esc_html_e( 'Selected users', 'iws' ); ?></option><option value="levels" <?php selected( $rule['customer_type'], 'levels' ); ?>><?php esc_html_e( 'Customer levels', 'iws' ); ?></option></select></label></div><div style="margin-top:10px"><?php self::customer_select( $name . '[user_ids]', $rule['user_ids'] ); ?></div><div style="margin-top:10px"><?php self::level_select( $name . '[user_levels]', $rule['user_levels'], $settings['levels'] ); ?></div></td></tr>
+			<tr><th scope="row"><?php esc_html_e( 'Customers', 'iws' ); ?></th><td><div class="iws-rule-row-split"><label><?php esc_html_e( 'Customer scope', 'iws' ); ?> <select name="<?php echo $name; ?>[customer_type]"><option value="all" <?php selected( $rule['customer_type'], 'all' ); ?>><?php esc_html_e( 'Everyone / global', 'iws' ); ?></option><option value="users" <?php selected( $rule['customer_type'], 'users' ); ?>><?php esc_html_e( 'Selected users', 'iws' ); ?></option><option value="levels" <?php selected( $rule['customer_type'], 'levels' ); ?>><?php esc_html_e( 'Customer levels', 'iws' ); ?></option><?php foreach (['roles'=>'Selected user roles','guests'=>'Guests only','retail'=>'Retail only (including guests)','wholesale'=>'Approved trade roles only'] as $scope=>$label): ?><option value="<?php echo esc_attr($scope); ?>" <?php selected($rule['customer_type'],$scope); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></label></div><div style="margin-top:10px"><?php self::customer_select( $name . '[user_ids]', $rule['user_ids'] ); ?></div><div style="margin-top:10px"><?php self::level_select( $name . '[user_levels]', $rule['user_levels'], $settings['levels'] ); self::role_select($name . '[user_roles]', $rule['user_roles']); ?></div></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Conditions', 'iws' ); ?></th><td><div class="iws-rule-row-split"><label><?php esc_html_e( 'Min qty', 'iws' ); ?> <input class="small-text" type="number" min="0" name="<?php echo $name; ?>[min_qty]" value="<?php echo esc_attr( $rule['min_qty'] ); ?>" /></label><label><?php esc_html_e( 'Max qty', 'iws' ); ?> <input class="small-text" type="number" min="0" name="<?php echo $name; ?>[max_qty]" value="<?php echo esc_attr( $rule['max_qty'] ); ?>" /></label><label><?php esc_html_e( 'Min subtotal', 'iws' ); ?> <input class="small-text" type="number" step="0.01" min="0" name="<?php echo $name; ?>[min_subtotal]" value="<?php echo esc_attr( $rule['min_subtotal'] ); ?>" /></label></div></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Schedule', 'iws' ); ?></th><td><div class="iws-rule-row-split"><label><?php esc_html_e( 'From', 'iws' ); ?> <input type="date" name="<?php echo $name; ?>[from_date]" value="<?php echo esc_attr( $rule['from_date'] ); ?>" /></label><label><?php esc_html_e( 'To', 'iws' ); ?> <input type="date" name="<?php echo $name; ?>[to_date]" value="<?php echo esc_attr( $rule['to_date'] ); ?>" /></label><label><input type="checkbox" name="<?php echo $name; ?>[exclude_sale]" value="1" <?php checked( $rule['exclude_sale'], 'yes' ); ?> /> <?php esc_html_e( 'Exclude sale items', 'iws' ); ?></label><label><input type="checkbox" name="<?php echo $name; ?>[show_badge]" value="1" <?php checked( $rule['show_badge'], 'yes' ); ?> /> <?php esc_html_e( 'Show discount on product/cart/checkout', 'iws' ); ?></label></div></td></tr>
 			<tr><th scope="row"><label><?php esc_html_e( 'Priority', 'iws' ); ?></label></th><td><input class="small-text" type="number" name="<?php echo $name; ?>[priority]" value="<?php echo esc_attr( $rule['priority'] ); ?>" min="0" /> <p class="description"><?php esc_html_e( 'Lower numbers run first.', 'iws' ); ?></p></td></tr>
@@ -261,27 +264,40 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 			if ( in_array( $level, array( 'silver', 'gold', 'vip' ), true ) ) { update_user_meta( $user_id, self::USER_LEVEL_META, $level ); } else { delete_user_meta( $user_id, self::USER_LEVEL_META ); }
 		}
 
-		public static function runtime_product_price( $price, $product ) { return $price; }
+		public static function runtime_product_price($price, $product) {
+            if ((is_admin() && !wp_doing_ajax()) || !$product instanceof WC_Product || '' === $price || 'yes' !== self::get_settings()['enabled'] || IWS_Pricing_Context::is_final($product)) return $price;
+            if (function_exists('iws_b2b_rules_may_stack') && !iws_b2b_rules_may_stack()) return $price;
+            return self::discounted_price_for_product($product, (float)$price, 1, null);
+        }
+        public static function variation_hash($hash, $product = null, $display = false) {
+            $hash['iws_discount_v386'] = [get_current_user_id(), (array)wp_get_current_user()->roles, get_user_meta(get_current_user_id(), self::USER_LEVEL_META, true), current_time('Y-m-d'), md5(wp_json_encode(self::get_settings()))];
+            return $hash;
+        }
+        private static function role_select($name, $csv) {
+            echo '<fieldset><legend>' . esc_html__('Roles (used by Selected user roles)', 'iws') . '</legend>';
+            $chosen = explode(',', (string)$csv);
+            foreach (wp_roles()->roles as $role=>$details) echo '<label style="display:inline-block;margin:5px 14px 5px 0"><input type="checkbox" name="' . esc_attr($name) . '[]" value="' . esc_attr($role) . '" ' . checked(in_array($role,$chosen,true), true, false) . '> ' . esc_html(translate_user_role($details['name'])) . '</label>';
+            echo '</fieldset>';
+        }
 
 		public static function apply_product_discounts( $cart ) {
 			if ( is_admin() && ! wp_doing_ajax() ) { return; }
 			if ( empty( $cart ) || 'yes' !== self::get_settings()['enabled'] ) { return; }
+            if (function_exists('iws_b2b_rules_may_stack') && !iws_b2b_rules_may_stack()) return;
 			foreach ( $cart->get_cart() as $cart_item_key => &$cart_item ) {
 				if ( empty( $cart_item['data'] ) || ! is_a( $cart_item['data'], 'WC_Product' ) ) { continue; }
 				$product = $cart_item['data'];
-				$active_price = (float) $product->get_price( 'edit' );
-				if ( $active_price <= 0 && $product->is_on_sale() && '' !== $product->get_sale_price( 'edit' ) ) {
-					$active_price = (float) $product->get_sale_price( 'edit' );
-				}
-				if ( $active_price <= 0 ) {
-					$active_price = (float) $product->get_regular_price( 'edit' );
-				}
+                $raw_price = IWS_Pricing_Context::base($product);
+                if (function_exists('iws_b2b_is_enabled') && iws_b2b_is_enabled() && iws_b2b_current_user_is_wholesale()) $raw_price = $product->get_price('edit');
+                if ('' === $raw_price || null === $raw_price || !is_numeric($raw_price)) continue;
+                $active_price = (float)$raw_price; // A zero/free price must never fall back to the regular price.
 
 				$regular_price = (float) $product->get_regular_price( 'edit' );
 				$cart_item['iws_original_price'] = $regular_price > $active_price ? $regular_price : $active_price;
 
 				$new_price = self::discounted_price_for_product( $product, $active_price, (int) ( $cart_item['quantity'] ?? 1 ), $cart );
-				$product->set_price( max( 0, wc_format_decimal( $new_price ) ) );
+				IWS_Pricing_Context::set($product, max(0, wc_format_decimal($new_price)));
+                $cart->cart_contents[$cart_item_key]['iws_original_price'] = $cart_item['iws_original_price'];
 			}
 			unset( $cart_item );
 		}
@@ -290,6 +306,7 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 			if ( is_admin() && ! wp_doing_ajax() ) { return; }
 			$settings = self::get_settings();
 			if ( empty( $cart ) || 'yes' !== $settings['enabled'] ) { return; }
+            if (function_exists('iws_b2b_rules_may_stack') && !iws_b2b_rules_may_stack()) return;
 			$mode = $settings['conflict_mode'] ?? 'stack';
 			$matches = array();
 
@@ -318,14 +335,10 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 			}
 		}
 
-		public static function price_html( $price_html, $product ) {
-			if ( is_admin() || 'yes' !== self::get_settings()['enabled'] || ! is_a( $product, 'WC_Product' ) ) { return $price_html; }
-			$base = (float) $product->get_price( 'edit' );
-			if ( $base <= 0 ) { return $price_html; }
-			$new = self::discounted_price_for_product( $product, $base, 1, null );
-			if ( $new < $base ) { return wc_format_sale_price( wc_price( $base ), wc_price( $new ) ) . $product->get_price_suffix(); }
-			return $price_html;
-		}
+        public static function price_html($price_html, $product) {
+            // Runtime price getters and native variation ranges already contain the final unit price.
+            return $price_html;
+        }
 
 		public static function cart_item_price_html( $price_html, $cart_item, $cart_item_key ) {
 			return self::cart_line_discount_html( $price_html, $cart_item, false );
@@ -497,14 +510,14 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 			$qty = $cart ? (int) $cart->get_cart_contents_count() : 0;
 			if ( ! self::qty_matches( $rule, $qty ) ) { return false; }
 			$min_subtotal = (float) ( $rule['min_subtotal'] ?? 0 );
-			if ( $min_subtotal > 0 && $cart && (float) $cart->get_subtotal() < $min_subtotal ) { return false; }
+			if ( $min_subtotal > 0 && (!$cart || (float)$cart->get_subtotal() < $min_subtotal) ) { return false; }
 			return true;
 		}
 
 		private static function rule_matches_product( $rule, $product, $qty, $cart ) {
 			if ( ! self::rule_is_active( $rule ) || ! self::qty_matches( $rule, $qty ) || ! self::customer_matches( $rule ) ) { return false; }
 			$min_subtotal = (float) ( $rule['min_subtotal'] ?? 0 );
-			if ( $min_subtotal > 0 && $cart && (float) $cart->get_subtotal() < $min_subtotal ) { return false; }
+			if ( $min_subtotal > 0 && (!$cart || (float)$cart->get_subtotal() < $min_subtotal) ) { return false; }
 			if ( 'yes' === ( $rule['exclude_sale'] ?? 'no' ) && $product->is_on_sale() ) { return false; }
 			$apply_to = $rule['apply_to'] ?? 'all';
 			if ( 'all' === $apply_to ) { return true; }
@@ -517,6 +530,11 @@ if ( ! class_exists( 'IWS_Woo_Discount_Rules' ) ) {
 		private static function customer_matches( $rule ) {
 			$type = $rule['customer_type'] ?? 'all';
 			if ( 'all' === $type ) { return true; }
+            $trade = function_exists('iws_b2b_is_enabled') && iws_b2b_is_enabled() && iws_b2b_current_user_is_wholesale();
+            if ('guests' === $type) return !is_user_logged_in();
+            if ('retail' === $type) return !$trade;
+            if ('wholesale' === $type) return $trade;
+            if ('roles' === $type) return (bool)array_intersect((array)wp_get_current_user()->roles, explode(',', (string)($rule['user_roles'] ?? '')));
 			$user_id = get_current_user_id();
 			if ( ! $user_id ) { return false; }
 			if ( 'users' === $type ) { return in_array( $user_id, self::ids_array( $rule['user_ids'] ?? '' ), true ); }

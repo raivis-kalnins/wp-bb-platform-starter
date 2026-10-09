@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 function wpbbshop_v305_is_english() {
     if (function_exists('pll_current_language')) {
-        $lang = pll_current_language('slug');
+        $lang = wpbbshop_v433_current_language();
         if ($lang) { return $lang === 'en'; }
     }
     return substr((string) get_locale(), 0, 2) !== 'lv';

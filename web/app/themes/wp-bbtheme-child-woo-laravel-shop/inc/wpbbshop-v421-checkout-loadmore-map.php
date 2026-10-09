@@ -26,7 +26,7 @@ add_filter('loop_shop_per_page', function ($per_page) {
 
 /** Append a market-aware Google Map to both Contact language pages. */
 function wpbbshop_v421_contact_map_html() {
-    $lang = function_exists('pll_current_language') ? pll_current_language('slug') : '';
+    $lang = function_exists('pll_current_language') ? wpbbshop_v433_current_language() : '';
     $lv = ($lang === 'lv');
     $address = function_exists('wpbbshop_v414_store_address')
         ? wpbbshop_v414_store_address()

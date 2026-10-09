@@ -1,0 +1,10 @@
+{
+  "name": "wp/wp-bbuilder",
+  "description": "Gutenberg, Bootstrap and ACF block builder for WP BB Platform.",
+  "type": "wordpress-plugin",
+  "version": "5.9.0",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.3"
+  }
+}

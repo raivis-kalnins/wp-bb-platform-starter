@@ -2,7 +2,7 @@
   "name": "wp/wp-theme-woo-support",
   "description": "Reusable WooCommerce functionality for the WP BBTheme suite.",
   "type": "wordpress-plugin",
-  "version": "3.7.0",
+  "version": "3.8.6",
   "license": "proprietary",
   "require": {
     "php": ">=8.3"

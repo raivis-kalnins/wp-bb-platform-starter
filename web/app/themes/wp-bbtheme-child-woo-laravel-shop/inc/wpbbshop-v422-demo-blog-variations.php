@@ -12,7 +12,7 @@ if (!defined('WPBBSHOP_V422_VERSION')) {
 
 function wpbbshop_v422_lang() {
     if (function_exists('pll_current_language')) {
-        $lang = pll_current_language('slug');
+        $lang = wpbbshop_v433_current_language();
         if (is_string($lang) && $lang !== '') {
             return strtolower($lang) === 'lv' ? 'lv' : 'en';
         }

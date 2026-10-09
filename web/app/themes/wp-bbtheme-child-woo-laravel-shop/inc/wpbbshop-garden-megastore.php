@@ -36,7 +36,7 @@ function wpbbshop_megastore_departments_312() {
 
 function wpbbshop_megastore_is_en_312() {
     if (function_exists('pll_current_language')) {
-        $lang = pll_current_language('slug');
+        $lang = wpbbshop_v433_current_language();
         if ($lang) { return $lang === 'en'; }
     }
     return substr((string) get_locale(), 0, 2) !== 'lv';

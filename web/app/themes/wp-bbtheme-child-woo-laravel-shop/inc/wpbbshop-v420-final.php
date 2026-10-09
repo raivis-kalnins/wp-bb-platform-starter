@@ -129,7 +129,7 @@ add_filter('theme_mod_nav_menu_locations', function ($locations) {
     if (!is_array($locations)) {
         $locations = array();
     }
-    $lang = function_exists('pll_current_language') ? pll_current_language('slug') : '';
+    $lang = function_exists('pll_current_language') ? wpbbshop_v433_current_language() : '';
     $is_lv = ($lang === 'lv');
     $primary = wpbbshop_v420_menu_term_id($is_lv ? 'wp-bb-home-garden-lv-galvena' : 'wp-bb-home-garden-en-main');
     $footer  = wpbbshop_v420_menu_term_id($is_lv ? 'wp-bb-home-garden-lv-kajenes' : 'wp-bb-home-garden-en-footer');
@@ -153,7 +153,7 @@ add_filter('wp_nav_menu_objects', function ($items) {
     if (!is_array($items)) {
         return $items;
     }
-    $lang = function_exists('pll_current_language') ? pll_current_language('slug') : '';
+    $lang = function_exists('pll_current_language') ? wpbbshop_v433_current_language() : '';
     $lang = ($lang === 'lv') ? 'lv' : 'en';
     $map = array(
         'contact' => array('lv' => 'kontakti', 'en' => 'contact'),

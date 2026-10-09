@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var state = localStorage.getItem('wpbb_cookie_consent');
     if (state === 'accepted' || state === 'rejected') {
       banner.style.display = 'none';
+      if (typeof window.wp_set_consent === 'function') window.wp_set_consent('statistics', state === 'accepted' ? 'allow' : 'deny');
+      window.dispatchEvent(new CustomEvent('wpbb:consent-changed', {detail: {statistics: state === 'accepted'}}));
       return;
     }
   } catch (e) {}
@@ -15,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function save(value) {
     try { localStorage.setItem('wpbb_cookie_consent', value); } catch (e) {}
     banner.style.display = 'none';
+    window.dispatchEvent(new CustomEvent('wpbb:consent-changed', {detail: {statistics: value === 'accepted'}}));
+    if (typeof window.wp_set_consent === 'function') window.wp_set_consent('statistics', value === 'accepted' ? 'allow' : 'deny');
   }
 
   if (accept) accept.addEventListener('click', function () { save('accepted'); });

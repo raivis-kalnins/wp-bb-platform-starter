@@ -1,6 +1,10 @@
-# WP BBuilder 5.8.0
+# WP BBuilder 5.9.0
 
-## 5.8.0 local analytics dashboard
+## Coordinated October 2026 update: 5.9.0
+
+See [CHANGELOG-5.9.0.md](CHANGELOG-5.9.0.md) for current behaviour and setup requirements. Older sections below describe the previous releases, not additional setup steps.
+
+## Historical: 5.8.0 local analytics dashboard (superseded by 5.9.0)
 
 - Adds a first-party **WP BBuilder → Statistics** dashboard with Google Charts for visits, visitors, sessions, pages/session, countries, acquisition sources and devices.
 - Tracks most visited pages and WooCommerce products without storing raw IP addresses.
@@ -66,7 +70,7 @@
 - Adds the optional **BBuilder Guide** editor sidebar with searchable groups, clearer descriptions, use-case guidance and direct block insertion.
 - Enriches editor-only block keywords without renaming block types, attributes or saved markup. Existing projects and serialized block content remain compatible.
 
-![Version](https://img.shields.io/badge/version-5.6.8-blue)
+![Version](https://img.shields.io/badge/version-5.9.0-blue)
 ![WordPress](https://img.shields.io/badge/WordPress-6.5%2B-green)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple)
 ![License](https://img.shields.io/badge/license-GPLv2-blue)

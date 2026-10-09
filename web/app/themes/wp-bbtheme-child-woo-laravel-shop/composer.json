@@ -1,0 +1,12 @@
+{
+  "name": "wp/wp-bbtheme-child-woo-laravel-shop",
+  "description": "Home and Garden WooCommerce child theme for WP BB Platform.",
+  "type": "wordpress-theme",
+  "version": "4.0.34",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.0",
+    "wp/wp-bbtheme": "*",
+    "wp-plugin/woocommerce": "^11.1"
+  }
+}

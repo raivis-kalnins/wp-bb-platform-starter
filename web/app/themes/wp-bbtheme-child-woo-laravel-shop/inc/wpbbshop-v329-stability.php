@@ -24,7 +24,7 @@ remove_action('wp_footer', 'wpbbshop_v327_responsive_header_footer_guard', PHP_I
 
 function wpbbshop_v329_is_en() {
     if (function_exists('pll_current_language')) {
-        $lang = pll_current_language('slug');
+        $lang = wpbbshop_v433_current_language();
         if ($lang) { return $lang === 'en'; }
     }
     return substr((string) get_locale(), 0, 2) !== 'lv';

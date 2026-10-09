@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 function wpbbshop_v409_lang() {
     if (function_exists('pll_current_language')) {
-        $lang = pll_current_language('slug');
+        $lang = wpbbshop_v433_current_language();
         if (is_string($lang) && $lang !== '') return sanitize_key($lang);
     }
     return substr((string) get_locale(), 0, 2) === 'lv' ? 'lv' : 'en';
@@ -257,6 +257,7 @@ add_action('wp_enqueue_scripts', function(){
     wp_enqueue_style('wpbbshop-v409-catalog',$uri.'/assets/css/v409-catalog.css',array(),file_exists($base.'/assets/css/v409-catalog.css')?(string)filemtime($base.'/assets/css/v409-catalog.css'):'4.0.9');
     wp_enqueue_script('wpbbshop-v409-catalog',$uri.'/assets/js/v409-catalog.js',array('jquery'),file_exists($base.'/assets/js/v409-catalog.js')?(string)filemtime($base.'/assets/js/v409-catalog.js'):'4.0.9',true);
     wp_localize_script('wpbbshop-v409-catalog','WPBBShopCatalog409',array(
+        'lang'=>wpbbshop_v433_current_language(),
         'ajaxUrl'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('wpbbshop_v409_catalog'),
         'loadMore'=>wpbbshop_v409_t('Load more products','Ielādēt vairāk preču'),
         'loading'=>wpbbshop_v409_t('Loading…','Ielādē…'),

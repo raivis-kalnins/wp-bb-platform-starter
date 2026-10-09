@@ -22,18 +22,7 @@ function wpbbshop_v400_primary_language() {
 }
 
 function wpbbshop_v400_current_language() {
-    // Respect an explicit /en/ or /lv/ prefix even when product queries are
-    // language-neutral so one WooCommerce inventory can be shared safely.
-    if (!empty($_SERVER['REQUEST_URI'])) {
-        $path = trim((string) parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH), '/');
-        $first = $path === '' ? '' : sanitize_key((string) strtok($path, '/'));
-        if (in_array($first, array('en', 'lv'), true)) { return $first; }
-    }
-    if (function_exists('pll_current_language')) {
-        $lang = sanitize_key((string) pll_current_language('slug'));
-        if (in_array($lang, array('en', 'lv'), true)) { return $lang; }
-    }
-    return wpbbshop_v400_primary_language();
+    return wpbbshop_v433_current_language();
 }
 
 function wpbbshop_v400_t($en, $lv) {

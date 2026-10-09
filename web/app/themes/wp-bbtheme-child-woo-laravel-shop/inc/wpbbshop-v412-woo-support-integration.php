@@ -15,7 +15,7 @@ add_filter('wp_theme_woo_support_filter_product_item_html', function($html, $pro
 
 /** Preserve active Polylang language in plugin AJAX filter requests. */
 add_filter('gettext', function($translated, $text, $domain){
-    if ($domain !== 'wp-theme-woo-support' || !function_exists('pll_current_language') || pll_current_language('slug') !== 'lv') return $translated;
+    if ($domain !== 'wp-theme-woo-support' || !function_exists('pll_current_language') || wpbbshop_v433_current_language() !== 'lv') return $translated;
     $map = array(
         'Search'=>'Meklēt','Search products'=>'Meklēt preces','Clear search'=>'Notīrīt meklēšanu',
         'Open product comparison'=>'Atvērt preču salīdzināšanu','In stock'=>'Noliktavā','On sale'=>'Akcijā',

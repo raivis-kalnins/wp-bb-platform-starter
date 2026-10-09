@@ -136,7 +136,7 @@
     if(q.length < 2){ $form.find('.wpbbshop-search-results').attr('hidden', true).empty(); return; }
     timer = setTimeout(function(){
       if(typeof WpbbshopTheme === 'undefined') return;
-      $.get(WpbbshopTheme.ajaxUrl, { action:'wpbbshop_product_search', nonce:WpbbshopTheme.nonce, term:q, product_cat:($form.find('select[name="product_cat"]').val() || '') })
+      $.get(WpbbshopTheme.ajaxUrl, { action:'wpbbshop_product_search', lang:WpbbshopTheme.lang, nonce:WpbbshopTheme.nonce, term:q, product_cat:($form.find('select[name="product_cat"]').val() || '') })
         .done(function(resp){ if(resp && resp.success){ renderResults($form, resp.data, q); } });
     }, 180);
   });
@@ -154,7 +154,7 @@
     var max = parseInt($btn.attr('data-max') || '1', 10);
     $btn.addClass('is-loading').find('.wpbbshop-load-more-text').text('Ielādē...');
     $.post(WpbbshopTheme.ajaxUrl, {
-      action:'wpbbshop_load_more_products', nonce:WpbbshopTheme.nonce, page:next,
+      action:'wpbbshop_load_more_products', lang:WpbbshopTheme.lang, nonce:WpbbshopTheme.nonce, page:next,
       taxonomy:$btn.data('taxonomy') || '', term:$btn.data('term') || '', search:$btn.data('search') || '',
       min_price:$btn.data('min-price') || '', max_price:$btn.data('max-price') || '', onsale:$btn.data('onsale') || '', orderby:$btn.data('orderby') || ''
     }).done(function(res){

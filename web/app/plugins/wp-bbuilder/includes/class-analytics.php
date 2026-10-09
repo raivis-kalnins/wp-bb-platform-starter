@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) exit;
  */
 final class WPBB_Analytics {
     private static $instance = null;
-    const DB_VERSION = '1.0.0';
+    const DB_VERSION = '1.1.0';
     const CRON_HOOK = 'wpbb_analytics_cleanup';
 
     public static function instance() {
@@ -78,7 +78,9 @@ final class WPBB_Analytics {
             KEY page_id (page_id),
             KEY object_type (object_type),
             KEY country (country),
-            KEY is_demo (is_demo)
+            KEY is_demo (is_demo),
+            KEY dataset_date (is_demo, occurred_at),
+            KEY session_date (session_hash, occurred_at)
         ) {$charset};";
         dbDelta($sql);
         update_option('wpbb_analytics_db_version', self::DB_VERSION, false);
@@ -99,8 +101,11 @@ final class WPBB_Analytics {
     public function enqueue_tracker() {
         if (!wpbb_get_option('local_analytics_enabled', 1)) return;
         if (is_admin() || is_feed() || wp_doing_ajax()) return;
+        if (function_exists('is_account_page') && is_account_page()) return;
+        if (function_exists('is_order_received_page') && is_order_received_page()) return;
+        if (function_exists('is_checkout_pay_page') && is_checkout_pay_page()) return;
         if (is_user_logged_in() && current_user_can('edit_posts')) return;
-        if ($this->must_have_consent() && function_exists('wp_has_consent') && !wp_has_consent('statistics')) return;
+        // The browser waits for consent, including consent granted after this page loads.
 
         wp_enqueue_script(
             'wpbb-local-analytics',
@@ -123,6 +128,8 @@ final class WPBB_Analytics {
             'pageId' => $page_id,
             'objectType' => $object_type,
             'respectConsent' => $this->must_have_consent() ? 1 : 0,
+            'builtInConsent' => (bool)wpbb_get_option('cookie_consent_enabled',0),
+            'retentionDays' => max(30,min(730,(int)wpbb_get_option('local_analytics_retention_days',180))),
         ]);
     }
 
@@ -135,13 +142,11 @@ final class WPBB_Analytics {
     }
 
     private function country_from_headers() {
-        $keys = ['HTTP_CF_IPCOUNTRY','HTTP_X_COUNTRY_CODE','HTTP_X_APPENGINE_COUNTRY','GEOIP_COUNTRY_CODE','HTTP_CLOUDFRONT_VIEWER_COUNTRY'];
-        foreach ($keys as $key) {
-            if (empty($_SERVER[$key])) continue;
-            $country = strtoupper(sanitize_text_field(wp_unslash($_SERVER[$key])));
-            if (preg_match('/^[A-Z]{2}$/', $country) && $country !== 'XX') return $country;
-        }
-        return '';
+        // Opt in only after the origin is protected and the proxy overwrites client-supplied headers.
+        $key = (string)apply_filters('wpbb_analytics_trusted_country_header', '');
+        if (!$key || empty($_SERVER[$key]) || !is_string($_SERVER[$key])) return '';
+        $country = strtoupper(sanitize_text_field(wp_unslash($_SERVER[$key])));
+        return preg_match('/^[A-Z]{2}$/D',$country) && !in_array($country,['XX','T1'],true) ? $country : '';
     }
 
     private function device_from_ua($ua) {
@@ -162,6 +167,10 @@ final class WPBB_Analytics {
         if (!wpbb_get_option('local_analytics_enabled', 1)) return new WP_REST_Response(['stored' => false], 200);
         if ($this->must_have_consent() && function_exists('wp_has_consent') && !wp_has_consent('statistics')) return new WP_REST_Response(['stored' => false], 200);
 
+        if (($_SERVER['HTTP_DNT'] ?? '') === '1' || ($_SERVER['HTTP_SEC_GPC'] ?? '') === '1') return new WP_REST_Response(['stored'=>false],200);
+        $auth_user = function_exists('wp_validate_auth_cookie') ? wp_validate_auth_cookie('', 'logged_in') : 0;
+        if ($auth_user && user_can($auth_user,'edit_posts')) return new WP_REST_Response(['stored'=>false],200);
+
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '';
         if ($this->is_bot($ua)) return new WP_REST_Response(['stored' => false], 200);
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? esc_url_raw(wp_unslash($_SERVER['HTTP_ORIGIN'])) : '';
@@ -173,6 +182,7 @@ final class WPBB_Analytics {
 
         $data = $request->get_json_params();
         if (!is_array($data)) $data = [];
+        if ($this->must_have_consent() && ($data['consent'] ?? '') !== 'granted') return new WP_REST_Response(['stored'=>false],200);
         $visitor = isset($data['visitor']) ? sanitize_text_field($data['visitor']) : '';
         $session = isset($data['session']) ? sanitize_text_field($data['session']) : '';
         if ($visitor === '' || $session === '' || strlen($visitor) > 128 || strlen($session) > 128) {
@@ -180,7 +190,7 @@ final class WPBB_Analytics {
         }
 
         $path = $this->clean_path($data['path'] ?? '/');
-        if (strpos($path, '/wp-admin') === 0 || strpos($path, '/wp-json') === 0 || strpos($path, '/wp-login') === 0) {
+        if (preg_match('~/(wp-admin|wp-json|wp-login\.php|my-account|mans-konts|order-pay|order-received)(/|$)~i',$path)) {
             return new WP_REST_Response(['stored' => false], 200);
         }
 
@@ -197,7 +207,7 @@ final class WPBB_Analytics {
         $session_hash = hash_hmac('sha256', $session, $salt);
         $recent_cutoff = gmdate('Y-m-d H:i:s', time() - 30);
         $duplicate = $wpdb->get_var($wpdb->prepare(
-            'SELECT id FROM ' . self::table_name() . ' WHERE session_hash=%s AND path=%s AND occurred_at >= %s LIMIT 1',
+            'SELECT id FROM ' . self::table_name() . ' WHERE is_demo=0 AND session_hash=%s AND path=%s AND occurred_at >= %s LIMIT 1',
             $session_hash,
             $path,
             $recent_cutoff
@@ -243,8 +253,7 @@ final class WPBB_Analytics {
     public function admin_assets($hook) {
         if (strpos((string) $hook, 'wpbb-analytics') === false) return;
         wp_enqueue_style('wpbb-analytics-admin', WPBB_PLUGIN_URL . 'assets/analytics-admin.css', [], WPBB_VERSION);
-        wp_enqueue_script('google-charts', 'https://www.gstatic.com/charts/loader.js', [], null, true);
-        wp_enqueue_script('wpbb-analytics-admin', WPBB_PLUGIN_URL . 'assets/analytics-admin.js', ['google-charts'], WPBB_VERSION, true);
+        wp_enqueue_script('wpbb-analytics-admin', WPBB_PLUGIN_URL . 'assets/analytics-admin.js', [], WPBB_VERSION, true);
     }
 
     private function range_days() {
@@ -256,78 +265,15 @@ final class WPBB_Analytics {
         return gmdate('Y-m-d H:i:s', time() - ($days * DAY_IN_SECONDS));
     }
 
-    public function get_report($days = 30) {
-        global $wpdb;
-        $table = self::table_name();
-        $since = $this->where_range($days);
-        $prev_since = gmdate('Y-m-d H:i:s', time() - ($days * 2 * DAY_IN_SECONDS));
-        $now = current_time('mysql', true);
-
-        $summary = $wpdb->get_row($wpdb->prepare(
-            "SELECT COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors, COUNT(DISTINCT session_hash) sessions FROM {$table} WHERE occurred_at >= %s AND occurred_at <= %s",
-            $since, $now
-        ), ARRAY_A);
-        $prev = $wpdb->get_row($wpdb->prepare(
-            "SELECT COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors FROM {$table} WHERE occurred_at >= %s AND occurred_at < %s",
-            $prev_since, $since
-        ), ARRAY_A);
-        $views = (int) ($summary['views'] ?? 0);
-        $visitors = (int) ($summary['visitors'] ?? 0);
-        $sessions = (int) ($summary['sessions'] ?? 0);
-        $prev_views = (int) ($prev['views'] ?? 0);
-        $prev_visitors = (int) ($prev['visitors'] ?? 0);
-
-        $daily = $wpdb->get_results($wpdb->prepare(
-            "SELECT DATE(occurred_at) day, COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors FROM {$table} WHERE occurred_at >= %s GROUP BY DATE(occurred_at) ORDER BY day ASC",
-            $since
-        ), ARRAY_A);
-        $top_pages = $wpdb->get_results($wpdb->prepare(
-            "SELECT path, MAX(title) title, MAX(object_type) object_type, COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors FROM {$table} WHERE occurred_at >= %s GROUP BY path ORDER BY views DESC LIMIT 20",
-            $since
-        ), ARRAY_A);
-        $top_products = $wpdb->get_results($wpdb->prepare(
-            "SELECT page_id, path, MAX(title) title, COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors FROM {$table} WHERE occurred_at >= %s AND object_type='product' GROUP BY page_id, path ORDER BY views DESC LIMIT 12",
-            $since
-        ), ARRAY_A);
-        $countries = $wpdb->get_results($wpdb->prepare(
-            "SELECT IF(country='', 'Unknown', country) country, COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors FROM {$table} WHERE occurred_at >= %s GROUP BY country ORDER BY views DESC LIMIT 15",
-            $since
-        ), ARRAY_A);
-        $referrers = $wpdb->get_results($wpdb->prepare(
-            "SELECT IF(referrer_host='', 'Direct / internal', referrer_host) source, COUNT(*) views, COUNT(DISTINCT visitor_hash) visitors FROM {$table} WHERE occurred_at >= %s GROUP BY referrer_host ORDER BY views DESC LIMIT 15",
-            $since
-        ), ARRAY_A);
-        $devices = $wpdb->get_results($wpdb->prepare(
-            "SELECT IF(device='', 'unknown', device) device, COUNT(*) views FROM {$table} WHERE occurred_at >= %s GROUP BY device ORDER BY views DESC",
-            $since
-        ), ARRAY_A);
-
-        $trend = function($now_value, $prev_value) {
-            if ($prev_value <= 0) return $now_value > 0 ? 100.0 : 0.0;
-            return round((($now_value - $prev_value) / $prev_value) * 100, 1);
-        };
-
-        return [
-            'days' => $days,
-            'views' => $views,
-            'visitors' => $visitors,
-            'sessions' => $sessions,
-            'pages_per_session' => $sessions ? round($views / $sessions, 2) : 0,
-            'view_growth' => $trend($views, $prev_views),
-            'visitor_growth' => $trend($visitors, $prev_visitors),
-            'daily' => $daily,
-            'top_pages' => $top_pages,
-            'top_products' => $top_products,
-            'countries' => $countries,
-            'referrers' => $referrers,
-            'devices' => $devices,
-            'generated' => current_time('mysql'),
-        ];
+    public function get_report($days = 30, $demo = false, $window = null) {
+        return WPBB_Analytics_Insights::report($window ?: WPBB_Analytics_Window::make($days), $demo);
     }
 
     public function render_dashboard() {
         if (!current_user_can('manage_options')) return;
-        $data = $this->get_report($this->range_days());
+        $window = WPBB_Analytics_Window::make($this->range_days(), sanitize_text_field(wp_unslash($_GET['start'] ?? '')), sanitize_text_field(wp_unslash($_GET['end'] ?? '')));
+        $data = $this->get_report($window['days'], 'demo' === ($_GET['dataset'] ?? ''), $window);
+        if (!empty($data['error'])) { echo '<div class="wrap"><h1>Website statistics</h1><div class="notice notice-error"><p>'.esc_html($data['error']).'</p></div></div>'; return; }
         $data['settings_url'] = admin_url('options-general.php?page=wpbb-analytics-settings');
         $data['full_settings_url'] = admin_url('options-general.php?page=wpbb-settings');
         $data['nonce'] = wp_create_nonce('wpbb_analytics_admin');
@@ -371,7 +317,7 @@ final class WPBB_Analytics {
         $retention = max(30, min(730, $retention));
         ?>
         <div class="wrap wpbb-analytics-wrap">
-            <div class="wpbb-analytics-head"><div><span class="wpbb-analytics-kicker">WP BB PLATFORM</span><h1><?php esc_html_e('Local analytics settings', 'wp-bbuilder'); ?></h1><p><?php esc_html_e('First-party statistics with no raw IP storage. Country data is used only when your host/CDN already supplies a country header.', 'wp-bbuilder'); ?></p></div><a class="button button-secondary" href="<?php echo esc_url(admin_url('options-general.php?page=wpbb-analytics')); ?>"><?php esc_html_e('Open statistics', 'wp-bbuilder'); ?></a></div>
+            <div class="wpbb-analytics-head"><div><span class="wpbb-analytics-kicker">WP BB PLATFORM</span><h1><?php esc_html_e('Local analytics settings', 'wp-bbuilder'); ?></h1><p><?php esc_html_e('First-party statistics with no raw IP storage. Country is unknown unless a trusted proxy header is explicitly configured.', 'wp-bbuilder'); ?></p></div><a class="button button-secondary" href="<?php echo esc_url(admin_url('options-general.php?page=wpbb-analytics')); ?>"><?php esc_html_e('Open statistics', 'wp-bbuilder'); ?></a></div>
             <?php if (!empty($_GET['updated'])): ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e('Analytics settings saved.', 'wp-bbuilder'); ?></p></div><?php endif; ?>
             <div class="wpbb-analytics-panel">
                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -379,7 +325,7 @@ final class WPBB_Analytics {
                     <?php wp_nonce_field('wpbb_analytics_save_settings'); ?>
                     <table class="form-table" role="presentation">
                         <tr><th><?php esc_html_e('Local analytics', 'wp-bbuilder'); ?></th><td><label><input type="checkbox" name="local_analytics_enabled" value="1" <?php checked($enabled, 1); ?>> <?php esc_html_e('Collect privacy-first page-view statistics', 'wp-bbuilder'); ?></label></td></tr>
-                        <tr><th><?php esc_html_e('Consent', 'wp-bbuilder'); ?></th><td><label><input type="checkbox" name="local_analytics_respect_consent" value="1" <?php checked($consent, 1); ?>> <?php esc_html_e('Respect the WordPress Consent API statistics category when available', 'wp-bbuilder'); ?></label></td></tr>
+                        <tr><th><?php esc_html_e('Consent', 'wp-bbuilder'); ?></th><td><label><input type="checkbox" name="local_analytics_respect_consent" value="1" <?php checked($consent, 1); ?>> <?php esc_html_e('Require statistics consent before identifiers are created or visits are sent (WordPress Consent API or BBuilder cookie banner)', 'wp-bbuilder'); ?></label></td></tr>
                         <tr><th><label for="wpbb-retention"><?php esc_html_e('Retention', 'wp-bbuilder'); ?></label></th><td><input id="wpbb-retention" type="number" min="30" max="730" name="local_analytics_retention_days" value="<?php echo esc_attr($retention); ?>"> <?php esc_html_e('days', 'wp-bbuilder'); ?></td></tr>
                     </table>
                     <?php submit_button(__('Save analytics settings', 'wp-bbuilder')); ?>
@@ -442,7 +388,7 @@ final class WPBB_Analytics {
                 'is_demo' => 1,
             ]);
         }
-        wp_safe_redirect(admin_url('options-general.php?page=wpbb-analytics&range=90&demo=1'));
+        wp_safe_redirect(admin_url('options-general.php?page=wpbb-analytics&range=90&dataset=demo'));
         exit;
     }
 
@@ -548,6 +494,7 @@ final class WPBB_Analytics {
 
     public function render_dashboard_widget() {
         $r = $this->get_report(7);
+        echo '<p><strong>'.esc_html__('Local traffic - real visits only','wp-bbuilder').'</strong><br>'.esc_html($r['window']['start'].' to '.$r['window']['end'].' ('.$r['window']['timezone'].')').'</p>';
         echo '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 12px">';
         foreach ([__('Views','wp-bbuilder') => $r['views'], __('Visitors','wp-bbuilder') => $r['visitors'], __('Sessions','wp-bbuilder') => $r['sessions']] as $label => $value) {
             echo '<div style="padding:12px;background:#f6f7f7;border-radius:8px"><strong style="display:block;font-size:20px">' . esc_html(number_format_i18n($value)) . '</strong><span>' . esc_html($label) . '</span></div>';

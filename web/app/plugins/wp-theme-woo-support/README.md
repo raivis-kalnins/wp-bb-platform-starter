@@ -1,4 +1,8 @@
-# WP Theme Woo Support 3.8.3
+# WP Theme Woo Support 3.8.6
+
+## Coordinated October 2026 update: 3.8.6
+
+See [CHANGELOG-3.8.6.md](CHANGELOG-3.8.6.md) for current behaviour and setup requirements. Older sections below describe the previous releases, not additional setup steps.
 
 Reusable WooCommerce functionality for the WP BBTheme suite. Ecommerce behaviour is kept in this companion plugin so sector child themes can share robust catalogue, product, variation, cart/account and quote workflows without duplicating business logic.
 

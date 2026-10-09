@@ -332,8 +332,12 @@ add_action('template_redirect', function () {
     if (isset($aliases[$slug])) {
         $canonical = get_page_by_path($aliases[$slug], OBJECT, 'page');
         if ($canonical instanceof WP_Post && $canonical->post_status === 'publish') {
-            wp_safe_redirect(get_permalink($canonical), 301);
-            exit;
+            $target = wpbbshop_v433_url(get_permalink($canonical));
+            $target_path = trim((string) parse_url((string) $target, PHP_URL_PATH), '/');
+            if ($target && $target_path !== $path) {
+                wp_safe_redirect($target, 301);
+                exit;
+            }
         }
     }
 
@@ -348,7 +352,7 @@ add_action('template_redirect', function () {
 
     $page = get_page_by_path($slug, OBJECT, 'page');
     if ($page instanceof WP_Post && $page->post_status === 'publish') {
-        $permalink = get_permalink($page);
+        $permalink = wpbbshop_v433_url(get_permalink($page));
         $target_path = trim((string) parse_url((string) $permalink, PHP_URL_PATH), '/');
         if ($target_path !== $path) {
             wp_safe_redirect($permalink, 302);

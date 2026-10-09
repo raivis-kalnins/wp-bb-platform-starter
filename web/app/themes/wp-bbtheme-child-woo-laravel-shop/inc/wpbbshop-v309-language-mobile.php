@@ -36,7 +36,7 @@ add_action('admin_init', function(){ if (current_user_can('manage_options')) { w
 /* If an older database still resolves /en/ to the parent theme Journal index, render the store homepage anyway. */
 add_filter('template_include', function($template) {
     if (function_exists('wpbbshop_v407_polylang_native') && wpbbshop_v407_polylang_native()) { return $template; }
-    if (is_admin() || !function_exists('pll_current_language') || pll_current_language('slug') !== 'en') { return $template; }
+    if (is_admin() || !function_exists('pll_current_language') || wpbbshop_v433_current_language() !== 'en') { return $template; }
     $path = isset($_SERVER['REQUEST_URI']) ? (string)parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH) : '';
     $path = trim((string)$path, '/');
     if ($path === 'en' || (is_home() && !is_paged())) {
@@ -48,7 +48,7 @@ add_filter('template_include', function($template) {
 
 add_filter('pre_get_document_title', function($title) {
     if (function_exists('wpbbshop_v407_polylang_native') && wpbbshop_v407_polylang_native()) { return $title; }
-    if (function_exists('pll_current_language') && pll_current_language('slug') === 'en') {
+    if (function_exists('pll_current_language') && wpbbshop_v433_current_language() === 'en') {
         $path = isset($_SERVER['REQUEST_URI']) ? trim((string)parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH), '/') : '';
         if ($path === 'en') { return 'WP BB Home & Garden — Tools, garden and workshop equipment'; }
     }

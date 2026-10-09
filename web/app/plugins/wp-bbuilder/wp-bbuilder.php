@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP BBuilder
  * Description: Lightweight Bootstrap-oriented Gutenberg blocks optimized for Core Web Vitals and modular front-end loading.
- * Version: 5.8.2
+ * Version: 5.9.0
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Tested up to: 7.1
@@ -12,7 +12,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-define('WPBB_VERSION', '5.8.2');
+define('WPBB_VERSION', '5.9.0');
 define('WPBB_PLUGIN_FILE', __FILE__);
 define('WPBB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WPBB_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -34,6 +34,8 @@ require_once WPBB_PLUGIN_DIR . 'includes/class-login-security.php';
 require_once WPBB_PLUGIN_DIR . 'includes/class-frontend-editor.php';
 require_once WPBB_PLUGIN_DIR . 'includes/class-booking-admin.php';
 require_once WPBB_PLUGIN_DIR . 'includes/class-editor-discovery.php';
+require_once WPBB_PLUGIN_DIR . 'includes/class-analytics-insights.php';
+require_once WPBB_PLUGIN_DIR . 'includes/class-google-analytics.php';
 require_once WPBB_PLUGIN_DIR . 'includes/class-analytics.php';
 
 final class WP_BBuilder {
@@ -60,6 +62,7 @@ final class WP_BBuilder {
         WPBB_Booking_Admin::instance();
         WPBB_Editor_Discovery::instance();
         WPBB_Analytics::instance();
+        WPBB_Google_Analytics::instance();
     }
 
 }

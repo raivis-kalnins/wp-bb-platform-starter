@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 
 $is_en = false;
 if (function_exists('pll_current_language')) {
-    $lang = pll_current_language('slug');
+    $lang = wpbbshop_v433_current_language();
     $is_en = ($lang === 'en');
 } else {
     $is_en = substr((string) get_locale(), 0, 2) === 'en';

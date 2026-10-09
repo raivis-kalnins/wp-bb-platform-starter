@@ -4,6 +4,9 @@ defined('ABSPATH') || exit;
 
 define('WPBBSHOP_VERSION', wp_get_theme()->get('Version'));
 
+/* One language context for normal navigation, shared inventory and AJAX. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v433-language-continuity.php';
+
 add_action('after_setup_theme', function() {
     load_theme_textdomain('wpbbshop', get_stylesheet_directory() . '/languages');
     add_theme_support('title-tag');
@@ -30,6 +33,7 @@ add_action('wp_enqueue_scripts', function() {
     wp_enqueue_script('wpbbshop-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', ['jquery'], WPBBSHOP_VERSION, true);
     wp_localize_script('wpbbshop-theme', 'WpbbshopTheme', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
+        'lang' => wpbbshop_v433_current_language(),
         'nonce' => wp_create_nonce('wpbbshop_ajax'),
     ]);
 }, 20);
@@ -78,11 +82,11 @@ function wpbbshop_logo_html() {
             'alt' => get_bloginfo('name') ?: 'WP BB Home & Garden',
         ));
         if ($img) {
-            return '<a class="wpbbshop-logo wpbbshop-brand-v410 is-custom" href="' . esc_url(home_url('/')) . '" aria-label="WP BB Home & Garden">' . $img . '</a>';
+            return '<a class="wpbbshop-logo wpbbshop-brand-v410 is-custom" href="' . esc_url(wpbbshop_v433_home_url()) . '" aria-label="WP BB Home & Garden">' . $img . '</a>';
         }
     }
     $src = trailingslashit(get_stylesheet_directory_uri()) . 'assets/img/wpbb-home-garden-logo.svg?v=410';
-    return '<a class="wpbbshop-logo wpbbshop-brand-v410" href="' . esc_url(home_url('/')) . '" aria-label="WP BB Home & Garden"><img class="wpbbshop-logo-image" src="' . esc_url($src) . '" alt="WP BB Home & Garden" width="620" height="136" loading="eager" decoding="async"></a>';
+    return '<a class="wpbbshop-logo wpbbshop-brand-v410" href="' . esc_url(wpbbshop_v433_home_url()) . '" aria-label="WP BB Home & Garden"><img class="wpbbshop-logo-image" src="' . esc_url($src) . '" alt="WP BB Home & Garden" width="620" height="136" loading="eager" decoding="async"></a>';
 }
 
 function wpbbshop_category_icon_html($term = null, $force_default = true) {
@@ -150,7 +154,7 @@ function wpbbshop_nav_menu($location, $fallback_items = []) {
         return wp_nav_menu(['theme_location'=>$location, 'container'=>false, 'echo'=>false, 'menu_class'=>'wpbbshop-menu wpbbshop-menu-'.$location]);
     }
     $out = '<ul class="wpbbshop-menu wpbbshop-menu-'.$location.'">';
-    foreach ($fallback_items as $label=>$url) $out .= '<li><a href="'.esc_url($url).'">'.esc_html($label).'</a></li>';
+    foreach ($fallback_items as $label=>$url) $out .= '<li><a href="'.esc_url(wpbbshop_v433_url($url)).'">'.esc_html($label).'</a></li>';
     return $out.'</ul>';
 }
 
@@ -242,9 +246,9 @@ function wpbbshop_option_parts($key, $default = '') {
 function wpbbshop_page_url($slug, $fallback = '') {
     $page = get_page_by_path($slug);
     if ($page) {
-        return get_permalink($page->ID);
+        return wpbbshop_v433_url(get_permalink($page->ID));
     }
-    return $fallback ? $fallback : home_url('/' . trim($slug, '/') . '/');
+    return wpbbshop_v433_url($fallback ? $fallback : home_url('/' . trim($slug, '/') . '/'));
 }
 
 /** Client-approved category order used by the homepage, category menu and shop sidebar. */
@@ -319,7 +323,7 @@ function wpbbshop_mini_cart_html() {
             <?php woocommerce_mini_cart(); ?>
         </div>
     </aside>
-    <?php return ob_get_clean();
+    <?php return preg_replace('/>\s+</', '><', (string) ob_get_clean());
 }
 
 function wpbbshop_header_html() {
@@ -338,7 +342,7 @@ function wpbbshop_header_html() {
     <header class="wpbbshop-site-header">
         <div class="wpbbshop-container wpbbshop-mainbar">
             <div class="wpbbshop-logo-wrap"><?php echo wpbbshop_logo_html(); ?></div>
-            <form role="search" method="get" class="wpbbshop-search wpbbshop-ajax-search" action="<?php echo esc_url(home_url('/')); ?>" autocomplete="off">
+            <form role="search" method="get" class="wpbbshop-search wpbbshop-ajax-search" action="<?php echo esc_url(wpbbshop_v433_home_url()); ?>" autocomplete="off">
                 <div class="wpbbshop-search-field-wrap">
                     <input type="search" name="s" placeholder="Meklēt pēc nosaukuma, SKU vai ID..." value="<?php echo esc_attr(get_search_query()); ?>" aria-label="Meklēt produktus">
                     <div class="wpbbshop-search-results" hidden></div>
@@ -424,7 +428,7 @@ add_shortcode('wpbbshop_footer', 'wpbbshop_footer_html');
  * No wishlist/compare plugin is required: guest users use cookies and logged-in users use user meta.
  */
 function wpbbshop_list_url($list) {
-    return add_query_arg(array('wpbbshop_list' => sanitize_key($list)), home_url('/'));
+    return add_query_arg(array('wpbbshop_list' => sanitize_key($list)), wpbbshop_v433_home_url());
 }
 
 function wpbbshop_get_list_items($list) {
@@ -1883,3 +1887,8 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v430-commerce-polish.ph
 
 /* 4.0.31 drawer geometry and complete header category search. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v431-drawer-search-polish.php';
+
+/* 4.0.34: isolate drawer layout from homepage content formatting. */
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_style('wpbbshop-v434-minicart', get_stylesheet_directory_uri() . '/assets/css/v434-minicart.css', array(), '4.0.34');
+}, 10000);

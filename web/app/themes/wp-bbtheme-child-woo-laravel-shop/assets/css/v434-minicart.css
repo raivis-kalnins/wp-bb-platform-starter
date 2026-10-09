@@ -1,0 +1,63 @@
+/* Component-local rules: homepage shortcodes must not create extra grid tracks. */
+#wpbbshop-mini-cart-panel .llg-mini-cart-list > .llg-mini-cart-item {
+  display:grid!important;
+  grid-template-columns:80px minmax(0,1fr)!important;
+  grid-auto-rows:auto!important;
+  align-items:start!important;
+  gap:13px!important;
+  width:100%!important; min-width:0!important; max-width:none!important;
+  padding:17px 34px 17px 0!important; box-sizing:border-box!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-item > .llg-mini-cart-thumb {
+  grid-column:1!important; grid-row:1!important;
+  width:80px!important; min-width:0!important; height:80px!important;
+  margin:0!important; float:none!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-item > .llg-mini-cart-copy {
+  grid-column:2!important; grid-row:1!important;
+  width:100%!important; min-width:0!important; max-width:none!important;
+  margin:0!important; padding:0!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-copy > .llg-mini-cart-title {
+  width:100%!important; max-width:none!important; white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-item > .llg-mini-cart-remove {
+  position:absolute!important; top:17px!important; right:0!important; left:auto!important;
+}
+/* Only structural breaks are hidden; genuine product/variation text is untouched. */
+#wpbbshop-mini-cart-panel .llg-mini-cart-item > br,
+#wpbbshop-mini-cart-panel .llg-mini-cart-item > p:empty,
+#wpbbshop-mini-cart-panel .llg-mini-cart-copy > br,
+#wpbbshop-mini-cart-panel .llg-mini-cart-price > br,
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons > br,
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons > p:empty,
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons::before,
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons::after {
+  display:none!important; content:none!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons {
+  display:grid!important; grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-rows:auto!important; gap:10px!important;
+  width:100%!important; margin:0!important; padding:0!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons > a.button {
+  grid-column:1!important; margin:0!important; width:100%!important;
+  min-height:48px!important; box-sizing:border-box!important;
+}
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons > a.llg-mini-cart-view {grid-row:1!important}
+#wpbbshop-mini-cart-panel .llg-mini-cart-buttons > a.llg-mini-cart-checkout {grid-row:2!important}
+/* Keep the heading/close control clear of the logged-in WordPress toolbar. */
+body.admin-bar #wpbbshop-mini-cart-panel {
+  top:var(--wp-admin--admin-bar--height,32px)!important;
+  height:calc(100dvh - var(--wp-admin--admin-bar--height,32px))!important;
+}
+@media(max-width:782px){body.admin-bar #wpbbshop-mini-cart-panel {
+  top:var(--wp-admin--admin-bar--height,46px)!important;
+  height:calc(100dvh - var(--wp-admin--admin-bar--height,46px))!important;
+}}
+
+#wpbbshop-mini-cart-panel .llg-mini-cart-variation{width:100%;font-size:11px;line-height:1.5;margin:0 0 6px;color:#657b8b}
+#wpbbshop-mini-cart-panel .llg-mini-cart-variation dl{display:block;margin:0;padding:0;border:0}
+#wpbbshop-mini-cart-panel .llg-mini-cart-variation dt{float:left;margin:0 5px 0 0;clear:left;font-weight:600}
+#wpbbshop-mini-cart-panel .llg-mini-cart-variation dd,#wpbbshop-mini-cart-panel .llg-mini-cart-variation p{margin:0;padding:0}

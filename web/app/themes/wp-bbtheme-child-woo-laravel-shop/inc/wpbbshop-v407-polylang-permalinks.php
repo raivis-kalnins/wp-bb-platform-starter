@@ -22,13 +22,7 @@ function wpbbshop_v407_language_home_url($lang) {
 }
 
 function wpbbshop_v407_localize_store_url($url, $lang = '') {
-    $lang = in_array($lang, array('en','lv'), true) ? $lang : (function_exists('wpbbshop_v400_current_language') ? wpbbshop_v400_current_language() : 'en');
-    $primary = function_exists('wpbbshop_v400_primary_language') ? wpbbshop_v400_primary_language() : 'en';
-    $home = home_url('/');
-    if (!$url || strpos($url, $home) !== 0) return $url;
-    $relative = ltrim(substr($url, strlen($home)), '/');
-    $relative = preg_replace('#^(en|lv)/#', '', $relative);
-    return $lang === $primary ? trailingslashit($home.$relative) : trailingslashit($home.$lang.'/'.$relative);
+    return wpbbshop_v433_url($url, $lang);
 }
 
 function wpbbshop_v407_category_url($english_slug, $lang = '') {
@@ -47,9 +41,7 @@ function wpbbshop_v407_category_url($english_slug, $lang = '') {
 }
 
 function wpbbshop_v407_product_url($product_id, $lang = '') {
-    $lang = in_array($lang, array('en','lv'), true) ? $lang : (function_exists('wpbbshop_v400_current_language') ? wpbbshop_v400_current_language() : 'en');
-    $url = get_permalink(absint($product_id));
-    return $url ? wpbbshop_v407_localize_store_url($url, $lang) : wpbbshop_v407_language_home_url($lang);
+    return wpbbshop_v433_product_url(absint($product_id), $lang);
 }
 
 function wpbbshop_v407_language_target_url($lang) {
@@ -91,12 +83,13 @@ function wpbbshop_v407_language_switcher() {
 
 /* Shared demo products: allow a language-prefixed product URL without cloning stock. */
 add_action('init', function() {
+    if (!wpbbshop_v433_shared_bridge()) return;
     add_rewrite_rule('^(en|lv)/product/([^/]+)/?$', 'index.php?post_type=product&product=$matches[2]&lang=$matches[1]', 'top');
     add_rewrite_rule('^(en|lv)/product-category/(.+?)/?$', 'index.php?product_cat=$matches[2]&lang=$matches[1]', 'top');
 }, 6);
 
 add_action('pre_get_posts', function($query) {
-    if (is_admin() || !$query->is_main_query()) return;
+    if (is_admin() || !wpbbshop_v433_shared_bridge() || !$query->is_main_query()) return;
     if ($query->get('product') || $query->get('post_type') === 'product') {
         // Keep the UI language from the request but do not filter the one shared
         // demo inventory by the language assigned to the product post itself.
@@ -106,9 +99,9 @@ add_action('pre_get_posts', function($query) {
 
 /* Make generated product links stay in the language currently being viewed. */
 add_filter('post_type_link', function($url, $post) {
-    if (is_admin() || !$post || $post->post_type !== 'product') return $url;
+    if (!wpbbshop_v433_is_frontend() || !$post || $post->post_type !== 'product' || wpbbshop_v433_resolving()) return $url;
     $lang = function_exists('wpbbshop_v400_current_language') ? wpbbshop_v400_current_language() : 'en';
-    return wpbbshop_v407_localize_store_url($url, $lang);
+    return wpbbshop_v433_product_url($post->ID, $lang, $url);
 }, 80, 2);
 
 /* Clean one-time repair: front-page pair + categories + hard rewrite flush. */

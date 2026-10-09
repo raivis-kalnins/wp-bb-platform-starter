@@ -293,7 +293,7 @@ function wpbbshop_polylang_woo_official_active_312() {
 
 function wpbbshop_polylang_current_slug_312() {
     if (!function_exists('pll_current_language')) { return ''; }
-    $slug = pll_current_language('slug');
+    $slug = wpbbshop_v433_current_language();
     return is_string($slug) ? sanitize_key($slug) : '';
 }
 
