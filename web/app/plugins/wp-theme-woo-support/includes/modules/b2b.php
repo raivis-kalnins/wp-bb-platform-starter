@@ -581,22 +581,20 @@ function iws_b2b_discount_for_qty( $qty ) {
 }
 
 function iws_b2b_filter_product_price( $price, $product ) {
-	if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-		return $price;
-	}
-	if ( ! iws_b2b_is_enabled() || ! iws_b2b_current_user_is_wholesale() || ! $product instanceof WC_Product ) {
-		return $price;
-	}
-	$settings = iws_b2b_get_settings();
-	if ( 'yes' !== $settings['enable_discount'] || '' === $price ) {
-		return $price;
-	}
-	$base = (float) $price;
-	if ( 'amount' === $settings['discount_type'] ) {
-		return max( 0, $base - (float) $settings['discount_amount'] );
-	}
-	$discount = iws_b2b_get_base_discount();
-	return $discount > 0 ? round( $base * ( 1 - ( $discount / 100 ) ), wc_get_price_decimals() ) : $price;
+    if ( is_admin() && ! defined( 'DOING_AJAX' ) ) return $price;
+    if ( ! iws_b2b_is_enabled() || ! iws_b2b_current_user_is_wholesale() || ! $product instanceof WC_Product ) return $price;
+    $settings = iws_b2b_get_settings();
+    $specific = $product->get_meta( '_iws_b2b_wholesale_price', true );
+    if ( '' === $specific && $product instanceof WC_Product_Variation ) {
+        $parent = wc_get_product( $product->get_parent_id() );
+        if ( $parent ) $specific = $parent->get_meta( '_iws_b2b_wholesale_price', true );
+    }
+    if ( '' !== $specific && is_numeric( $specific ) ) return max( 0, (float) $specific );
+    if ( 'yes' !== $settings['enable_discount'] || '' === $price ) return $price;
+    $base = (float) $price;
+    if ( 'amount' === $settings['discount_type'] ) return max( 0, $base - (float) $settings['discount_amount'] );
+    $discount = iws_b2b_get_base_discount();
+    return $discount > 0 ? round( $base * ( 1 - ( $discount / 100 ) ), wc_get_price_decimals() ) : $price;
 }
 
 function iws_b2b_filter_variation_price( $price, $variation, $product ) {
@@ -643,6 +641,15 @@ function iws_b2b_apply_cart_discount( $cart ) {
 			$base = (float) $product->get_price( 'edit' );
 		}
 		if ( $base <= 0 ) {
+			continue;
+		}
+		$specific = $product->get_meta( '_iws_b2b_wholesale_price', true );
+		if ( '' === $specific && $product instanceof WC_Product_Variation ) {
+			$parent = wc_get_product( $product->get_parent_id() );
+			if ( $parent ) { $specific = $parent->get_meta( '_iws_b2b_wholesale_price', true ); }
+		}
+		if ( '' !== $specific && is_numeric( $specific ) ) {
+			$product->set_price( max( 0, (float) $specific ) );
 			continue;
 		}
 		if ( 'amount' === $settings['discount_type'] ) {
@@ -827,3 +834,36 @@ function iws_b2b_frontend_styles() {
 	wp_add_inline_script( 'iws-b2b-wholesale', $fix_js );
 
 }
+
+
+/* ---- 3.8 B2B demo lab, product trade pricing and account intelligence ---- */
+add_action( 'woocommerce_product_options_pricing', 'iws_b2b_product_pricing_fields' );
+add_action( 'woocommerce_process_product_meta', 'iws_b2b_save_product_pricing_fields' );
+add_action( 'woocommerce_variation_options_pricing', 'iws_b2b_variation_pricing_field', 20, 3 );
+add_action( 'woocommerce_save_product_variation', 'iws_b2b_save_variation_pricing_field', 20, 2 );
+add_action( 'show_user_profile', 'iws_b2b_user_trade_fields' );
+add_action( 'edit_user_profile', 'iws_b2b_user_trade_fields' );
+add_action( 'personal_options_update', 'iws_b2b_save_user_trade_fields' );
+add_action( 'edit_user_profile_update', 'iws_b2b_save_user_trade_fields' );
+add_action( 'admin_menu', 'iws_b2b_demo_lab_menu', 72 );
+add_action( 'admin_post_iws_b2b_create_demo', 'iws_b2b_create_demo' );
+add_action( 'admin_post_iws_b2b_reset_demo', 'iws_b2b_reset_demo' );
+add_action( 'woocommerce_check_cart_items', 'iws_b2b_validate_product_minimums', 30 );
+
+function iws_b2b_product_pricing_fields(){
+    woocommerce_wp_text_input(array('id'=>'_iws_b2b_wholesale_price','label'=>__('B2B wholesale price','wp-theme-woo-support'),'data_type'=>'price','description'=>__('Optional fixed trade price. When set it takes priority over the global percentage discount.','wp-theme-woo-support'),'desc_tip'=>true));
+    woocommerce_wp_text_input(array('id'=>'_iws_b2b_min_qty','label'=>__('B2B minimum quantity','wp-theme-woo-support'),'type'=>'number','custom_attributes'=>array('min'=>'1','step'=>'1'),'description'=>__('Optional minimum quantity for wholesale customers.','wp-theme-woo-support'),'desc_tip'=>true));
+    woocommerce_wp_text_input(array('id'=>'_iws_b2b_case_pack','label'=>__('B2B case / pack size','wp-theme-woo-support'),'type'=>'number','custom_attributes'=>array('min'=>'1','step'=>'1'),'description'=>__('Shown in the B2B portal and quick-order guidance.','wp-theme-woo-support'),'desc_tip'=>true));
+}
+function iws_b2b_save_product_pricing_fields($post_id){foreach(array('_iws_b2b_wholesale_price','_iws_b2b_min_qty','_iws_b2b_case_pack')as$key){if(isset($_POST[$key]))update_post_meta($post_id,$key,wc_clean(wp_unslash($_POST[$key])));}}
+function iws_b2b_variation_pricing_field($loop,$variation_data,$variation){woocommerce_wp_text_input(array('id'=>'_iws_b2b_wholesale_price_'.$variation->ID,'name'=>'_iws_b2b_wholesale_price['.$variation->ID.']','value'=>get_post_meta($variation->ID,'_iws_b2b_wholesale_price',true),'label'=>__('B2B price','wp-theme-woo-support'),'data_type'=>'price','wrapper_class'=>'form-row form-row-full'));}
+function iws_b2b_save_variation_pricing_field($variation_id,$i){if(isset($_POST['_iws_b2b_wholesale_price'][$variation_id]))update_post_meta($variation_id,'_iws_b2b_wholesale_price',wc_clean(wp_unslash($_POST['_iws_b2b_wholesale_price'][$variation_id])));}
+function iws_b2b_user_trade_fields($user){if(!current_user_can('manage_woocommerce'))return;?><h2><?php esc_html_e('B2B account','wp-theme-woo-support');?></h2><table class="form-table"><tr><th><label for="iws_b2b_discount_percent">Discount %</label></th><td><input type="number" step="0.01" min="0" max="100" name="iws_b2b_discount_percent" value="<?php echo esc_attr(get_user_meta($user->ID,'iws_b2b_discount_percent',true));?>"></td></tr><tr><th>Credit limit</th><td><input type="number" step="0.01" min="0" name="iws_b2b_credit_limit" value="<?php echo esc_attr(get_user_meta($user->ID,'iws_b2b_credit_limit',true));?>"></td></tr><tr><th>Payment terms</th><td><input type="text" name="iws_b2b_payment_terms" value="<?php echo esc_attr(get_user_meta($user->ID,'iws_b2b_payment_terms',true));?>" placeholder="Net 30"></td></tr><tr><th>Tax exempt</th><td><label><input type="checkbox" name="iws_b2b_tax_exempt" value="yes" <?php checked(get_user_meta($user->ID,'iws_b2b_tax_exempt',true),'yes');?>> Approved tax-exempt account</label></td></tr></table><?php }
+function iws_b2b_save_user_trade_fields($user_id){if(!current_user_can('manage_woocommerce'))return;update_user_meta($user_id,'iws_b2b_discount_percent',wc_format_decimal($_POST['iws_b2b_discount_percent']??''));update_user_meta($user_id,'iws_b2b_credit_limit',wc_format_decimal($_POST['iws_b2b_credit_limit']??''));update_user_meta($user_id,'iws_b2b_payment_terms',sanitize_text_field(wp_unslash($_POST['iws_b2b_payment_terms']??'')));update_user_meta($user_id,'iws_b2b_tax_exempt',isset($_POST['iws_b2b_tax_exempt'])?'yes':'no');}
+function iws_b2b_validate_product_minimums(){if(!iws_b2b_is_enabled()||!iws_b2b_current_user_is_wholesale()||!WC()->cart)return;foreach(WC()->cart->get_cart()as$item){$p=$item['data']??null;if(!$p)continue;$min=absint($p->get_meta('_iws_b2b_min_qty',true));if(!$min&&$p instanceof WC_Product_Variation){$parent=wc_get_product($p->get_parent_id());$min=$parent?absint($parent->get_meta('_iws_b2b_min_qty',true)):0;}if($min&&$item['quantity']<$min)wc_add_notice(sprintf(__('%1$s requires at least %2$d units for B2B orders.','wp-theme-woo-support'),$p->get_name(),$min),'error');}}
+function iws_b2b_demo_lab_menu(){add_submenu_page('woocommerce',__('B2B Demo Lab','wp-theme-woo-support'),__('B2B Demo Lab','wp-theme-woo-support'),'manage_woocommerce','wpbb-b2b-demo','iws_b2b_demo_lab_page');}
+function iws_b2b_create_demo(){if(!current_user_can('manage_woocommerce'))wp_die('Denied');check_admin_referer('iws_b2b_create_demo');iws_b2b_register_roles();$clients=array(array('wpbb_trade_bronze','Bronze Trade Ltd',5,2500,'Net 14'),array('wpbb_trade_silver','Silver Installers Ltd',10,7500,'Net 30'),array('wpbb_trade_gold','Gold Projects Ltd',15,20000,'Net 45'));foreach($clients as$c){$email=$c[0].'@example.test';$user=get_user_by('login',$c[0]);if(!$user){$id=wp_create_user($c[0],wp_generate_password(24,true,true),$email);if(is_wp_error($id))continue;$user=get_user_by('id',$id);} $user->set_role('wholesale_customer');update_user_meta($user->ID,'iws_b2b_company',$c[1]);update_user_meta($user->ID,'iws_b2b_discount_percent',$c[2]);update_user_meta($user->ID,'iws_b2b_credit_limit',$c[3]);update_user_meta($user->ID,'iws_b2b_payment_terms',$c[4]);update_user_meta($user->ID,'_wpbb_b2b_demo','1');}
+$products=wc_get_products(array('limit'=>12,'status'=>array('publish','draft')));foreach($products as$i=>$p){$retail=(float)$p->get_regular_price();if($retail>0){update_post_meta($p->get_id(),'_iws_b2b_wholesale_price',wc_format_decimal($retail*(.82+($i%3)*.03)));update_post_meta($p->get_id(),'_iws_b2b_min_qty',($i%3)+2);update_post_meta($p->get_id(),'_iws_b2b_case_pack',($i%4+1)*2);update_post_meta($p->get_id(),'_wpbb_b2b_demo','1');}}
+$page=get_page_by_path('b2b-portal');if(!$page){$page_id=wp_insert_post(array('post_title'=>'B2B Portal','post_name'=>'b2b-portal','post_type'=>'page','post_status'=>'publish','post_content'=>'[iws_b2b_dashboard]'));if($page_id)update_post_meta($page_id,'_wpbb_b2b_demo','1');}$settings=iws_b2b_get_settings();$settings['enabled']='yes';$settings['enable_discount']='yes';if((float)$settings['discount_percent']<=0)$settings['discount_percent']=5;update_option('iws_b2b_settings',$settings,false);wp_safe_redirect(admin_url('admin.php?page=wpbb-b2b-demo&created=1'));exit;}
+function iws_b2b_reset_demo(){if(!current_user_can('manage_woocommerce'))wp_die('Denied');check_admin_referer('iws_b2b_reset_demo');if(!function_exists('wp_delete_user'))require_once ABSPATH.'wp-admin/includes/user.php';$users=get_users(array('meta_key'=>'_wpbb_b2b_demo','meta_value'=>'1'));foreach($users as$u)wp_delete_user($u->ID);$products=get_posts(array('post_type'=>'product','post_status'=>'any','fields'=>'ids','posts_per_page'=>100,'meta_key'=>'_wpbb_b2b_demo','meta_value'=>'1'));foreach($products as$id){delete_post_meta($id,'_iws_b2b_wholesale_price');delete_post_meta($id,'_iws_b2b_min_qty');delete_post_meta($id,'_iws_b2b_case_pack');delete_post_meta($id,'_wpbb_b2b_demo');}$pages=get_posts(array('post_type'=>'page','post_status'=>'any','fields'=>'ids','posts_per_page'=>20,'meta_key'=>'_wpbb_b2b_demo','meta_value'=>'1'));foreach($pages as$id)wp_delete_post($id,true);wp_safe_redirect(admin_url('admin.php?page=wpbb-b2b-demo&reset=1'));exit;}
+function iws_b2b_demo_lab_page(){if(!current_user_can('manage_woocommerce'))return;$checks=array('B2B module loaded'=>function_exists('iws_b2b_get_settings'),'Wholesale role exists'=>(bool)get_role('wholesale_customer'),'B2B enabled'=>iws_b2b_is_enabled(),'Portal page'=>(bool)get_page_by_path('b2b-portal'));$demo_users=get_users(array('meta_key'=>'_wpbb_b2b_demo','meta_value'=>'1'));$demo_products=get_posts(array('post_type'=>'product','post_status'=>'any','fields'=>'ids','posts_per_page'=>30,'meta_key'=>'_wpbb_b2b_demo','meta_value'=>'1'));?><div class="wrap"><h1>B2B Portal & Pricing — Demo Lab</h1><p>Create safe local/demo B2B clients, product-specific trade prices, minimum quantities and a B2B Portal page. This is separate from live customers.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:1300px"><div class="postbox"><div class="inside"><h2>Health checks</h2><table class="widefat striped"><?php foreach($checks as$k=>$ok):?><tr><th><?php echo esc_html($k);?></th><td><?php echo $ok?'✅ Ready':'⚠ Needs setup';?></td></tr><?php endforeach;?></table><p><strong>Demo clients:</strong> <?php echo count($demo_users);?> &nbsp; <strong>Demo-priced products:</strong> <?php echo count($demo_products);?></p><form method="post" action="<?php echo esc_url(admin_url('admin-post.php'));?>"><input type="hidden" name="action" value="iws_b2b_create_demo"><?php wp_nonce_field('iws_b2b_create_demo');?><?php submit_button('Create / refresh B2B demo','primary','submit',false);?></form> <form style="display:inline-block" method="post" action="<?php echo esc_url(admin_url('admin-post.php'));?>"><input type="hidden" name="action" value="iws_b2b_reset_demo"><?php wp_nonce_field('iws_b2b_reset_demo');?><button class="button">Remove B2B demo data</button></form></div></div><div class="postbox"><div class="inside"><h2>Demo client tiers</h2><table class="widefat striped"><tr><th>Client</th><th>Discount</th><th>Credit</th><th>Terms</th></tr><?php foreach($demo_users as$u):?><tr><td><?php echo esc_html(get_user_meta($u->ID,'iws_b2b_company',true));?></td><td><?php echo esc_html(get_user_meta($u->ID,'iws_b2b_discount_percent',true));?>%</td><td><?php echo wp_kses_post(wc_price((float)get_user_meta($u->ID,'iws_b2b_credit_limit',true)));?></td><td><?php echo esc_html(get_user_meta($u->ID,'iws_b2b_payment_terms',true));?></td></tr><?php endforeach;?></table><p><a class="button" href="<?php echo esc_url(admin_url('admin.php?page=iws-b2b-wholesale'));?>">Open B2B settings</a> <?php if($page=get_page_by_path('b2b-portal')):?><a class="button" target="_blank" href="<?php echo esc_url(get_permalink($page));?>">Open B2B portal</a><?php endif;?></p></div></div></div></div><?php }

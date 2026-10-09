@@ -22,7 +22,7 @@
     {
       "type": "path",
       "url": "packages/wp-bbuilder",
-      "options": { "symlink": true }
+      "options": { "symlink": false }
     },
     {
       "type": "path",

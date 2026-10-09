@@ -53,7 +53,7 @@ function wpbbshop_v425_blog_assets() {
         'heating-plan'         => $base . 'heating-plan.jpg',
         'radiator-size'        => $base . 'radiator-size.jpg',
         'cultivator-guide'     => $base . 'cultivator-guide.jpg',
-        'variant-stock'        => $base . 'variant-stock.jpg',
+        'variation-stock'        => $base . 'variant-stock.jpg',
         'underfloor-heating'   => $base . 'underfloor-heating.jpg',
         'garden-maintenance'   => $base . 'garden-maintenance.jpg',
         'heat-pump-guide'      => $base . 'heat-pump-guide.jpg',
@@ -150,7 +150,7 @@ function wpbbshop_v425_refresh_demo_media() {
         'heating-plan'        => array('blog-heating-plan.jpg','product-air-source-heat-pump.jpg','product-panel-radiator-22.jpg'),
         'radiator-size'       => array('blog-radiator-size.jpg','product-panel-radiator-22.jpg','product-radiator-valve-pack.jpg'),
         'cultivator-guide'    => array('blog-cultivator-guide.jpg','product-cultivator-1050.jpg','product-mini-tractor-15hp.jpg'),
-        'variant-stock'       => array('blog-variant-stock.jpg','product-radiator-valve-pack.jpg','product-underfloor-manifold.jpg'),
+        'variation-stock'       => array('blog-variant-stock.jpg','product-radiator-valve-pack.jpg','product-underfloor-manifold.jpg'),
         'underfloor-heating'  => array('blog-underfloor-heating.jpg','product-underfloor-mat.jpg','product-underfloor-manifold.jpg'),
         'garden-maintenance'  => array('blog-garden-maintenance.jpg','product-riding-mower-1050a.jpg','product-cultivator-1050.jpg'),
         'heat-pump-guide'     => array('blog-heat-pump-guide.jpg','product-air-source-heat-pump.jpg','product-pump-25-60.jpg'),
@@ -262,6 +262,10 @@ add_action('wp_enqueue_scripts', function() {
 function wpbbshop_v425_guide_image_url($post_id) {
     $post_id = absint($post_id);
     if (!$post_id) { return ''; }
+    if (function_exists('wpbbshop_v428_guide_image_url')) {
+        $v428 = wpbbshop_v428_guide_image_url($post_id);
+        if ($v428) { return $v428; }
+    }
     if (function_exists('wpbbshop_v426_guide_image_url')) {
         $v426 = wpbbshop_v426_guide_image_url($post_id);
         if ($v426) { return $v426; }
@@ -307,7 +311,7 @@ function wpbbshop_v425_post_gallery_items($post_id) {
         'heating-plan'        => array($blog['heating-plan'] ?? '', $product['air-source-heat-pump'] ?? '', $product['panel-radiator-22'] ?? ''),
         'radiator-size'       => array($blog['radiator-size'] ?? '', $product['panel-radiator-22'] ?? '', $product['radiator-valve-pack'] ?? ''),
         'cultivator-guide'    => array($blog['cultivator-guide'] ?? '', $product['cultivator-1050'] ?? '', $product['mini-tractor-15hp'] ?? ''),
-        'variant-stock'       => array($blog['variant-stock'] ?? '', $product['radiator-valve-pack'] ?? '', $product['underfloor-manifold'] ?? ''),
+        'variation-stock'       => array($blog['variation-stock'] ?? '', $product['radiator-valve-pack'] ?? '', $product['underfloor-manifold'] ?? ''),
         'underfloor-heating'  => array($blog['underfloor-heating'] ?? '', $product['underfloor-mat'] ?? '', $product['underfloor-manifold'] ?? ''),
         'garden-maintenance'  => array($blog['garden-maintenance'] ?? '', $product['riding-mower-1050a'] ?? '', $product['cultivator-1050'] ?? ''),
         'heat-pump-guide'     => array($blog['heat-pump-guide'] ?? '', $product['air-source-heat-pump'] ?? '', $product['pump-25-60'] ?? ''),

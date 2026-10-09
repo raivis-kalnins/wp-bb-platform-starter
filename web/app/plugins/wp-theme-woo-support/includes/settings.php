@@ -38,7 +38,7 @@ add_filter( 'woocommerce_get_settings_pages', function( $pages ) {
 					'stock' => 'Stock display enhancements', 'discount_rules' => 'Discount rules', 'product_schema' => 'Product schema graph',
 					'product_filter' => 'AJAX product filter and compare', 'variation_swatches' => 'Variation swatches', 'quote_request' => 'Cart + product quote basket', 'product_ux' => 'Legacy product UI fixes',
 					'product_admin' => 'Product admin fields', 'ajax_search' => 'AJAX search block', 'custom_login' => 'Legacy account and login routing',
-					'mini_cart' => 'Mini-cart drawer', 'template_overrides' => 'Plugin WooCommerce templates', 'demo_import' => 'Woo demo importer', 'marketing_intelligence' => 'Marketing intelligence and campaign attribution', 'b2b' => 'B2B portal and pricing',
+					'mini_cart' => 'Mini-cart drawer', 'template_overrides' => 'Plugin WooCommerce templates', 'demo_import' => 'Woo demo importer', 'marketing_intelligence' => 'Marketing intelligence and campaign attribution', 'crm_intelligence' => 'Local CRM intelligence and customer lifecycle statistics', 'product_sync' => 'Product import, export and scheduled supplier sync', 'b2b' => 'B2B portal and pricing',
 				);
 
 				$current = wp_theme_woo_support_features();

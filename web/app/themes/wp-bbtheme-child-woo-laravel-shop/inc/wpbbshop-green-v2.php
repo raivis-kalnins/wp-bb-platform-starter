@@ -270,10 +270,22 @@ function wpbbshop_green_product_image_html($product) {
 
     // v4.0.25 gives all WP BB demo catalogue products a cleaner local showcase
     // image before the older demo/Media Library fallbacks run.
-    $v425_url = function_exists('wpbbshop_v425_demo_product_asset') ? wpbbshop_v425_demo_product_asset($product) : '';
+    $v428_url = function_exists('wpbbshop_v428_demo_product_asset') ? wpbbshop_v428_demo_product_asset($product) : '';
+    $v425_url = $v428_url ?: (function_exists('wpbbshop_v425_demo_product_asset') ? wpbbshop_v425_demo_product_asset($product) : '');
     if ($v425_url) {
-        $primary_html = '<img class="llg-product-image-primary wpbb-v425-demo-image" src="' . esc_url($v425_url) . '" alt="' . esc_attr(wpbbshop_green_demo_name_309($product)) . '" loading="lazy" decoding="async">';
+        $primary_html = '<img class="llg-product-image-primary wpbb-v425-demo-image" src="' . esc_url($v425_url) . '" alt="' . esc_attr(wpbbshop_green_demo_name_309($product)) . '" loading="lazy" decoding="async" referrerpolicy="no-referrer">';
         $v425_owned = true;
+
+        // v4.0.27 real-photo demo products expose a second, department-matched
+        // photo as the card gallery/hover image instead of suppressing galleries.
+        if (function_exists('wpbbshop_v426_demo_product_gallery_urls')) {
+            $real_gallery = wpbbshop_v426_demo_product_gallery_urls($product);
+            foreach ((array) $real_gallery as $real_url) {
+                if (!$real_url || $real_url === $v425_url) { continue; }
+                $secondary_html = '<img class="llg-product-image-secondary wpbb-v426-realistic-secondary" src="' . esc_url($real_url) . '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">';
+                break;
+            }
+        }
     }
 
     // Demo products use bundled theme assets directly. This keeps Refresh fast and
@@ -312,7 +324,7 @@ function wpbbshop_green_product_image_html($product) {
             }
         }
     }
-    if ($secondary_html === '' && !$v425_owned) {
+    if ($secondary_html === '') {
         foreach ($gallery_ids as $gallery_id) {
             if ($gallery_id && $gallery_id !== $image_id) {
                 $secondary_html = wp_get_attachment_image($gallery_id, 'woocommerce_thumbnail', false, array(
@@ -460,7 +472,7 @@ function wpbbshop_green_footer_html() {
         <div class="llg-footer-col"><h4><?php echo $is_en?'Information':'Informācija'; ?></h4><?php echo wpbbshop_nav_menu('footer',$footer_fallback); ?></div>
         <div class="llg-footer-col"><h4><?php echo $is_en?'Customers':'Klientiem'; ?></h4><?php echo wpbbshop_nav_menu('service',$service_fallback); ?></div>
         <div class="llg-footer-col"><h4><?php echo $is_en?'Contact':'Kontakti'; ?></h4><p class="llg-contact-list"><span><?php echo wpbbshop_green_icon('location'); ?> <?php echo esc_html($address); ?></span><?php if($phone): ?><span><?php echo wpbbshop_green_icon('phone'); ?> <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/','',$phone)); ?>"><?php echo esc_html($phone); ?></a></span><?php endif; ?><?php if($email): ?><span><?php echo wpbbshop_green_icon('mail'); ?> <a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></span><?php endif; ?><?php if($hours): ?><span><?php echo wpbbshop_green_icon('clock'); ?> <?php echo esc_html($hours); ?></span><?php endif; ?></p></div>
-        <div class="llg-footer-col llg-footer-delivery"><h4><?php echo $is_en?'Delivery & payment':'Piegāde un apmaksa'; ?></h4><div class="llg-footer-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_delivery_partners','Unisend,Omniva,Latvijas Pasts,Kurjers')))) as $item): ?><span><?php echo esc_html($is_en && $item === 'Kurjers' ? 'Courier' : $item); ?></span><?php endforeach; ?></div><div class="llg-footer-pills llg-payment-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_payment_methods','Skaidrā naudā,Bankas pārskaitījums,EveryPay / Swedbank')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div></div>
+        <div class="llg-footer-col llg-footer-delivery"><h4><?php echo $is_en?'Delivery & payment':'Piegāde un apmaksa'; ?></h4><div class="llg-footer-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_delivery_partners','Unisend,Omniva,Latvijas Pasts,Kurjers')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div><div class="llg-footer-pills llg-payment-pills"><?php foreach(array_filter(array_map('trim',explode(',',wpbbshop_get_theme_option('footer_payment_methods','Skaidrā naudā,Bankas pārskaitījums,EveryPay / Swedbank')))) as $item): ?><span><?php echo esc_html($item); ?></span><?php endforeach; ?></div></div>
         <div class="llg-footer-col llg-footer-partners-col"><h4><?php echo $is_en?'Price comparison':'Cenu salīdzināšana'; ?></h4><?php echo function_exists('wpbbshop_v408_footer_comparison_html') ? wpbbshop_v408_footer_comparison_html($is_en) : '<div class="llg-comparison-sites"><a href="https://www.kurpirkt.lv/" target="_blank" rel="noopener noreferrer">KurPirkt.lv</a><a href="https://www.salidzini.lv/" target="_blank" rel="noopener noreferrer">Salidzini.lv</a><a href="https://ceno.lv/" target="_blank" rel="noopener noreferrer">Ceno.lv</a></div>'; ?></div>
       </div></div>
       <div class="llg-footer-bottom"><div class="wpbbshop-container"><span>© <?php echo esc_html(date('Y')); ?> WP BB Home & Garden. <?php echo $is_en?'All rights reserved.':'Visas tiesības aizsargātas.'; ?></span><span class="llg-footer-meta"><?php echo esc_html($store_city); ?> • <?php echo esc_html($store_country); ?> <span class="llg-footer-sep">•</span> <?php echo $is_en?'Developed by':'Izstrādāja'; ?> <a class="llg-developer-link" href="https://digitalpulse.click/" target="_blank" rel="noopener noreferrer">DigitalPulse.click</a></span></div></div>

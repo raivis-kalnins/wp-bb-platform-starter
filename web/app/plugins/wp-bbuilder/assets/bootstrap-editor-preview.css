@@ -1,0 +1,38 @@
+/*
+ * Small, canvas-scoped Bootstrap preview subset.
+ * The full Bootstrap stylesheet is intentionally not loaded in wp-admin.
+ */
+.editor-styles-wrapper .d-flex { display: flex !important; }
+.editor-styles-wrapper .d-grid { display: grid !important; }
+.editor-styles-wrapper .flex-row { flex-direction: row !important; }
+.editor-styles-wrapper .flex-column { flex-direction: column !important; }
+.editor-styles-wrapper .flex-wrap { flex-wrap: wrap !important; }
+.editor-styles-wrapper .justify-content-start { justify-content: flex-start !important; }
+.editor-styles-wrapper .justify-content-center { justify-content: center !important; }
+.editor-styles-wrapper .justify-content-end { justify-content: flex-end !important; }
+.editor-styles-wrapper .justify-content-between { justify-content: space-between !important; }
+.editor-styles-wrapper .justify-content-around { justify-content: space-around !important; }
+.editor-styles-wrapper .justify-content-evenly { justify-content: space-evenly !important; }
+.editor-styles-wrapper .align-items-start { align-items: flex-start !important; }
+.editor-styles-wrapper .align-items-center { align-items: center !important; }
+.editor-styles-wrapper .align-items-end { align-items: flex-end !important; }
+.editor-styles-wrapper .align-items-stretch { align-items: stretch !important; }
+.editor-styles-wrapper .text-start { text-align: left !important; }
+.editor-styles-wrapper .text-center { text-align: center !important; }
+.editor-styles-wrapper .text-end { text-align: right !important; }
+.editor-styles-wrapper .w-100 { width: 100% !important; }
+.editor-styles-wrapper .h-100 { height: 100% !important; }
+.editor-styles-wrapper .rounded { border-radius: .375rem !important; }
+.editor-styles-wrapper .rounded-0 { border-radius: 0 !important; }
+.editor-styles-wrapper .rounded-1 { border-radius: .25rem !important; }
+.editor-styles-wrapper .rounded-2 { border-radius: .375rem !important; }
+.editor-styles-wrapper .rounded-3 { border-radius: .5rem !important; }
+.editor-styles-wrapper .rounded-4 { border-radius: 1rem !important; }
+.editor-styles-wrapper .shadow-sm { box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important; }
+.editor-styles-wrapper .shadow { box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important; }
+.editor-styles-wrapper .shadow-lg { box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important; }
+.editor-styles-wrapper .order-first { order: -1 !important; }
+.editor-styles-wrapper .order-1 { order: 1 !important; }
+.editor-styles-wrapper .order-2 { order: 2 !important; }
+.editor-styles-wrapper .order-3 { order: 3 !important; }
+.editor-styles-wrapper .order-last { order: 13 !important; }

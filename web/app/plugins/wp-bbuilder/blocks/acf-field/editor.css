@@ -1,0 +1,62 @@
+.wp-block-wpbb-acf-field.wpbb-acf-field-editor {
+    min-height: 48px;
+}
+
+.wpbb-acf-field-editor__header {
+    align-items: center;
+    background: #f6f7f7;
+    border: 1px solid #dcdcde;
+    border-bottom: 0;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    padding: 8px 12px;
+}
+
+.wpbb-acf-field-editor__field {
+    min-width: 0;
+}
+
+.wpbb-acf-field-editor__field strong,
+.wpbb-acf-field-editor__field span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wpbb-acf-field-editor__field span {
+    color: #646970;
+    font-size: 12px;
+}
+
+.wpbb-acf-field-editor__preview {
+    border: 1px solid #dcdcde;
+    padding: 12px;
+}
+
+.wpbb-acf-field-editor__preview > .components-disabled,
+.wpbb-acf-field-editor__preview > .components-disabled > div {
+    width: 100%;
+}
+
+.wpbb-acf-field-editor__preview .wpbb-acf-field-editor-message {
+    margin: 0;
+}
+
+.wpbb-acf-field-editor__placeholder .components-placeholder__fieldset {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+}
+
+.wpbb-acf-field-editor__placeholder .components-base-control {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.wpbb-acf-field-editor__status {
+    color: #646970;
+    font-size: 12px;
+    margin: 8px 0 0;
+}

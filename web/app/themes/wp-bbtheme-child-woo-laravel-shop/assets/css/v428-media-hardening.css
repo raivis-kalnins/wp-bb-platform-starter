@@ -1,0 +1,5 @@
+/* v4.0.28: demo cards are photographic and no longer depend on generated green artwork. */
+body.wpbbshop-theme .wpbb-v428-photo-product,
+body.wpbbshop-theme .wpbb-v425-demo-image,
+body.wpbbshop-theme .llg-product-image-primary.wpbb-v428-photo-product{object-fit:contain!important;object-position:center!important;background:#fff!important;padding:8px!important;filter:none!important}
+body.wpbbshop-theme .wpbb-v428-guide-photo{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;background:#f5f6f5!important}

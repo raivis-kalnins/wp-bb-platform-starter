@@ -1,4 +1,4 @@
-# WP Theme Woo Support 3.7.0
+# WP Theme Woo Support 3.8.0
 
 Reusable WooCommerce functionality for the WP BBTheme suite. Ecommerce behaviour is kept in this companion plugin so sector child themes can share robust catalogue, product, variation, cart/account and quote workflows without duplicating business logic.
 
@@ -84,3 +84,12 @@ The Marketing Intelligence screen now adds deeper CRM-style commerce insight whi
 - Expanded automatic recommendations covering retention, reactivation, campaign efficiency, product momentum and product affinity.
 - Campaign URL builder now supports source, medium, campaign, content and term.
 - Order processing is paged in batches instead of loading an unlimited order result in one query.
+
+
+## 3.8.0 commerce operations suite
+
+- B2B module now loads with the Store profile while remaining internally disabled until configured. It adds product/variation trade prices, minimum quantities, case packs, client discount/credit/payment-term fields and a B2B Demo Lab that can create disposable test clients and a portal page.
+- Demo importer prefers bundled photographic media and only falls back to generated SVG artwork when the demo-media assets are missing.
+- Local CRM Intelligence adds customer segmentation, repeat-rate/AOV metrics, predicted reorder dates, cohort/revenue charts, action recommendations and CSV segment export without depending on FluentCRM.
+- Product Sync provides native JSON/XML/CSV/Woo REST import profiles, SKU/external-ID upserts, image sideloading, stock/price-only fast mode, scheduled WP-Cron jobs, secure external cron URLs and CSV/JSON/XML product export.
+- A live DummyJSON draft-import profile can be created from the Product Sync screen for safe testing; the public test endpoint is intended only for development/demo data.

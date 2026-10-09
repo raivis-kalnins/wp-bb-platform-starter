@@ -1,4 +1,4 @@
-/* WP BB Home & Garden v4.0.26 — photographic catalogue and editorial media. */
+/* WP BB Home & Garden v4.0.27 — photographic catalogue and editorial media. */
 
 /* Retail-style product media: white neutral packshot surface, no illustrated
    mint card, glow or artificial ground shadow. */
@@ -14,7 +14,8 @@ html body.wpbbshop-theme .llg-card-media-main,
 html body.wpbbshop-theme .llg-card-media-secondary{padding:6px!important}
 html body.wpbbshop-theme .llg-card-image img.wpbb-v425-demo-image,
 html body.wpbbshop-theme .llg-card-image img.wpbb-v426-realistic-product,
-html body.wpbbshop-theme img.wpbb-v426-realistic-product{
+html body.wpbbshop-theme img.wpbb-v426-realistic-product,
+html body.wpbbshop-theme img.wpbb-v426-realistic-secondary{
   display:block!important;
   width:100%!important;
   height:100%!important;

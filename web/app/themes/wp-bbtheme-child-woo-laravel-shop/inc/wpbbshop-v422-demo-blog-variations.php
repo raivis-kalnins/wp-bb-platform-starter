@@ -467,21 +467,20 @@ function wpbbshop_v422_remove_showcase() {
     delete_option('wpbbshop_v422_showcase_version'); update_option('wpbbshop_v422_showcase_disabled', '1', false);
 }
 
-add_action('admin_post_wpbbshop_v400_remove_demo', function() {
-    if (current_user_can('manage_options')) { wpbbshop_v422_remove_showcase(); }
-}, 1);
-add_action('admin_post_wpbbshop_v400_seed', function() {
-    if (current_user_can('manage_options')) { update_option('wpbbshop_v422_showcase_disabled', '0', false); delete_option('wpbbshop_v422_showcase_version'); }
-}, 1);
+// v4.0.27: the base 500-item catalogue, demo blog and richer new-product
+// showcase are managed independently from the single Home & Garden tabbed UI.
+// Do not couple the v4.0.00 catalogue seed/remove actions to showcase content.
 
-add_action('admin_menu', function() {
-    add_theme_page('Home & Garden Demo Content', 'Demo Blog & Variations', 'manage_options', 'wpbbshop-v422-showcase', 'wpbbshop_v422_admin_page');
-}, 95);
+// v4.0.27: no separate Appearance submenu. Demo imports live exclusively in
+// the tabbed Appearance -> Home & Garden screen.
 
 function wpbbshop_v422_admin_page() {
     if (!current_user_can('manage_options')) { return; }
-    $notice = isset($_GET['wpbb_v422_notice']) ? sanitize_text_field(wp_unslash($_GET['wpbb_v422_notice'])) : '';
+    // Legacy URL kept only for backwards compatibility. The submenu itself is
+    // removed; anyone opening an old bookmark gets a single link to the new UI.
     ?>
+    <div class="wrap"><h1>Demo imports moved</h1><p>Catalogue, Blog and New Product demo imports are now together under <a href="<?php echo esc_url(admin_url('themes.php?page=wpbbshop-platform&tab=blogdemo')); ?>">Appearance &rarr; Home &amp; Garden</a>.</p></div>
+    <?php return; ?>
     <div class="wrap"><h1>WP BB Home & Garden — Demo Blog & Variations</h1>
       <p>Create or refresh bilingual product-guide posts plus heating, cultivator, ride-on mower and mini-tractor demo products with variation-level stock.</p>
       <?php if ($notice) : ?><div class="notice notice-success is-dismissible"><p><?php echo esc_html($notice); ?></p></div><?php endif; ?>
@@ -496,7 +495,7 @@ add_action('admin_post_wpbbshop_v422_seed_showcase', function() {
     check_admin_referer('wpbbshop_v422_seed_showcase');
     $result = function_exists('wpbbshop_v423_seed_all') ? wpbbshop_v423_seed_all() : wpbbshop_v422_seed_all();
     $message = sprintf('Demo showcase ready: %d posts created, %d updated; %d bilingual demo products refreshed.', (int)$result['posts']['created'], (int)$result['posts']['updated'], (int)$result['products']['created']);
-    wp_safe_redirect(add_query_arg('wpbb_v422_notice', rawurlencode($message), admin_url('themes.php?page=wpbbshop-v422-showcase'))); exit;
+    wp_safe_redirect(add_query_arg('wpbb_notice', rawurlencode($message), admin_url('themes.php?page=wpbbshop-platform&tab=blogdemo'))); exit;
 });
 
 function wpbbshop_v422_guide_posts() {

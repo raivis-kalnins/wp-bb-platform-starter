@@ -1,0 +1,378 @@
+/*
+ * BBuilder Row/Column canvas layout.
+ *
+ * Only the editor canvas is targeted. WordPress editor chrome, navigation,
+ * dialogs, and responsive sidebars are intentionally untouched.
+ */
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row {
+  --wpbb-editor-gap-x: 8px;
+  --wpbb-editor-gap-y: 8px;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: var(--wpbb-editor-row-max-width, 100%) !important;
+  border: 1px dashed #a7aaad;
+  border-radius: 2px;
+  padding: 8px;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gx-0 { --wpbb-editor-gap-x: 0px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gx-1 { --wpbb-editor-gap-x: 4px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gx-2 { --wpbb-editor-gap-x: 8px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gx-3 { --wpbb-editor-gap-x: 12px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gx-4 { --wpbb-editor-gap-x: 16px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gx-5 { --wpbb-editor-gap-x: 24px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gy-0 { --wpbb-editor-gap-y: 0px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gy-1 { --wpbb-editor-gap-y: 4px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gy-2 { --wpbb-editor-gap-y: 8px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gy-3 { --wpbb-editor-gap-y: 12px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gy-4 { --wpbb-editor-gap-y: 16px; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].wpbb-row.gy-5 { --wpbb-editor-gap-y: 24px; }
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] > .wpbb-row__content,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] > .wpbb-row__content {
+  position: relative;
+  padding-top: 24px;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] > .wpbb-row__content > .wpbb-editor-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  box-sizing: border-box;
+  max-width: calc(100% - 8px) !important;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Each Column owns its active responsive span. Attribute selectors make the
+ * editor grid immune to frontend Bootstrap/theme flex-width overrides. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="1"] { grid-column: span 1 / span 1 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="2"] { grid-column: span 2 / span 2 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="3"] { grid-column: span 3 / span 3 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="4"] { grid-column: span 4 / span 4 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="5"] { grid-column: span 5 / span 5 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="6"] { grid-column: span 6 / span 6 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="7"] { grid-column: span 7 / span 7 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="8"] { grid-column: span 8 / span 8 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="9"] { grid-column: span 9 / span 9 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="10"] { grid-column: span 10 / span 10 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="11"] { grid-column: span 11 / span 11 !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 12 / span 12 !important; }
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .wpbb-editor-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  box-sizing: border-box;
+  max-width: calc(100% - 8px) !important;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container.container,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container.container-fluid {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__content > .block-editor-inner-blocks,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  grid-auto-flow: row;
+  grid-auto-rows: minmax(min-content, auto);
+  align-items: stretch !important;
+  align-content: start;
+  column-gap: var(--wpbb-editor-gap-x, 8px) !important;
+  row-gap: var(--wpbb-editor-gap-y, 8px) !important;
+  margin: 0 !important;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="wpbb/column"],
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="wpbb/column"] {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex: none !important;
+  flex-direction: column !important;
+  grid-column: span var(--wpbb-editor-column-span, 12) / span var(--wpbb-editor-column-span, 12) !important;
+  align-self: stretch !important;
+  float: none !important;
+  clear: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  min-height: 72px;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border: 1px dotted #c3c4c7;
+  border-radius: 2px;
+  padding: 6px;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content {
+  box-sizing: border-box;
+  display: flex !important;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  width: 100% !important;
+  height: 100%;
+  max-width: var(--wpbb-editor-column-content-max-width, 100%) !important;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 24px;
+  position: relative;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks {
+  box-sizing: border-box;
+  display: flex !important;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  box-sizing: border-box;
+  display: flex !important;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100%;
+  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* The row appender remains a normal full-row WordPress control. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout > .block-list-appender,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout > .block-editor-default-block-appender,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout > .block-list-appender,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout > .block-editor-default-block-appender {
+  grid-column: 1 / -1;
+  min-width: 0;
+  width: 100%;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] .block-list-appender {
+  min-width: 0;
+}
+
+/* Reflect Column alignment settings inside the editor-only content wrapper. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].justify-content-start > .wpbb-column__content { justify-content: flex-start !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].justify-content-center > .wpbb-column__content { justify-content: center !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].justify-content-end > .wpbb-column__content { justify-content: flex-end !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].justify-content-between > .wpbb-column__content { justify-content: space-between !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].justify-content-around > .wpbb-column__content { justify-content: space-around !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].justify-content-evenly > .wpbb-column__content { justify-content: space-evenly !important; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-start > .wpbb-column__content { align-items: flex-start !important; text-align: left; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center > .wpbb-column__content { align-items: center !important; text-align: center; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-end > .wpbb-column__content { align-items: flex-end !important; text-align: right; }
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-stretch > .wpbb-column__content { align-items: stretch !important; }
+
+/* 5.4.5: make Row and Column centre settings visible for native WordPress blocks. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].justify-content-center .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="wpbb/column"]:first-child,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].justify-content-center .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="wpbb/column"]:first-child,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].justify-content-end .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="wpbb/column"]:first-child,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"].justify-content-end .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="wpbb/column"]:first-child {
+  grid-column-start: var(--wpbb-editor-row-start, 1) !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block {
+  align-self: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 100%;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-heading,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-paragraph,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-list,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-buttons,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-image,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-cover__inner-container,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-group__inner-container {
+  text-align: center !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-buttons {
+  justify-content: center !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-image > div,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center .wp-block-image figure,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"].align-items-center figure.wp-block-image {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 5.4.12: nested Rows always occupy the full Column content track. This keeps
+ * page-specific alignment styles from shrink-wrapping the editor grid. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block[data-type="wpbb/row"] {
+  box-sizing: border-box !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  flex-basis: auto !important;
+}
+
+/* Button alignment belongs to the editor wrapper, not to the theme button.
+ * Custom button classes remain free to provide their real padding and shape. */
+.editor-styles-wrapper .wpbb-button-editor {
+  box-sizing: border-box;
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.editor-styles-wrapper .wpbb-button-editor--align-start { justify-content: flex-start !important; }
+.editor-styles-wrapper .wpbb-button-editor--align-center { justify-content: center !important; }
+.editor-styles-wrapper .wpbb-button-editor--align-end { justify-content: flex-end !important; }
+.editor-styles-wrapper .wpbb-button-editor > .wpbb-editor-label { flex: 0 0 auto; }
+
+
+/* 5.4.13: keep nested editor Rows on the complete parent content track.
+ * Theme preview CSS may apply fit-content, max-content, fixed widths, flex-basis,
+ * or inline-size to a page-specific Row class. These rules affect only the
+ * Gutenberg canvas and leave saved/frontend Bootstrap output untouched. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks,
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  inline-size: 100% !important;
+  max-inline-size: 100% !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block[data-type="wpbb/row"],
+.editor-styles-wrapper .wp-block[data-type="wpbb/column"] > .wpbb-column__content > .block-editor-inner-blocks > .block-editor-block-list__layout > .wp-block[data-type="wpbb/row"].wpbb-row {
+  display: block !important;
+  flex: 1 1 100% !important;
+  flex-basis: 100% !important;
+  inline-size: 100% !important;
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+}
+
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] > .wpbb-row__content,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] > .wpbb-row__content > .block-editor-inner-blocks,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] > .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks,
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout {
+  inline-size: 100% !important;
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Grid placement must win over page-specific flex/width rules on every direct
+ * Column. A md=3 card occupies three tracks and md=1 arrows occupy one track. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .block-editor-block-list__layout > .wp-block[data-type="wpbb/column"][data-wpbb-span] {
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  flex-basis: auto !important;
+  inline-size: 100% !important;
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* 5.4.14: Bootstrap responsive class names are present for theme preview
+ * selectors, but the isolated editor grid remains the only width system. */
+.editor-styles-wrapper .wp-block[data-type="wpbb/row"] .block-editor-block-list__layout > [data-type="wpbb/column"][class*="col-"] {
+  flex: none !important;
+  flex-basis: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+
+/* 5.5.3: a row with one resolved 12/12 column should use the full editor canvas.
+ * Do not force an arbitrary 8-column/content-size cap onto a simple full-width layout. */
+.editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .wp-block[data-type="wpbb/row"][data-wpbb-single-full="1"],
+.editor-styles-wrapper .is-layout-constrained > .wp-block[data-type="wpbb/row"][data-wpbb-single-full="1"] {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* 5.6.5: keep Bootstrap layout blocks legible even while editing deeply nested demos. */
+.editor-styles-wrapper [data-type="wpbb/bootstrap-div"]{box-sizing:border-box;display:block;min-width:0;width:100%;max-width:100%}
+.editor-styles-wrapper [data-type="wpbb/row"]{box-sizing:border-box;min-width:0;width:100%;max-width:100%;clear:both}
+.editor-styles-wrapper [data-type="wpbb/row"] > .wpbb-row__content{box-sizing:border-box;min-width:0;width:100%;max-width:100%}
+.editor-styles-wrapper [data-type="wpbb/row"] > .wpbb-row__content > .block-editor-inner-blocks > .block-editor-block-list__layout,
+.editor-styles-wrapper [data-type="wpbb/row"] .wpbb-row__container > .block-editor-inner-blocks > .block-editor-block-list__layout{box-sizing:border-box;display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr));align-items:stretch;min-width:0;width:100%!important;max-width:100%!important}
+.editor-styles-wrapper [data-type="wpbb/column"]{min-width:0!important;max-width:100%!important;overflow:visible}
+.editor-styles-wrapper [data-type="wpbb/icon-card"]{min-width:0;width:100%;height:100%}
+.editor-styles-wrapper [data-type="wpbb/icon-card"] .wpbb-icon-card{height:100%}
+
+/* 5.6.5: malformed legacy demo content must never collapse the editor canvas. */
+.editor-styles-wrapper [data-type="wpbb/row"]{box-sizing:border-box;display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:visible!important}
+.editor-styles-wrapper [data-type="wpbb/row"]>.wpbb-row__content,.editor-styles-wrapper [data-type="wpbb/row"]>.wpbb-row__container{box-sizing:border-box;width:100%!important;max-width:100%!important;min-width:0!important}
+.editor-styles-wrapper [data-type="wpbb/column"]{box-sizing:border-box;min-width:0!important;overflow:visible!important}
+.editor-styles-wrapper [data-type="wpbb/bootstrap-div"]{box-sizing:border-box;min-width:0!important;max-width:100%!important}
+.editor-styles-wrapper .block-editor-warning{max-width:100%;white-space:normal}
+
+/* 5.6.6: recovered/default rows can still preview as a useful equal grid.
+ * Explicit responsive Column widths disable this mode in editor.js. */
+@media (min-width: 768px) {
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="2"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 6 / span 6 !important; }
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="3"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 4 / span 4 !important; }
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="4"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 3 / span 3 !important; }
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="5"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 12 / span 12 !important; }
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="6"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 4 / span 4 !important; }
+}
+@media (min-width: 1200px) {
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="5"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 2 / span 2 !important; }
+  .editor-styles-wrapper .wp-block[data-type="wpbb/row"][data-wpbb-auto-count="6"] [data-type="wpbb/column"][data-wpbb-span="12"] { grid-column: span 2 / span 2 !important; }
+}

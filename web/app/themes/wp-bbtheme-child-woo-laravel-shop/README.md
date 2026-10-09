@@ -1,3 +1,21 @@
+# WP BB Home & Garden Child Theme v4.0.28
+
+## 4.0.28 photographic demo hardening
+
+- Demo product cards now use bundled photographic product media at the final rendering layer instead of generated/schematic green illustrations.
+- Existing real merchant product images remain untouched.
+- Product Guide cards use a different context-relevant real photograph per guide; a one-time repair corrects stale/duplicated guide keys from older demo refreshes, with bundled local photo fallbacks.
+- v4.0.27 Wikimedia sources remain available for richer galleries, but the primary demo cards no longer depend on remote image availability.
+
+## v4.0.27 real catalogue photos + one demo-import screen
+
+- Fixes the remaining 500-item `HG-DEMO` catalogue so **Popular products** and **Offers & savings** no longer fall back to the old green schematic artwork. Each of the 20 departments now resolves to real department-matched product photography, with two photo variants per department.
+- Adds real secondary/hover photos to demo product cards and a real-photo gallery on single demo-product pages.
+- Modernises Product Guide imagery, including the radiator, variation/stock, underfloor-heating, garden-maintenance and tractor topics, and ignores stale v4.0.26 cached attachments when the configured source photo has changed.
+- Consolidates demo importing under **Appearance → Home & Garden**. The old separate **Demo Blog & Variations** menu is removed. The one screen now has **Demo catalogue**, **Blog demo** and **New product demo** tabs alongside Languages, XML feeds, Laravel/Svelte and Performance.
+- Decouples the 500-item catalogue seed/remove actions from the blog/showcase demo content, so each demo type can be refreshed independently.
+- Existing real WooCommerce product images remain untouched; these mappings apply only to theme-owned demo content.
+
 ## v4.0.26 realistic product and blog imagery
 
 - Replaces the v4.0.25 generated showcase artwork with distinct real photographs for every bundled showcase product.
@@ -266,7 +284,7 @@ Build: **full fixed child-theme package**
 - Adds variable demo products with deliberately different per-variation stock states so in-stock, low-stock and unavailable options can all be tested.
 - Variable product pages now show an **Options & availability** matrix with every variation's attributes, SKU, price and stock state, plus a button that selects that variation in the normal WooCommerce form.
 - Product cards show the number of variations and how many are currently available; variable products use **Choose options / Izvēlēties variantu** rather than pretending they can be added directly without a selection.
-- On local/development sites the additional demo content self-seeds once for administrators. A manual **Appearance → Demo Blog & Variations** screen can refresh it safely without duplicates.
+- On local/development sites the additional demo content self-seeds once for administrators. Demo Blog and New Product imports are now managed from tabs under **Appearance → Home & Garden**.
 - The normal **Create / refresh demo catalogue** action re-enables the showcase after demo removal; the normal demo removal action also removes the v4.0.22 showcase content.
 
 ## v4.0.23 realistic demos and editorial guides
@@ -276,7 +294,7 @@ Build: **full fixed child-theme package**
 - Moves the complete variation availability matrix out of the WooCommerce purchase form so it no longer overlaps quantity/add-to-cart controls.
 - Adds richer bilingual Product Guide demo posts and a photo-led homepage guide slider.
 - Rebuilds single blog posts with a large featured image, editorial header, author information, reading time, sticky help/author panel, previous/next posts and related guides.
-- Demo content can be refreshed from **Appearance → Demo Blog & Variations** without creating duplicates.
+- Demo content can be refreshed from **Appearance → Home & Garden** without creating duplicates.
 
 
 ## 4.0.24 Blog, gallery and quote UX

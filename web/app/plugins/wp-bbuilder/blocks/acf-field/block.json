@@ -1,0 +1,146 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wpbb/acf-field",
+  "version": "5.4.2",
+  "title": "ACF Field",
+  "category": "wpbb",
+  "icon": "database-view",
+  "description": "Display a saved Advanced Custom Fields value in the block editor and on the front end.",
+  "keywords": [
+    "acf",
+    "custom field",
+    "dynamic"
+  ],
+  "textdomain": "wp-bbuilder",
+  "usesContext": [
+    "postId",
+    "postType",
+    "queryId",
+    "termId",
+    "taxonomy",
+    "userId"
+  ],
+  "attributes": {
+    "fieldKey": {
+      "type": "string",
+      "default": ""
+    },
+    "fieldName": {
+      "type": "string",
+      "default": ""
+    },
+    "fieldLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "fieldType": {
+      "type": "string",
+      "default": ""
+    },
+    "fieldMultiple": {
+      "type": "boolean",
+      "default": false
+    },
+    "fieldSource": {
+      "type": "string",
+      "default": "current_post"
+    },
+    "displayAs": {
+      "type": "string",
+      "default": "auto"
+    },
+    "tagName": {
+      "type": "string",
+      "default": "p"
+    },
+    "prefix": {
+      "type": "string",
+      "default": ""
+    },
+    "suffix": {
+      "type": "string",
+      "default": ""
+    },
+    "separator": {
+      "type": "string",
+      "default": ", "
+    },
+    "showEmptyMessage": {
+      "type": "boolean",
+      "default": false
+    },
+    "emptyMessage": {
+      "type": "string",
+      "default": ""
+    },
+    "trueText": {
+      "type": "string",
+      "default": "Yes"
+    },
+    "falseText": {
+      "type": "string",
+      "default": "No"
+    },
+    "buttonLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": false
+    },
+    "nofollow": {
+      "type": "boolean",
+      "default": false
+    },
+    "downloadFile": {
+      "type": "boolean",
+      "default": false
+    },
+    "imageSize": {
+      "type": "string",
+      "default": "large"
+    },
+    "showImageCaption": {
+      "type": "boolean",
+      "default": false
+    },
+    "iconSize": {
+      "type": "number",
+      "default": 32
+    }
+  },
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false,
+    "color": {
+      "text": true,
+      "background": true,
+      "link": true,
+      "gradients": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "__experimentalFontFamily": true,
+      "__experimentalFontWeight": true,
+      "__experimentalFontStyle": true,
+      "__experimentalTextTransform": true,
+      "__experimentalTextDecoration": true,
+      "__experimentalLetterSpacing": true
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

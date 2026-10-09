@@ -24,8 +24,7 @@ function wpbbshop_v407_language_home_url($lang) {
 function wpbbshop_v407_localize_store_url($url, $lang = '') {
     $lang = in_array($lang, array('en','lv'), true) ? $lang : (function_exists('wpbbshop_v400_current_language') ? wpbbshop_v400_current_language() : 'en');
     $primary = function_exists('wpbbshop_v400_primary_language') ? wpbbshop_v400_primary_language() : 'en';
-    // Use the site root: Polylang may filter home_url() to the active /lv/ root.
-    $home = trailingslashit((string) get_option('home'));
+    $home = home_url('/');
     if (!$url || strpos($url, $home) !== 0) return $url;
     $relative = ltrim(substr($url, strlen($home)), '/');
     $relative = preg_replace('#^(en|lv)/#', '', $relative);
@@ -49,34 +48,9 @@ function wpbbshop_v407_category_url($english_slug, $lang = '') {
 
 function wpbbshop_v407_product_url($product_id, $lang = '') {
     $lang = in_array($lang, array('en','lv'), true) ? $lang : (function_exists('wpbbshop_v400_current_language') ? wpbbshop_v400_current_language() : 'en');
-    $product_id = absint($product_id);
-    if (function_exists('pll_get_post')) {
-        $translated = absint(pll_get_post($product_id, $lang));
-        if ($translated && get_post_status($translated) === 'publish') {
-            $product_id = $translated;
-        }
-    }
-    $url = get_permalink($product_id);
+    $url = get_permalink(absint($product_id));
     return $url ? wpbbshop_v407_localize_store_url($url, $lang) : wpbbshop_v407_language_home_url($lang);
 }
-
-/* Resolve old or language-prefixed product URLs to their translated product.
- * Products without a published translation continue using shared inventory. */
-add_action('template_redirect', function () {
-    if (!is_product() || is_preview() || !function_exists('pll_get_post') ||
-        (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'GET') ||
-        isset($_GET['add-to-cart'])) {
-        return;
-    }
-    $product_id = get_queried_object_id();
-    $lang = wpbbshop_v400_current_language();
-    $translated = absint(pll_get_post($product_id, $lang));
-    if (!$translated || $translated === $product_id || get_post_status($translated) !== 'publish') {
-        return;
-    }
-    wp_safe_redirect(wpbbshop_v407_product_url($translated, $lang), 302);
-    exit;
-}, -10);
 
 function wpbbshop_v407_language_target_url($lang) {
     $lang = in_array($lang, array('en','lv'), true) ? $lang : 'en';

@@ -27,7 +27,7 @@ add_action('after_setup_theme', function() {
 
 add_action('wp_enqueue_scripts', function() {
     wp_enqueue_style('wpbbshop-theme', get_stylesheet_directory_uri() . '/assets/css/theme.css', [], WPBBSHOP_VERSION);
-    wp_enqueue_script('wpbbshop-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', ['jquery'], (string) filemtime(get_stylesheet_directory() . '/assets/js/theme.js'), true);
+    wp_enqueue_script('wpbbshop-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', ['jquery'], WPBBSHOP_VERSION, true);
     wp_localize_script('wpbbshop-theme', 'WpbbshopTheme', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('wpbbshop_ajax'),
@@ -495,7 +495,7 @@ function wpbbshop_native_action_button($list, $product_id, $label, $icon) {
 }
 
 function wpbbshop_yith_wishlist_button($product_id) {
-    return wpbbshop_native_action_button('wishlist', $product_id, wpbbshop_v312_t(__('Pievienot vēlmēm', 'wpbbshop'), __('Add to wishlist', 'wpbbshop')), '♡');
+    return wpbbshop_native_action_button('wishlist', $product_id, __('Pievienot vēlmēm', 'wpbbshop'), '♡');
 }
 
 function wpbbshop_yith_compare_button($product_id) {
@@ -505,12 +505,12 @@ function wpbbshop_yith_compare_button($product_id) {
             return wp_theme_woo_support_compare_button($product);
         }
     }
-    return wpbbshop_native_action_button('compare', $product_id, wpbbshop_v312_t(__('Salīdzināt', 'wpbbshop'), __('Compare', 'wpbbshop')), '⇄');
+    return wpbbshop_native_action_button('compare', $product_id, __('Salīdzināt', 'wpbbshop'), '⇄');
 }
 
-function wpbbshop_product_quick_actions($product_id, $include_compare = true) {
+function wpbbshop_product_quick_actions($product_id) {
     $wishlist = wpbbshop_yith_wishlist_button($product_id);
-    $compare = $include_compare ? wpbbshop_yith_compare_button($product_id) : '';
+    $compare = wpbbshop_yith_compare_button($product_id);
     if (!$wishlist && !$compare) {
         return '';
     }
@@ -528,7 +528,7 @@ function wpbbshop_sale_badge($product) {
         $percent = round((($regular - $sale) / $regular) * 100);
         return '<span class="wpbbshop-sale-badge">-' . esc_html($percent) . '%</span>';
     }
-    return '<span class="wpbbshop-sale-badge">' . esc_html(wpbbshop_v312_t('Izpārdošana', 'Sale')) . '</span>';
+    return '<span class="wpbbshop-sale-badge">Izpārdošana</span>';
 }
 
 function wpbbshop_product_card($product) {
@@ -544,7 +544,7 @@ function wpbbshop_product_card($product) {
       <div class="wpbbshop-product-meta"><?php echo wp_kses_post($cats); ?></div>
       <h3 class="wpbbshop-product-title"><a href="<?php echo esc_url($link); ?>"><?php echo esc_html($product->get_name()); ?></a></h3>
       <div class="wpbbshop-product-price"><?php echo wp_kses_post($product->get_price_html()); ?></div>
-      <a href="<?php echo esc_url($product->add_to_cart_url()); ?>" data-quantity="1" data-product_id="<?php echo esc_attr($id); ?>" class="button add_to_cart_button ajax_add_to_cart wpbbshop-add-cart <?php echo esc_attr($product->get_type()); ?>"><?php echo esc_html(wpbbshop_v312_t('Pievienot grozam', 'Add to cart')); ?></a>
+      <a href="<?php echo esc_url($product->add_to_cart_url()); ?>" data-quantity="1" data-product_id="<?php echo esc_attr($id); ?>" class="button add_to_cart_button ajax_add_to_cart wpbbshop-add-cart <?php echo esc_attr($product->get_type()); ?>">Pievienot grozam</a>
     </article>
     <?php return ob_get_clean();
 }
@@ -559,7 +559,7 @@ function wpbbshop_products_shortcode($atts) {
     $q = new WP_Query($args);
     ob_start(); ?>
     <section class="wpbbshop-products-section <?php echo esc_attr($atts['class']); ?>" style="--wpbbshop-cols:<?php echo (int)$atts['columns']; ?>">
-      <?php if($atts['title']): ?><div class="wpbbshop-section-head"><h2><?php echo esc_html($atts['title']); ?></h2><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>"><span class="llg-section-link-text"><?php echo esc_html(wpbbshop_v312_t('Skatīt visus', 'View all')); ?></span><span class="llg-section-link-icon">›</span></a></div><?php endif; ?>
+      <?php if($atts['title']): ?><div class="wpbbshop-section-head"><h2><?php echo esc_html($atts['title']); ?></h2><a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>"><span class="llg-section-link-text">Skatīt visus</span><span class="llg-section-link-icon">›</span></a></div><?php endif; ?>
       <div class="wpbbshop-product-grid">
       <?php while($q->have_posts()): $q->the_post(); global $product; echo wpbbshop_product_card($product); endwhile; wp_reset_postdata(); ?>
       </div>
@@ -608,15 +608,15 @@ add_action('woocommerce_before_shop_loop_item_title', function() {
 }, 6);
 
 // WooCommerce loop polish: replace default loop add-to-cart text with full width Latvian button.
-add_filter('woocommerce_product_add_to_cart_text', function(){ return wpbbshop_v312_t(__('Pievienot grozam', 'wpbbshop'), __('Add to cart', 'wpbbshop')); });
-add_filter('woocommerce_product_single_add_to_cart_text', function(){ return wpbbshop_v312_t(__('Pievienot grozam', 'wpbbshop'), __('Add to cart', 'wpbbshop')); });
+add_filter('woocommerce_product_add_to_cart_text', function(){ return __('Pievienot grozam', 'wpbbshop'); });
+add_filter('woocommerce_product_single_add_to_cart_text', function(){ return __('Pievienot grozam', 'wpbbshop'); });
 
 
 // Single product additions: clean YITH actions after add-to-cart and remove duplicate auto positions.
 add_action('woocommerce_single_product_summary', function() {
     global $product;
     if ($product && is_a($product, 'WC_Product')) {
-        echo '<div class="wpbbshop-single-actions">' . wpbbshop_yith_wishlist_button($product->get_id()) . '</div>';
+        echo '<div class="wpbbshop-single-actions">' . wpbbshop_yith_wishlist_button($product->get_id()) . wpbbshop_yith_compare_button($product->get_id()) . '</div>';
     }
 }, 35);
 
@@ -1030,8 +1030,6 @@ function wpbbshop_ajax_toggle_list() {
     if (!in_array($list, array('wishlist', 'compare'), true) || !$product_id) {
         wp_send_json_error(array('message' => __('Invalid request', 'wpbbshop')));
     }
-    $lang = isset($_POST['lang']) ? sanitize_key(wp_unslash($_POST['lang'])) : '';
-    $is_en = in_array($lang, array('en', 'lv'), true) ? $lang === 'en' : wpbbshop_v312_is_en();
     $result = wpbbshop_toggle_list_item($list, $product_id);
     wp_send_json_success(array(
         'list' => $list,
@@ -1040,7 +1038,7 @@ function wpbbshop_ajax_toggle_list() {
         'count' => count($result['ids']),
         'wishlist_count' => count(wpbbshop_get_list_items('wishlist')),
         'compare_count' => count(wpbbshop_get_list_items('compare')),
-        'label' => $result['active'] ? ($is_en ? __('Added', 'wpbbshop') : __('Pievienots', 'wpbbshop')) : ($is_en ? __('Add', 'wpbbshop') : __('Pievienot', 'wpbbshop')),
+        'label' => $result['active'] ? __('Pievienots', 'wpbbshop') : __('Pievienot', 'wpbbshop'),
     ));
 }
 
@@ -1141,7 +1139,7 @@ function wpbbshop_render_single_product_section($product_id, $mode = 'related') 
     $limit = max(1, absint(wpbbshop_get_theme_option($limit_key, '4')));
     $columns = max(2, min(6, absint(wpbbshop_get_theme_option('single_related_columns', '4'))));
     $meta_key = $is_recommended ? '_wpbbshop_recommended_product_ids' : '_wpbbshop_related_product_ids';
-    $title = $is_recommended ? wpbbshop_v312_t(__('Ieteicamās preces', 'wpbbshop'), __('Recommended products', 'wpbbshop')) : wpbbshop_v312_t(__('Saistītie produkti', 'wpbbshop'), __('Related products', 'wpbbshop'));
+    $title = $is_recommended ? __('Ieteicamās preces', 'wpbbshop') : __('Saistītie produkti', 'wpbbshop');
     $ids = wpbbshop_parse_product_ids_csv(get_post_meta($product_id, $meta_key, true));
     if (!$ids && $is_recommended) {
         $p = wc_get_product($product_id);
@@ -1447,6 +1445,18 @@ if (!function_exists('wpbbshop_v38_gallery_items')) {
     function wpbbshop_v38_gallery_items($product) {
         $items = array();
         if (!$product || !is_a($product, 'WC_Product')) { return $items; }
+
+        // v4.0.27: all theme-owned Home & Garden demo products use the same
+        // real-photo source set in cards and on the single-product gallery.
+        if (function_exists('wpbbshop_v426_demo_product_gallery_urls')) {
+            $real_urls = wpbbshop_v426_demo_product_gallery_urls($product);
+            foreach ((array) $real_urls as $real_url) {
+                if (!$real_url) { continue; }
+                $items[] = array('thumb'=>$real_url, 'main'=>$real_url, 'full'=>$real_url, 'alt'=>$product->get_name());
+            }
+            if ($items) { return $items; }
+        }
+
         $demo_map = array(
             'LL-DEMO-D20'=>'drill.png','LL-DEMO-C50'=>'compressor.webp','LL-DEMO-W200'=>'welder.png','LL-DEMO-G3500'=>'generator.webp',
             'LL-DEMO-J3T'=>'jack.png','LL-DEMO-A1500'=>'impact-wrench.webp','LL-DEMO-S108'=>'tool-set.webp','LL-DEMO-B26'=>'blower.png',
@@ -1853,3 +1863,7 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v425-content-cart-quote
 
 /* 4.0.26 real photographic product/blog imagery with incremental local caching. */
 require_once get_stylesheet_directory() . '/inc/wpbbshop-v426-realistic-media.php';
+
+
+/* 4.0.28 reliable local photographic demo media and Product Guide image hardening. */
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v428-media-hardening.php';

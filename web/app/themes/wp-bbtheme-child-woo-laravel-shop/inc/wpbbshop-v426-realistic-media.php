@@ -1,6 +1,6 @@
 <?php
 /**
- * WP BB Home & Garden v4.0.26
+ * WP BB Home & Garden v4.0.27
  * Real-photo showcase layer for demo products and Product Guides.
  *
  * Product cards use distinct photographic references rather than generated
@@ -11,7 +11,7 @@
 defined('ABSPATH') || exit;
 
 if (!defined('WPBBSHOP_V426_VERSION')) {
-    define('WPBBSHOP_V426_VERSION', '4.0.26');
+    define('WPBBSHOP_V426_VERSION', '4.0.27');
 }
 
 function wpbbshop_v426_commons_file_url($filename, $width = 1600) {
@@ -23,7 +23,7 @@ function wpbbshop_v426_commons_file_url($filename, $width = 1600) {
 
 /** Distinct photo for every v4.0.23/25 showcase product. */
 function wpbbshop_v426_product_sources() {
-    return array(
+    $sources = array(
         'panel-radiator-22' => array(
             'file' => '247 Home Rescue radiators.jpg',
             'license' => 'CC0 1.0',
@@ -37,7 +37,7 @@ function wpbbshop_v426_product_sources() {
         'cultivator-1050' => array(
             'file' => 'Power tiller or cultivator.jpg',
             'license' => 'CC BY-SA 4.0',
-            'credit' => 'சு.பத்மா / Wikimedia Commons',
+            'credit' => 'Wikimedia Commons contributor',
         ),
         'mini-tractor-15hp' => array(
             'file' => 'Australis 40hp compact tractor.jpg',
@@ -60,9 +60,9 @@ function wpbbshop_v426_product_sources() {
             'credit' => 'The RedBurn / Wikimedia Commons',
         ),
         'riding-mower-1050a' => array(
-            'file' => '1986 Wheel Horse 520-H garden tractor-s.jpg',
-            'license' => 'Public domain',
-            'credit' => 'Christopher Ziemnowicz / Wikimedia Commons',
+            'file' => 'Lawn mower on the grass closeup.jpg',
+            'license' => 'CC BY 2.0',
+            'credit' => 'Shixart1985 / Wikimedia Commons',
         ),
         'air-source-heat-pump' => array(
             'file' => 'Heat pump unit.webp',
@@ -77,14 +77,51 @@ function wpbbshop_v426_product_sources() {
         'radiator-valve-pack' => array(
             'file' => 'Danfoss thermostatic radiator valve.jpg',
             'license' => 'CC BY-SA 4.0',
-            'credit' => 'Santeri Viinamäki / Wikimedia Commons',
+            'credit' => 'Santeri Viinamaki / Wikimedia Commons',
         ),
         'compact-tractor-package' => array(
-            'file' => 'Orcharding tractor.jpg',
-            'license' => 'Public domain',
-            'credit' => 'Ottre / Wikimedia Commons',
+            'file' => 'Garden machines, tractor.jpg',
+            'license' => 'CC BY-SA 4.0',
+            'credit' => 'Emmanuel Ssekaggo / Wikimedia Commons',
         ),
     );
+
+    // v4.0.27: the 500 HG-DEMO items now use department-matched real photos.
+    // Two photos per department keep adjacent/featured/sale cards visually distinct
+    // while still avoiding hundreds of heavy Media Library imports.
+    $catalog_files = array(
+        'garden-machinery' => array('Lawn mower on the grass closeup.jpg', 'Garden machines, tractor.jpg'),
+        'garden-tools' => array('Garden Tools.jpg', 'Gardening tools.jpg'),
+        'watering-irrigation' => array('Gardenhose.JPG', 'Lawn water hose sprinkler 2500x3300 (1).png'),
+        'greenhouses' => array('GREENHOUSE.jpg', 'BIO Greenhouse.jpg'),
+        'garden-furniture' => array('Outdoor furniture.jpg', 'Teak Garden Furniture Patio Set.jpg'),
+        'plants-seeds' => array('Plant seedlings.jpg', 'Seed Packets.jpg'),
+        'fertilisers-care' => array('Bags of compost - geograph.org.uk - 7828282.jpg', 'Fertilizer.jpg'),
+        'fences-gates' => array('Garden fence and gate at Nuthurst, West Sussex, England.jpg', 'Boundary gate and fence.jpg'),
+        'outdoor-storage' => array('Garden shed with furniture in Brastad 1.jpg', 'A new garden shed - geograph.org.uk - 7481143.jpg'),
+        'bbq-outdoor-cooking' => array('Round open-air barbecue grill.jpg', 'Outdoor cooking area with a barbecue grill and tables for gathering in a backyard setting.jpg'),
+        'power-tools' => array('CORDLESS DRILL.jpg', 'Cordless Electric Drill.jpg'),
+        'hand-tools' => array('Hammer hand tool.jpg', 'Garden tools.jpg'),
+        'building-materials' => array('Bricks for construction.jpg', 'BRICKS.jpg'),
+        'paint-finishing' => array('Paint roller (4600214187).jpg', 'Paint cans.jpg'),
+        'plumbing-heating' => array('Heating plumbing.jpg', 'Room radiator.jpg'),
+        'lighting-electrical' => array('ELECTRICAL SOCKET.jpg', 'Electric Socket.jpeg'),
+        'home-storage' => array('Storage Shelves (43782351190).jpg', 'A Kaleidoscope of Kitchen and Home Storage.jpg'),
+        'cleaning' => array('Vacuum cleaner.jpg', 'Cleaning supplies section in japanese hardware store.jpg'),
+        'workwear-safety' => array('Aa safetyhelmet 00.jpg', 'Safety gloves.jpg'),
+        'pet-outdoor' => array('Dog kennel.jpg', 'A dog in kennel.jpg'),
+    );
+    foreach ($catalog_files as $department => $files) {
+        foreach (array_values($files) as $index => $file) {
+            $suffix = $index === 0 ? 'a' : 'b';
+            $sources['catalog-' . $department . '-' . $suffix] = array(
+                'file' => $file,
+                'license' => 'See Wikimedia Commons file page',
+                'credit' => 'Wikimedia Commons contributor',
+            );
+        }
+    }
+    return $sources;
 }
 
 /** One unique editorial photograph per Product Guide. */
@@ -96,29 +133,29 @@ function wpbbshop_v426_blog_sources() {
             'credit' => 'Southend-on-Sea Borough Council / Wikimedia Commons',
         ),
         'radiator-size' => array(
-            'file' => 'Living room with radiator ( central heating throughout ground floor rooms) - Flickr - gailhampshire.jpg',
-            'license' => 'CC BY 2.0',
-            'credit' => 'gailhampshire / Wikimedia Commons',
+            'file' => 'Room radiator.jpg',
+            'license' => 'CC BY-SA 4.0',
+            'credit' => 'Tarasna0922 / Wikimedia Commons',
         ),
         'cultivator-guide' => array(
             'file' => 'Tilling backyard for new garden.jpg',
             'license' => 'CC BY-SA 2.0',
             'credit' => 'Joe Hoover / Wikimedia Commons',
         ),
-        'variant-stock' => array(
-            'file' => 'Circulateurs Grundfos.jpg',
-            'license' => 'CC BY-SA 4.0',
-            'credit' => 'The RedBurn / Wikimedia Commons',
+        'variation-stock' => array(
+            'file' => 'A Kaleidoscope of Kitchen and Home Storage.jpg',
+            'license' => 'See Wikimedia Commons file page',
+            'credit' => 'Kaviya Rajendran / Wikimedia Commons',
         ),
         'underfloor-heating' => array(
-            'file' => 'Underfloor heating system in construction of old built residential home.jpg',
-            'license' => 'CC BY 2.0',
-            'credit' => 'Shixart1985 / Wikimedia Commons',
+            'file' => 'Dornbirn-Ebnit-underfloor heating-system-02ASD.jpg',
+            'license' => 'CC BY-SA 4.0',
+            'credit' => 'Asurnipal / Wikimedia Commons',
         ),
         'garden-maintenance' => array(
-            'file' => 'Petrol lawnmower - 25 April 2026.jpg',
-            'license' => 'CC0 1.0',
-            'credit' => 'Aethonatic / Wikimedia Commons',
+            'file' => 'Person using a lawn mower in a green garden.jpg',
+            'license' => 'See Wikimedia Commons file page',
+            'credit' => 'Shixart1985 / Wikimedia Commons',
         ),
         'heat-pump-guide' => array(
             'file' => 'NIBE S2125 air source heat pump (rear) - Science Museum, London.jpg',
@@ -126,9 +163,9 @@ function wpbbshop_v426_blog_sources() {
             'credit' => 'The wub / Wikimedia Commons',
         ),
         'tractor-attachments' => array(
-            'file' => 'Deere lawn tractor.JPG',
-            'license' => 'CC BY-SA 3.0 (or GFDL)',
-            'credit' => 'trekphiler / Wikimedia Commons',
+            'file' => 'Garden machines, tractor.jpg',
+            'license' => 'CC BY-SA 4.0',
+            'credit' => 'Emmanuel Ssekaggo / Wikimedia Commons',
         ),
     );
 }
@@ -143,19 +180,36 @@ function wpbbshop_v426_cached_attachment_id($scope, $key) {
     static $cache = array();
     $cache_key = $scope . ':' . $key;
     if (array_key_exists($cache_key, $cache)) { return $cache[$cache_key]; }
+
+    $map = $scope === 'blog' ? wpbbshop_v426_blog_sources() : wpbbshop_v426_product_sources();
+    $expected_file = isset($map[$key]['file']) ? (string) $map[$key]['file'] : '';
+    if ($expected_file === '') { $cache[$cache_key] = 0; return 0; }
+
+    // Several older v4.0.26 attachments can share the same logical key. Only
+    // reuse the attachment when it was created from the source file that is
+    // currently configured, otherwise the storefront would keep showing a
+    // stale/dated image after a theme update.
     $ids = get_posts(array(
         'post_type' => 'attachment',
         'post_status' => 'inherit',
-        'posts_per_page' => 1,
+        'posts_per_page' => 20,
         'fields' => 'ids',
+        'orderby' => 'ID',
+        'order' => 'DESC',
         'meta_query' => array(
             array('key' => '_wpbbshop_v426_scope', 'value' => $scope),
             array('key' => '_wpbbshop_v426_key', 'value' => $key),
         ),
         'suppress_filters' => true,
     ));
-    $cache[$cache_key] = $ids ? (int) $ids[0] : 0;
-    return $cache[$cache_key];
+    foreach ((array) $ids as $id) {
+        if ((string) get_post_meta((int) $id, '_wpbbshop_v426_source_file', true) === $expected_file) {
+            $cache[$cache_key] = (int) $id;
+            return $cache[$cache_key];
+        }
+    }
+    $cache[$cache_key] = 0;
+    return 0;
 }
 
 function wpbbshop_v426_cached_or_remote($scope, $key, $size = 'large', $width = 1600) {
@@ -173,10 +227,28 @@ function wpbbshop_v426_product_key($product) {
     $key = (string) get_post_meta($id, '_wpbbshop_v422_demo_key', true);
     if ($key !== '') { return $key; }
 
-    // Keep older local demo products photo-led too, even if they pre-date v4.0.22.
     $sku = (string) $product->get_sku();
     $is_demo = (string) get_post_meta($id, '_wpbbshop_demo_product', true) === '1' || stripos($sku, 'HG-DEMO') === 0;
     if (!$is_demo) { return ''; }
+
+    // The 500-item catalogue is generated in a fixed 20-department rotation.
+    // Resolve its SKU directly so every department gets a real matching photo
+    // instead of falling through to the old green schematic artwork.
+    if (preg_match('/^HG-DEMO-(\d{4})$/i', $sku, $m)) {
+        $number = max(1, (int) $m[1]);
+        $departments = array(
+            'garden-machinery','garden-tools','watering-irrigation','greenhouses','garden-furniture',
+            'plants-seeds','fertilisers-care','fences-gates','outdoor-storage','bbq-outdoor-cooking',
+            'power-tools','hand-tools','building-materials','paint-finishing','plumbing-heating',
+            'lighting-electrical','home-storage','cleaning','workwear-safety','pet-outdoor',
+        );
+        $department = $departments[($number - 1) % count($departments)];
+        $variant = (int) floor(($number - 1) / count($departments)) % 2 === 0 ? 'a' : 'b';
+        return 'catalog-' . $department . '-' . $variant;
+    }
+
+    // Keep older local demo products photo-led too, even if they pre-date the
+    // 500-item SKU convention.
     $hay = strtolower(remove_accents($product->get_name() . ' ' . $sku));
     if (preg_match('/tractor|rider|ride.on|mower|p[lļ][aā]v/', $hay)) { return 'riding-mower-1050a'; }
     if (preg_match('/cultiv|tiller|fr[eē]z|augsn/', $hay)) { return 'cultivator-1050'; }
@@ -194,7 +266,52 @@ function wpbbshop_v426_demo_product_asset($product) {
     if ($key === '') { return ''; }
     $map = wpbbshop_v426_product_sources();
     if (!isset($map[$key])) { return ''; }
-    return wpbbshop_v426_cached_or_remote('product', $key, 'large', 1500);
+    return wpbbshop_v426_cached_or_remote('product', $key, 'large', strpos($key, 'catalog-') === 0 ? 1100 : 1500);
+}
+
+/**
+ * Real-photo gallery for both the 500-item catalogue and the richer showcase
+ * products. The first URL is the card/hero image; following URLs are genuine
+ * photographic alternatives used for hover and the single-product gallery.
+ */
+function wpbbshop_v426_demo_product_gallery_keys($product) {
+    $key = wpbbshop_v426_product_key($product);
+    if ($key === '') { return array(); }
+
+    if (preg_match('/^catalog-(.+)-(a|b)$/', $key, $m)) {
+        $other = $m[2] === 'a' ? 'b' : 'a';
+        return array($key, 'catalog-' . $m[1] . '-' . $other);
+    }
+
+    $map = array(
+        'panel-radiator-22' => array('panel-radiator-22','towel-radiator','radiator-valve-pack'),
+        'underfloor-mat' => array('underfloor-mat','underfloor-manifold','pump-25-60'),
+        'cultivator-1050' => array('cultivator-1050','mini-tractor-15hp','riding-mower-1050a'),
+        'mini-tractor-15hp' => array('mini-tractor-15hp','compact-tractor-package','cultivator-1050'),
+        'towel-radiator' => array('towel-radiator','panel-radiator-22','radiator-valve-pack'),
+        'boiler-24kw' => array('boiler-24kw','pump-25-60','panel-radiator-22'),
+        'pump-25-60' => array('pump-25-60','underfloor-manifold','boiler-24kw'),
+        'riding-mower-1050a' => array('riding-mower-1050a','catalog-garden-machinery-b','cultivator-1050'),
+        'air-source-heat-pump' => array('air-source-heat-pump','pump-25-60','underfloor-mat'),
+        'underfloor-manifold' => array('underfloor-manifold','underfloor-mat','pump-25-60'),
+        'radiator-valve-pack' => array('radiator-valve-pack','panel-radiator-22','towel-radiator'),
+        'compact-tractor-package' => array('compact-tractor-package','mini-tractor-15hp','cultivator-1050'),
+    );
+    return isset($map[$key]) ? $map[$key] : array($key);
+}
+
+function wpbbshop_v426_demo_product_gallery_urls($product) {
+    $keys = wpbbshop_v426_demo_product_gallery_keys($product);
+    if (!$keys) { return array(); }
+    $sources = wpbbshop_v426_product_sources();
+    $urls = array();
+    foreach ($keys as $key) {
+        if (!isset($sources[$key])) { continue; }
+        $width = strpos($key, 'catalog-') === 0 ? 1100 : 1500;
+        $url = wpbbshop_v426_cached_or_remote('product', $key, 'large', $width);
+        if ($url && !in_array($url, $urls, true)) { $urls[] = $url; }
+    }
+    return $urls;
 }
 
 function wpbbshop_v426_guide_key($post_id) {
@@ -215,7 +332,7 @@ function wpbbshop_v426_gallery_source_map() {
         'heating-plan' => array(array('blog','heating-plan'), array('product','air-source-heat-pump'), array('product','panel-radiator-22')),
         'radiator-size' => array(array('blog','radiator-size'), array('product','panel-radiator-22'), array('product','radiator-valve-pack')),
         'cultivator-guide' => array(array('blog','cultivator-guide'), array('product','cultivator-1050'), array('product','mini-tractor-15hp')),
-        'variant-stock' => array(array('blog','variant-stock'), array('product','pump-25-60'), array('product','underfloor-manifold')),
+        'variation-stock' => array(array('blog','variation-stock'), array('product','pump-25-60'), array('product','underfloor-manifold')),
         'underfloor-heating' => array(array('blog','underfloor-heating'), array('product','underfloor-mat'), array('product','underfloor-manifold')),
         'garden-maintenance' => array(array('blog','garden-maintenance'), array('product','riding-mower-1050a'), array('product','cultivator-1050')),
         'heat-pump-guide' => array(array('blog','heat-pump-guide'), array('product','air-source-heat-pump'), array('product','pump-25-60')),
@@ -264,8 +381,8 @@ function wpbbshop_v426_incremental_media_cache() {
     require_once ABSPATH . 'wp-admin/includes/image.php';
 
     foreach ($queue as $item) {
-        $token = $item['scope'] . ':' . $item['key'];
-        if (!empty($done[$token]) || wpbbshop_v426_cached_attachment_id($item['scope'], $item['key'])) {
+        $token = $item['scope'] . ':' . $item['key'] . ':' . md5((string) $item['spec']['file']);
+        if (wpbbshop_v426_cached_attachment_id($item['scope'], $item['key'])) {
             $done[$token] = 1;
             continue;
         }
@@ -301,7 +418,7 @@ function wpbbshop_v426_incremental_media_cache() {
     }
 
     update_option('wpbbshop_v426_cached_sources', $done, false);
-    if (count($done) >= count($queue)) { update_option('wpbbshop_v426_media_version', WPBBSHOP_V426_VERSION, false); }
+    if ($imported_this_request === 0) { update_option('wpbbshop_v426_media_version', WPBBSHOP_V426_VERSION, false); }
 }
 add_action('admin_init', 'wpbbshop_v426_incremental_media_cache', 195);
 add_action('after_switch_theme', 'wpbbshop_v426_incremental_media_cache', 195);

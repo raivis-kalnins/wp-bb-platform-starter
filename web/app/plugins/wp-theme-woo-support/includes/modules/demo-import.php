@@ -303,6 +303,29 @@ function wpbb_child_woo_demo_local_attachment( $path, $title ) {
 	return (int) $id;
 }
 
+
+/**
+ * Built-in photographic demo media. The previous SVG cards remain only as a
+ * last-resort fallback when a package has been stripped of its demo-media dir.
+ */
+function wpbb_child_woo_demo_builtin_media_paths( $index ) {
+    $files = array(
+        'brushcutter.webp', 'blower-v45-v46.webp', 'welder-v43-v46.webp', 'trimmer-head-v43-v46.webp',
+        'oil-pump-v43-v46.webp', 'generator.webp', 'drill-v46.webp', 'trimmer-line-v45-v46.webp',
+        'chain-sharpener-v43-v46.webp', 'tool-set.webp', 'aluminum-head-v45-v46.webp', 'compressor.webp', 'jack-v43-v46.webp'
+    );    $files = array_values( array_filter( $files, function( $file ) {
+        return is_readable( wp_theme_woo_support_path( 'assets/demo-media/' . $file ) );
+    } ) );
+    if ( ! $files ) { return array(); }
+    $count = count( $files );
+    $index = max( 0, absint( $index ) );
+    return array(
+        wp_theme_woo_support_path( 'assets/demo-media/' . $files[ $index % $count ] ),
+        wp_theme_woo_support_path( 'assets/demo-media/' . $files[ ( $index + 7 ) % $count ] ),
+        wp_theme_woo_support_path( 'assets/demo-media/' . $files[ ( $index + 13 ) % $count ] ),
+    );
+}
+
 function wpbb_child_woo_demo_variation_options( $product_data = array(), $profile = null ) {
 	$profile = is_array( $profile ) ? $profile : ( function_exists( 'wp_theme_get_demo_profile' ) ? wp_theme_get_demo_profile() : array() );
 	$options = array(
@@ -369,11 +392,17 @@ function wpbb_child_woo_demo_create_products() {
 			$product->set_regular_price( (string) $price );
 		}
 		$local_image = apply_filters( 'wp_theme_woo_demo_product_image_path', '', $data, $i, $profile );
-		$image_id    = $local_image ? wpbb_child_woo_demo_local_attachment( $local_image, $name ) : wpbb_child_woo_demo_svg_attachment( $name, 'Main image', $i + 1 );
-		$gallery     = $local_image ? array() : array(
-			wpbb_child_woo_demo_svg_attachment( $name, 'Gallery view 1', $i + 30 ),
-			wpbb_child_woo_demo_svg_attachment( $name, 'Gallery view 2', $i + 60 ),
-		);
+		$builtin_media = wpbb_child_woo_demo_builtin_media_paths( $i );
+		if ( ! $local_image && $builtin_media ) { $local_image = $builtin_media[0]; }
+		$image_id = $local_image ? wpbb_child_woo_demo_local_attachment( $local_image, $name ) : wpbb_child_woo_demo_svg_attachment( $name, 'Main image', $i + 1 );
+		$gallery = array();
+		if ( count( $builtin_media ) > 1 ) {
+			foreach ( array_slice( $builtin_media, 1, 2 ) as $gallery_path ) {
+				$gallery[] = wpbb_child_woo_demo_local_attachment( $gallery_path, $name . ' gallery' );
+			}
+		} elseif ( ! $local_image ) {
+			$gallery = array( wpbb_child_woo_demo_svg_attachment( $name, 'Gallery view 1', $i + 30 ), wpbb_child_woo_demo_svg_attachment( $name, 'Gallery view 2', $i + 60 ) );
+		}
 		if ( $image_id ) {
 			$product->set_image_id( $image_id );
 		}

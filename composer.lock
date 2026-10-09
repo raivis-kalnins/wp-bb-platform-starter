@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a10226e9c19f0f7383f76023669f400c",
+    "content-hash": "48b6844bcb7d641e0346d0d56d3234cd",
     "packages": [
         {
             "name": "brick/math",
@@ -6959,7 +6959,7 @@
             ],
             "description": "Gutenberg, Bootstrap and ACF block builder for WP BB Platform.",
             "transport-options": {
-                "symlink": true,
+                "symlink": false,
                 "relative": true
             }
         },
