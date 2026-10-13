@@ -1892,3 +1892,5 @@ require_once get_stylesheet_directory() . '/inc/wpbbshop-v431-drawer-search-poli
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('wpbbshop-v434-minicart', get_stylesheet_directory_uri() . '/assets/css/v434-minicart.css', array(), '4.0.34');
 }, 10000);
+
+require_once get_stylesheet_directory() . '/inc/wpbbshop-v435-pwa.php';
