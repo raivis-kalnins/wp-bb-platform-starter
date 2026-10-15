@@ -1,0 +1,7 @@
+# Licensed/private deployment assets. Keep these local; do not commit to a public repository.
+private/*.zip
+!private/README.md
+updraft-backup/*.gz
+updraft-backup/*.zip
+!updraft-backup/README.md
+setup.key
